@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FECAEResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FeCabResp xmlns="http://ar.gov.afip.dif.FEV1/">
+    <Cuit>27296804385</Cuit>
+    <PtoVta>2</PtoVta>
+    <CbteTipo>3</CbteTipo>
+    <FchProceso>20160521135526</FchProceso>
+    <CantReg>1</CantReg>
+    <Resultado>A</Resultado>
+    <Reproceso>N</Reproceso>
+  </FeCabResp>
+  <FeDetResp xmlns="http://ar.gov.afip.dif.FEV1/">
+    <FECAEDetResponse>
+      <Concepto>1</Concepto>
+      <DocTipo>80</DocTipo>
+      <DocNro>30516888241</DocNro>
+      <CbteDesde>7</CbteDesde>
+      <CbteHasta>7</CbteHasta>
+      <CbteFch>20160521</CbteFch>
+      <Resultado>A</Resultado>
+      <CAE>66215396735575</CAE>
+      <CAEFchVto>20160531</CAEFchVto>
+    </FECAEDetResponse>
+  </FeDetResp>
+</FECAEResponse>

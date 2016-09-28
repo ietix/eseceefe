@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{11B15D78-A258-4C7B-A43B-7065677A1ADC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BibliotecaSCF</RootNamespace>
+    <AssemblyName>BibliotecaSCF</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\BibliotecaSCF.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentNHibernate, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WSAA, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SCF\bin\WSAA.dll</HintPath>
+    </Reference>
+    <Reference Include="WSFEv1, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SCF\bin\WSFEv1.dll</HintPath>
+    </Reference>
+    <Reference Include="WSFEv1.Logica, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SCF\bin\WSFEv1.Logica.dll</HintPath>
+    </Reference>
+    <Reference Include="WSFEv1.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SCF\bin\WSFEv1.Service.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Catalogos\CatalogoArticulo.cs" />
+    <Compile Include="Catalogos\CatalogoArticuloCliente.cs" />
+    <Compile Include="Catalogos\CatalogoArticuloProveedor.cs" />
+    <Compile Include="Catalogos\CatalogoCliente.cs" />
+    <Compile Include="Catalogos\CatalogoConcepto.cs" />
+    <Compile Include="Catalogos\CatalogoContratoMarco.cs" />
+    <Compile Include="Catalogos\CatalogoDatosEmpresa.cs" />
+    <Compile Include="Catalogos\CatalogoDireccion.cs" />
+    <Compile Include="Catalogos\CatalogoEntrega.cs" />
+    <Compile Include="Catalogos\CatalogoFactura.cs" />
+    <Compile Include="Catalogos\CatalogoGenerico.cs" />
+    <Compile Include="Catalogos\CatalogoIva.cs" />
+    <Compile Include="Catalogos\CatalogoMoneda.cs" />
+    <Compile Include="Catalogos\CatalogoNotaDePedido.cs" />
+    <Compile Include="Catalogos\CatalogoProveedor.cs" />
+    <Compile Include="Catalogos\CatalogoTipoComprobante.cs" />
+    <Compile Include="Catalogos\CatalogoTipoDocumento.cs" />
+    <Compile Include="Catalogos\CatalogoTransporte.cs" />
+    <Compile Include="Catalogos\CatalogoUnidadMedida.cs" />
+    <Compile Include="Catalogos\CatalogoUsuario.cs" />
+    <Compile Include="Catalogos\CatalogoNotaDeCredito.cs" />
+    <Compile Include="ClasesComplementarias\Constantes.cs" />
+    <Compile Include="ClasesComplementarias\ManejoDeNHibernate.cs" />
+    <Compile Include="Clases\Articulo.cs" />
+    <Compile Include="Clases\ArticuloCliente.cs" />
+    <Compile Include="Clases\ArticuloProveedor.cs" />
+    <Compile Include="Clases\Cliente.cs" />
+    <Compile Include="Clases\Concepto.cs" />
+    <Compile Include="Clases\ContratoMarco.cs" />
+    <Compile Include="Clases\DatosEmpresa.cs" />
+    <Compile Include="Clases\Direccion.cs" />
+    <Compile Include="Clases\Entrega.cs" />
+    <Compile Include="Clases\Factura.cs" />
+    <Compile Include="Clases\HistorialCosto.cs" />
+    <Compile Include="Clases\HistorialPrecio.cs" />
+    <Compile Include="Clases\ItemContratoMarco.cs" />
+    <Compile Include="Clases\ItemEntrega.cs" />
+    <Compile Include="Clases\ItemNotaDeCredito.cs" />
+    <Compile Include="Clases\ItemNotaDePedido.cs" />
+    <Compile Include="Clases\Iva.cs" />
+    <Compile Include="Clases\NotaDeCredito.cs" />
+    <Compile Include="Clases\TipoMoneda.cs" />
+    <Compile Include="Clases\NotaDePedido.cs" />
+    <Compile Include="Clases\Proveedor.cs" />
+    <Compile Include="Clases\TipoComprobante.cs" />
+    <Compile Include="Clases\TipoDocumento.cs" />
+    <Compile Include="Clases\Transporte.cs" />
+    <Compile Include="Clases\UnidadMedida.cs" />
+    <Compile Include="Clases\Usuario.cs" />
+    <Compile Include="Controladores\ControladorGeneral.cs" />
+    <Compile Include="Mapeos\ArticuloClienteMap.cs" />
+    <Compile Include="Mapeos\ArticuloMap.cs" />
+    <Compile Include="Mapeos\ArticuloProveedorMap.cs" />
+    <Compile Include="Mapeos\ClienteMap.cs" />
+    <Compile Include="Mapeos\ConceptoMap.cs" />
+    <Compile Include="Mapeos\ContratoMarcoMap.cs" />
+    <Compile Include="Mapeos\DatosEmpresaMap.cs" />
+    <Compile Include="Mapeos\DireccionMap.cs" />
+    <Compile Include="Mapeos\EntregaMap.cs" />
+    <Compile Include="Mapeos\FacturaMap.cs" />
+    <Compile Include="Mapeos\HistorialCostoMap.cs" />
+    <Compile Include="Mapeos\HistorialPrecioMap.cs" />
+    <Compile Include="Mapeos\ItemContratoMarcoMap.cs" />
+    <Compile Include="Mapeos\ItemEntregaMap.cs" />
+    <Compile Include="Mapeos\ItemNotaDeCreditoMap.cs" />
+    <Compile Include="Mapeos\ItemNotaDePedidoMap.cs" />
+    <Compile Include="Mapeos\IvaMap.cs" />
+    <Compile Include="Mapeos\NotaDeCreditoMap.cs" />
+    <Compile Include="Mapeos\TipoMonedaMap.cs" />
+    <Compile Include="Mapeos\NotaDePedidoMap.cs" />
+    <Compile Include="Mapeos\ProveedorMap.cs" />
+    <Compile Include="Mapeos\TipoComprobanteMap.cs" />
+    <Compile Include="Mapeos\TipoDocumentoMap.cs" />
+    <Compile Include="Mapeos\TransporteMap.cs" />
+    <Compile Include="Mapeos\UnidadMedidaMap.cs" />
+    <Compile Include="Mapeos\UsuarioMap.cs" />
+    <Compile Include="ModuloPrueba.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

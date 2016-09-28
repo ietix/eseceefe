@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FERecuperaLastCbteResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PtoVta xmlns="http://ar.gov.afip.dif.FEV1/">2</PtoVta>
+  <CbteTipo xmlns="http://ar.gov.afip.dif.FEV1/">1</CbteTipo>
+  <CbteNro xmlns="http://ar.gov.afip.dif.FEV1/">22</CbteNro>
+</FERecuperaLastCbteResponse>
