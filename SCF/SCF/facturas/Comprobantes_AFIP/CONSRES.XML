@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FECompConsultaResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ResultGet xmlns="http://ar.gov.afip.dif.FEV1/">
+    <Concepto>1</Concepto>
+    <DocTipo>80</DocTipo>
+    <DocNro>30516888241</DocNro>
+    <CbteDesde>875</CbteDesde>
+    <CbteHasta>875</CbteHasta>
+    <CbteFch>20161003</CbteFch>
+    <ImpTotal>8335.63</ImpTotal>
+    <ImpTotConc>0</ImpTotConc>
+    <ImpNeto>6888.95</ImpNeto>
+    <ImpOpEx>0</ImpOpEx>
+    <ImpTrib>0</ImpTrib>
+    <ImpIVA>1446.68</ImpIVA>
+    <FchServDesde />
+    <FchServHasta />
+    <FchVtoPago />
+    <MonId>PES</MonId>
+    <MonCotiz>1</MonCotiz>
+    <Iva>
+      <AlicIva>
+        <Id>5</Id>
+        <BaseImp>6888.95</BaseImp>
+        <Importe>1446.68</Importe>
+      </AlicIva>
+    </Iva>
+    <Resultado>A</Resultado>
+    <CodAutorizacion>66404474741032</CodAutorizacion>
+    <EmisionTipo>CAE</EmisionTipo>
+    <FchVto>20161013</FchVto>
+    <FchProceso>20161003141548</FchProceso>
+    <PtoVta>2</PtoVta>
+    <CbteTipo>1</CbteTipo>
+  </ResultGet>
+  <Events xmlns="http://ar.gov.afip.dif.FEV1/">
+    <Evt>
+      <Code>4</Code>
+      <Msg>IMPORTANTE: El 01/11/2016 se renovaran los certificados SSL utilizados por los webservices de AFIP. Los nuevos certificados utilizaran el algoritmo de encriptacion SHA-2. Para mas informacion http://www.afip.gob.ar/ws/comoAfectaElCambio.asp</Msg>
+    </Evt>
+  </Events>
+</FECompConsultaResponse>
