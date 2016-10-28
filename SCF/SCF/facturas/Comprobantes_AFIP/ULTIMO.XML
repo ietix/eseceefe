@@ -2,11 +2,11 @@
 <FERecuperaLastCbteResponse xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <PtoVta xmlns="http://ar.gov.afip.dif.FEV1/">2</PtoVta>
   <CbteTipo xmlns="http://ar.gov.afip.dif.FEV1/">1</CbteTipo>
-  <CbteNro xmlns="http://ar.gov.afip.dif.FEV1/">888</CbteNro>
+  <CbteNro xmlns="http://ar.gov.afip.dif.FEV1/">22</CbteNro>
   <Events xmlns="http://ar.gov.afip.dif.FEV1/">
     <Evt>
       <Code>4</Code>
-      <Msg>IMPORTANTE: El 01/11/2016 se renovaran los certificados SSL utilizados por los webservices de AFIP. Los nuevos certificados utilizaran el algoritmo de encriptacion SHA-2. Para mas informacion http://www.afip.gob.ar/ws/comoAfectaElCambio.asp</Msg>
+      <Msg>IMPORTANTE: El 01/11/2016 se renovarán los certificados SSL utilizados por los webservices de AFIP. Los nuevos certificados utilizarán el algoritmo de encriptación SHA-2. Para más información http://www.afip.gob.ar/ws/comoAfectaElCambio.asp</Msg>
     </Evt>
   </Events>
 </FERecuperaLastCbteResponse>

@@ -153,60 +153,60 @@ License: SempaIT - Todos los derechos reservados.
                             </a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a href="../dashboard/reporte_facturas.aspx">Reporte Facturas</a>
+                                    <a href="/scf/dashboard/reporte_facturas.aspx">Reporte Facturas</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <a href="../proveedores/listado.aspx">
+                            <a href="/scf/proveedores/listado.aspx">
                                 <i class="icon-users"></i>
                                 <span class="title">Proveedores</span>
                             </a>
                         </li>
                         <li>
-                            <a href="../clientes/listado.aspx">
+                            <a href="/scf/clientes/listado.aspx">
                                 <i class="icon-user-following"></i>
                                 <span class="title">Clientes</span>
                             </a>
                         </li>
                         <li>
-                            <a href="../articulos/listado.aspx">
+                            <a href="/scf/articulos/listado.aspx">
                                 <i class="icon-book-open"></i>
                                 <span class="title">Articulos</span>
                             </a>
                         </li>
                         <li>
-                            <a href="../nota_pedido/listado.aspx">
+                            <a href="/scf/nota_pedido/listado.aspx">
                                 <i class="icon-docs"></i>
                                 <span class="title">Nota de Pedido</span>
                             </a>
                         </li>
                         <li>
-                            <a href="../remitos/listado.aspx">
+                            <a href="/scf/remitos/listado.aspx">
                                 <i class="icon-check"></i>
                                 <span class="title">Remitos</span>
                             </a>
                         </li>
                         <li>
-                            <a href="../contrato_marco/listado.aspx">
+                            <a href="/scf/contrato_marco/listado.aspx">
                                 <i class="icon-folder"></i>
                                 <span class="title">Contratos Marco</span>
                             </a>
                         </li>
                         <li>
-                            <a href="../facturas/listado.aspx">
+                            <a href="/scf/facturas/listado.aspx">
                                 <i class="icon-briefcase"></i>
                                 <span class="title">Facturación</span>
                             </a>
                         </li>
                         <li>
-                            <a href="../credito/listado.aspx">
+                            <a href="/scf/credito/listado.aspx">
                                 <i class="icon-wallet"></i>
                                 <span class="title">Nota de Credito</span>
                             </a>
                         </li>
                         <li>
-                            <a href="../transportes/listado.aspx">
+                            <a href="/scf/transportes/listado.aspx">
                                 <i class="icon-flag"></i>
                                 <span class="title">Transporte</span>
                             </a>
@@ -219,17 +219,16 @@ License: SempaIT - Todos los derechos reservados.
                             </a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a href="../config/cotizacion.aspx">Cotización</a>
+                                    <a href="/scf/config/cotizacion.aspx">Cotización</a>
                                 </li>
                                 <li>
-                                    <a href="../usuarios/listado.aspx">Usuarios</a>
+                                    <a href="/scf/usuarios/listado.aspx">Usuarios</a>
                                 </li>
                                 <li>
-                                    <a href="../config/empresa.aspx">Datos Empresa</a>
+                                    <a href="/scf/config/empresa.aspx">Datos Empresa</a>
                                 </li>
                             </ul>
                         </li>
-
                     </ul>
                     <!-- END SIDEBAR MENU -->
                 </div>
