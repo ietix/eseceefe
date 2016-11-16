@@ -130,65 +130,74 @@ namespace SCF.remitos
 
         private void CargarGrillaItemsEntrega(bool isSeleccionar)
         {
-            CargarGrillaItemsNotaDePedido();
-            DataTable tablaItemsEntrega = new DataTable();
+          CargarGrillaItemsNotaDePedido();
+          var tablaItemsEntrega = new DataTable();
 
-            if (Session["tablaItemsEntrega"] == null)
+          if (Session["tablaItemsEntrega"] == null)
+          {
+            tablaItemsEntrega.Columns.Add("codigoItemEntrega");
+            tablaItemsEntrega.Columns.Add("codigoArticulo");
+            tablaItemsEntrega.Columns.Add("descripcionCorta");
+            tablaItemsEntrega.Columns.Add("cantidad");
+            tablaItemsEntrega.Columns.Add("codigoProveedor");
+            tablaItemsEntrega.Columns.Add("razonSocialProveedor");
+            tablaItemsEntrega.Columns.Add("codigoItemNotaDePedido");
+            tablaItemsEntrega.Columns.Add("isEliminada");
+
+            if (Session["tablaEntrega"] != null)
             {
-                tablaItemsEntrega.Columns.Add("codigoItemEntrega");
-                tablaItemsEntrega.Columns.Add("codigoArticulo");
-                tablaItemsEntrega.Columns.Add("descripcionCorta");
-                tablaItemsEntrega.Columns.Add("cantidad");
-                tablaItemsEntrega.Columns.Add("codigoProveedor");
-                tablaItemsEntrega.Columns.Add("razonSocialProveedor");
-                tablaItemsEntrega.Columns.Add("codigoItemNotaDePedido");
-                tablaItemsEntrega.Columns.Add("isEliminada");
+              var codigoEntrega = Convert.ToInt32(((DataTable)Session["tablaEntrega"]).Rows[0]["codigoEntrega"]);
+              var tablaItemsEntregaActual = ControladorGeneral.RecuperarItemsEntrega(codigoEntrega);
+              tablaItemsEntregaActual.Columns.Add("isEliminada");
 
-                if (Session["tablaEntrega"] != null)
-                {
-                    int codigoEntrega = Convert.ToInt32(((DataTable)Session["tablaEntrega"]).Rows[0]["codigoEntrega"]);
-                    DataTable tablaItemsEntregaActual = ControladorGeneral.RecuperarItemsEntrega(codigoEntrega);
-                    tablaItemsEntregaActual.Columns.Add("isEliminada");
-
-                    tablaItemsEntrega = tablaItemsEntregaActual.Copy();
-                }
-
-                for (int i = 0; i < gvItemsNotaDePedido.VisibleRowCount; i++)
-                {
-                    if (gvItemsNotaDePedido.Selection.IsRowSelected(i))
-                    {
-                        DataRowView mRow = (DataRowView)gvItemsNotaDePedido.GetRow(i);
-                        tablaItemsEntrega.Rows.Add(-i, mRow.Row.ItemArray[1], mRow.Row.ItemArray[2], 1, 0, string.Empty, mRow.Row.ItemArray[0], false);
-                    }
-                }
-
-                Session["tablaItemsEntrega"] = tablaItemsEntrega;
-            }
-            else
-            {
-                tablaItemsEntrega = (DataTable)Session["tablaItemsEntrega"];
-
-                if (isSeleccionar)
-                {
-                    for (int i = 0; i < gvItemsNotaDePedido.VisibleRowCount; i++)
-                    {
-                        if (gvItemsNotaDePedido.Selection.IsRowSelected(i))
-                        {
-                            DataRowView mRow = (DataRowView)gvItemsNotaDePedido.GetRow(i);
-                            int codigoItemNotaDePedido = Convert.ToInt32(mRow.Row.ItemArray[0]);
-                            DataRow filaRepetida = (from t in tablaItemsEntrega.AsEnumerable() where Convert.ToInt32(t["codigoItemNotaDePedido"]) == codigoItemNotaDePedido select t).SingleOrDefault();
-
-                            if (filaRepetida == null)
-                            {
-                                tablaItemsEntrega.Rows.Add(-i, mRow.Row.ItemArray[1], mRow.Row.ItemArray[2], 1, 0, string.Empty, mRow.Row.ItemArray[0], false);
-                            }
-                        }
-                    }
-                }
+              tablaItemsEntrega = tablaItemsEntregaActual.Copy();
             }
 
-            gvItemsEntrega.DataSource = tablaItemsEntrega;
-            gvItemsEntrega.DataBind();
+            for (var i = 0; i < gvItemsNotaDePedido.VisibleRowCount; i++)
+            {
+              if (gvItemsNotaDePedido.Selection.IsRowSelected(i))
+              {
+                var dataRow = (DataRowView)gvItemsNotaDePedido.GetRow(i);
+                tablaItemsEntrega.Rows.Add(-i, dataRow.Row.ItemArray[1], dataRow.Row.ItemArray[2], 1, 0, string.Empty, dataRow.Row.ItemArray[0], false);
+              }
+            }
+
+            Session["tablaItemsEntrega"] = tablaItemsEntrega;
+          }
+          else
+          {
+            tablaItemsEntrega = (DataTable)Session["tablaItemsEntrega"];
+
+            if (isSeleccionar)
+            {
+              for (var i = 0; i < gvItemsNotaDePedido.VisibleRowCount; i++)
+              {
+                if (gvItemsNotaDePedido.Selection.IsRowSelected(i))
+                {
+                  var dataRow = (DataRowView)gvItemsNotaDePedido.GetRow(i);
+                  var codigoItemNotaDePedido = Convert.ToInt32(dataRow.Row.ItemArray[0]);
+                  var filaRepetida = (from t in tablaItemsEntrega.AsEnumerable() where Convert.ToInt32(t["codigoItemNotaDePedido"]) == codigoItemNotaDePedido select t).SingleOrDefault();
+
+                  if (filaRepetida == null)
+                  {
+                    var newDataRow = tablaItemsEntrega.NewRow();
+                    newDataRow["codigoItemEntrega"] = -i;
+                    newDataRow["codigoArticulo"] = dataRow.Row.ItemArray[1];
+                    newDataRow["descripcionCorta"] = dataRow.Row.ItemArray[2];
+                    newDataRow["cantidad"] = 1;
+                    newDataRow["codigoProveedor"] = 0;
+                    newDataRow["razonSocialProveedor"] = string.Empty;
+                    newDataRow["codigoItemNotaDePedido"] = dataRow.Row.ItemArray[0];
+                    newDataRow["isEliminada"] = false;
+                    tablaItemsEntrega.Rows.Add(newDataRow);
+                  }
+                }
+              }
+            }
+          }
+
+          gvItemsEntrega.DataSource = tablaItemsEntrega;
+          gvItemsEntrega.DataBind();
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
