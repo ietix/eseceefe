@@ -1912,7 +1912,56 @@ namespace BibliotecaSCF.Controladores
             }
         }
 
-        #endregion
+      /// <summary>
+      /// Calcula los kpis de entregas
+      /// </summary>
+      /// <returns>Una tabla conteniendo el nombre y valor de los KPI</returns>
+      public static DataTable CalcularKpisEntrega()
+      {
+        var sesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
+        {
+          var resultado = new DataTable();
+
+          resultado.Columns.Add("entregasEnTiempo");
+          resultado.Columns.Add("entregasPorVencer");
+          resultado.Columns.Add("entregasVencidas");
+
+          var listaNotadePedido = CatalogoNotaDePedido.RecuperarTodos(sesion);
+
+          var listaNotadePedidoOk =
+            listaNotadePedido.Where(
+              n =>
+              n.CodigoEstado == Constantes.Estados.VIGENTE
+              && n.ItemsNotaDePedido.Any(i => i.FechaEntrega >= DateTime.Now)).ToList();
+          var entregasEnTiempo = listaNotadePedidoOk.Count;
+          var entregasPorVencer =
+            listaNotadePedidoOk.Where(n => n.ItemsNotaDePedido.Any(i => i.FechaEntrega < DateTime.Now.AddDays(5)))
+              .ToList()
+              .Count;
+          var entregasVencidas =
+            listaNotadePedido.Where(
+              n =>
+              n.CodigoEstado == Constantes.Estados.VIGENTE
+              && n.ItemsNotaDePedido.Any(i => i.FechaEntrega < DateTime.Now)).ToList().Count;
+
+          resultado.Rows.Add(entregasEnTiempo, entregasPorVencer, entregasVencidas);
+
+          return resultado;
+        }
+        catch (Exception ex)
+        {
+          throw;
+        }
+        finally
+        {
+          sesion.Close();
+          sesion.Dispose();
+        }
+      }
+
+      #endregion
 
         #region Proveedores
 

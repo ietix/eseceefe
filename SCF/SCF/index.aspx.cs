@@ -1,17 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+﻿using BibliotecaSCF.Controladores;
+using System;
 
 namespace SCF
 {
-    public partial class index : System.Web.UI.Page
+  
+  public partial class index : System.Web.UI.Page
+  {
+    protected void Page_Load(object sender, EventArgs e)
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
+      CalcularKpis();
     }
+
+    private void CalcularKpis()
+    {
+      var kpiEntregas = ControladorGeneral.CalcularKpisEntrega();
+
+      lblEntregasEnTiempo.Value = Convert.ToInt32(kpiEntregas.Rows[0].ItemArray[0]);
+      lblEntregasPorVencer.Value = Convert.ToInt32(kpiEntregas.Rows[0].ItemArray[1]);
+      lblEntregasVencidas.Value = Convert.ToInt32(kpiEntregas.Rows[0].ItemArray[2]);
+    }
+  }
 }
