@@ -13,69 +13,71 @@ namespace SCF.facturas
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            CargarGrilla();
+          CargarGrilla();
         }
 
         private void CargarGrilla()
         {
-            gvFacturas.DataSource = ControladorGeneral.RecuperarTodasFacturas();
-            gvFacturas.DataBind();
+          gvFacturas.DataSource = ControladorGeneral.RecuperarTodasFacturas();
+          gvFacturas.DataBind();
         }
 
         protected void btnNuevo_Click(object sender, EventArgs e)
         {
-            Session["tablaFactura"] = null;
-            Response.Redirect("factura.aspx");
+          Session["tablaFactura"] = null;
+          Response.Redirect("factura.aspx");
         }
 
         protected void btnEditar_Click(object sender, EventArgs e)
         {
-            DataTable tablaFactura = GetTablaFacturaActualSession();
+          DataTable tablaFactura = GetTablaFacturaActualSession();
 
-            Session["tablaFactura"] = tablaFactura;
+          Session["tablaFactura"] = tablaFactura;
         }
 
         private DataTable GetTablaFacturaActualSession()
         {
-            int codigoFactura = Convert.ToInt32(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "codigoFactura"));
-            int numeroFactura = Convert.ToInt32(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "numeroFactura"));
-            DateTime fechaFacturacion = Convert.ToDateTime(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "fechaFacturacion"));
-            string descripcionTipoComprobante = gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "descripcionTipoComprobante").ToString();
-            string descripcionTipoMoneda = gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "descripcionTipoMoneda").ToString();
-            string descripcionConcepto = gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "descripcionConcepto").ToString();
-            string descripcionIVA = gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "descripcionIVA").ToString();
-            Double subtotal = Convert.ToDouble(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "subtotal"));
-            Double total = Convert.ToDouble(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "total"));
-            string cae = gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "cae").ToString();
-            DateTime fechaVencimientoCAE = Convert.ToDateTime(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "fechaVencimientoCAE"));
-            string condicionVenta = gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "condicionVenta").ToString();
-            string remitos = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "remitos")).ToString();
-            string domicilio = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "domicilio")).ToString();
-            string localidad = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "localidad")).ToString();
-            double cotizacion = Convert.ToDouble(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "cotizacion"));
+          var codigoFactura = Convert.ToInt32(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "codigoFactura"));
+          var numeroFactura = Convert.ToInt32(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "numeroFactura"));
+          var fechaFacturacion = Convert.ToDateTime(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "fechaFacturacion"));
+          var descripcionTipoComprobante = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "descripcionTipoComprobante"));
+          var descripcionTipoMoneda = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "descripcionTipoMoneda"));
+          var descripcionConcepto = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "descripcionConcepto"));
+          var descripcionIVA = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "descripcionIVA"));
+          var subtotal = Convert.ToDouble(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "subtotal"));
+          var total = Convert.ToDouble(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "total"));
+          var cae = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "cae"));
+          var fechaVencimientoCAE = Convert.ToDateTime(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "fechaVencimientoCAE"));
+          var condicionVenta = gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "condicionVenta").ToString();
+          var remitos = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "remitos"));
+          var domicilio = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "domicilio"));
+          var localidad = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "localidad"));
+          var cotizacion = Convert.ToDouble(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "cotizacion"));
+          var observaciones = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "observaciones"));
 
-            DataTable tablaFactura = new DataTable();
-            tablaFactura.Columns.Add("codigoFactura");
-            tablaFactura.Columns.Add("numeroFactura");
-            tablaFactura.Columns.Add("fechaFacturacion");
-            tablaFactura.Columns.Add("descripcionTipoComprobante");
-            tablaFactura.Columns.Add("descripcionTipoMoneda");
-            tablaFactura.Columns.Add("descripcionConcepto");
-            tablaFactura.Columns.Add("descripcionIVA");
-            tablaFactura.Columns.Add("subtotal");
-            tablaFactura.Columns.Add("total");
-            tablaFactura.Columns.Add("cae");
-            tablaFactura.Columns.Add("fechaVencimientoCAE");
-            tablaFactura.Columns.Add("condicionVenta");
-            tablaFactura.Columns.Add("remitos");
-            tablaFactura.Columns.Add("domicilio");
-            tablaFactura.Columns.Add("localidad");
-            tablaFactura.Columns.Add("cotizacion");
+          var tablaFactura = new DataTable();
+          tablaFactura.Columns.Add("codigoFactura");
+          tablaFactura.Columns.Add("numeroFactura");
+          tablaFactura.Columns.Add("fechaFacturacion");
+          tablaFactura.Columns.Add("descripcionTipoComprobante");
+          tablaFactura.Columns.Add("descripcionTipoMoneda");
+          tablaFactura.Columns.Add("descripcionConcepto");
+          tablaFactura.Columns.Add("descripcionIVA");
+          tablaFactura.Columns.Add("subtotal");
+          tablaFactura.Columns.Add("total");
+          tablaFactura.Columns.Add("cae");
+          tablaFactura.Columns.Add("fechaVencimientoCAE");
+          tablaFactura.Columns.Add("condicionVenta");
+          tablaFactura.Columns.Add("remitos");
+          tablaFactura.Columns.Add("domicilio");
+          tablaFactura.Columns.Add("localidad");
+          tablaFactura.Columns.Add("cotizacion");
+          tablaFactura.Columns.Add("observaciones");
 
-            tablaFactura.Rows.Add(new object[] { codigoFactura, numeroFactura, fechaFacturacion, descripcionTipoComprobante, descripcionTipoMoneda, descripcionConcepto, descripcionIVA, subtotal,
-            total,cae,fechaVencimientoCAE,condicionVenta,remitos,domicilio,localidad,cotizacion});
+          tablaFactura.Rows.Add(new object[] { codigoFactura, numeroFactura, fechaFacturacion, descripcionTipoComprobante, descripcionTipoMoneda, descripcionConcepto, descripcionIVA, subtotal,
+          total, cae, fechaVencimientoCAE, condicionVenta, remitos, domicilio, localidad, cotizacion, observaciones});
 
-            return tablaFactura;
+          return tablaFactura;
         }
 
         protected void btnConfirmarEliminarFactura_Click(object sender, EventArgs e)

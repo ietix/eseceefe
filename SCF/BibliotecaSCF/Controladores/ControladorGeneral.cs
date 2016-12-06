@@ -2321,51 +2321,52 @@ namespace BibliotecaSCF.Controladores
 
         public static DataTable RecuperarTodasFacturas()
         {
-            ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+          var nhSesion = ManejoDeNHibernate.IniciarSesion();
 
-            try
+          try
+          {
+            var tablaFacturas = new DataTable();
+            tablaFacturas.Columns.Add("codigoFactura");
+            tablaFacturas.Columns.Add("numeroFactura");
+            tablaFacturas.Columns.Add("fechaFacturacion");
+            tablaFacturas.Columns.Add("descripcionTipoComprobante");
+            tablaFacturas.Columns.Add("descripcionTipoMoneda");
+            tablaFacturas.Columns.Add("descripcionConcepto");
+            tablaFacturas.Columns.Add("descripcionIVA");
+            tablaFacturas.Columns.Add("subtotal");
+            tablaFacturas.Columns.Add("total");
+            tablaFacturas.Columns.Add("cae");
+            tablaFacturas.Columns.Add("fechaVencimientoCAE");
+            tablaFacturas.Columns.Add("remitos");
+            tablaFacturas.Columns.Add("condicionVenta");
+            tablaFacturas.Columns.Add("codigoDireccion");
+            tablaFacturas.Columns.Add("direccion");
+            tablaFacturas.Columns.Add("domicilio");
+            tablaFacturas.Columns.Add("localidad");
+            tablaFacturas.Columns.Add("cotizacion");
+            tablaFacturas.Columns.Add("observaciones");
+
+            var listaFacturas = CatalogoFactura.RecuperarTodos(nhSesion);
+
+            listaFacturas.OrderByDescending(x => x.NumeroFactura).Aggregate(tablaFacturas, (dt, r) =>
             {
-                DataTable tablaFacturas = new DataTable();
-                tablaFacturas.Columns.Add("codigoFactura");
-                tablaFacturas.Columns.Add("numeroFactura");
-                tablaFacturas.Columns.Add("fechaFacturacion");
-                tablaFacturas.Columns.Add("descripcionTipoComprobante");
-                tablaFacturas.Columns.Add("descripcionTipoMoneda");
-                tablaFacturas.Columns.Add("descripcionConcepto");
-                tablaFacturas.Columns.Add("descripcionIVA");
-                tablaFacturas.Columns.Add("subtotal");
-                tablaFacturas.Columns.Add("total");
-                tablaFacturas.Columns.Add("cae");
-                tablaFacturas.Columns.Add("fechaVencimientoCAE");
-                tablaFacturas.Columns.Add("remitos");
-                tablaFacturas.Columns.Add("condicionVenta");
-                tablaFacturas.Columns.Add("codigoDireccion");
-                tablaFacturas.Columns.Add("direccion");
-                tablaFacturas.Columns.Add("domicilio");
-                tablaFacturas.Columns.Add("localidad");
-                tablaFacturas.Columns.Add("cotizacion");
+              dt.Rows.Add(r.Codigo, r.NumeroFactura, r.FechaFacturacion, r.TipoComprobante.Descripcion, r.Moneda.Descripcion,
+              r.Concepto.Descripcion, r.Iva.Descripcion, r.Subtotal, r.Total, r.Cae, r.FechaVencimiento, string.Join(", ", r.Entregas.Select(x => x.NumeroRemito)),
+              r.CondicionVenta, r.Entregas[0].Direccion.Codigo, r.Entregas[0].Direccion.Descripcion + ", " + r.Entregas[0].Direccion.Localidad + ", " +
+              r.Entregas[0].Direccion.Provincia, r.Entregas[0].Direccion.Descripcion, r.Entregas[0].Direccion.Localidad, r.Cotizacion, r.Entregas[0].Observaciones); return dt;
+            });
 
-                List<Factura> listaFacturas = CatalogoFactura.RecuperarTodos(nhSesion);
-
-                listaFacturas.OrderByDescending(x => x.NumeroFactura).Aggregate(tablaFacturas, (dt, r) =>
-                {
-                    dt.Rows.Add(r.Codigo, r.NumeroFactura, r.FechaFacturacion, r.TipoComprobante.Descripcion, r.Moneda.Descripcion,
-                        r.Concepto.Descripcion, r.Iva.Descripcion, r.Subtotal, r.Total, r.Cae, r.FechaVencimiento, string.Join(", ", r.Entregas.Select(x => x.NumeroRemito)),
-                        r.CondicionVenta, r.Entregas[0].Direccion.Codigo, r.Entregas[0].Direccion.Descripcion + ", " + r.Entregas[0].Direccion.Localidad + ", " +
-                        r.Entregas[0].Direccion.Provincia, r.Entregas[0].Direccion.Descripcion, r.Entregas[0].Direccion.Localidad, r.Cotizacion); return dt;
-                });
-
-                return tablaFacturas;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                nhSesion.Close();
-                nhSesion.Dispose();
-            }
+            return tablaFacturas;
+          }
+          catch (Exception ex)
+          {
+              throw ex;
+          }
+          finally
+          {
+              nhSesion.Close();
+              nhSesion.Dispose();
+          }
         }
 
         public static DataTable RecuperarFacturaPorCodigo(int codigoFactura)
@@ -2386,7 +2387,6 @@ namespace BibliotecaSCF.Controladores
                 nhSesion.Dispose();
             }
         }
-
 
         public static int ConsultarUltimoNroComprobante(int ptoVenta, int tipoComptobanteAfip)
         {

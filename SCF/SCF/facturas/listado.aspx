@@ -108,7 +108,10 @@
                                         <dx:GridViewDataTextColumn FieldName="localidad" Visible="false" VisibleIndex="9" Caption="Condición Venta">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                         <dx:GridViewDataTextColumn FieldName="cotizacion" Visible="false" VisibleIndex="9" Caption="Cotizacion">
+                                        <dx:GridViewDataTextColumn FieldName="cotizacion" Visible="false" VisibleIndex="9" Caption="Cotizacion">
+                                            <Settings AllowSort="True" AutoFilterCondition="Contains" />
+                                        </dx:GridViewDataTextColumn>
+                                        <dx:GridViewDataTextColumn FieldName="observaciones" Visible="false" VisibleIndex="9" Caption="Observaciones">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
                                     </Columns>
