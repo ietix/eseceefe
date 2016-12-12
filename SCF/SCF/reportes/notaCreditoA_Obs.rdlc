@@ -1009,10 +1009,14 @@
     </ReportParameter>
     <ReportParameter Name="txtRazonSocialProveedor">
       <DataType>String</DataType>
+			<Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="txtTipoMoneda">
       <DataType>String</DataType>
+			<Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="txtCotizacion">

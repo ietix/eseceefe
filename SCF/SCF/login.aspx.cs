@@ -22,7 +22,7 @@ namespace SCF
             if (dtUsuarioActual != null)
             {
                 Session.Add("usuarioLogueado", dtUsuarioActual.Rows[0][1].ToString());
-                Response.Redirect("~/scf/index.aspx");
+                Response.Redirect("~/index.aspx");
             }            
             else
             {
