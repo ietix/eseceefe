@@ -1048,67 +1048,72 @@ namespace BibliotecaSCF.Controladores
 
         #region Entregas/Remitos
 
-        public static DataTable RecuperarTodasEntregas(bool sinFacturaAsociada)
+      public static DataTable RecuperarTodasEntregas(bool sinFacturaAsociada)
+      {
+        var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
         {
-            ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+          var tablaEntrega = new DataTable();
+          tablaEntrega.Columns.Add("codigoEntrega");
+          tablaEntrega.Columns.Add("codigoNotaDePedido");
+          tablaEntrega.Columns.Add("codigoCliente");
+          tablaEntrega.Columns.Add("razonSocialCliente");
+          tablaEntrega.Columns.Add("cuitCliente");//Agrego nro documento
+          tablaEntrega.Columns.Add("codigoSCF");
+          tablaEntrega.Columns.Add("fechaEmision");
+          tablaEntrega.Columns.Add("numeroNotaDePedido");
+          tablaEntrega.Columns.Add("numeroRemito");
+          tablaEntrega.Columns.Add("codigoEstado");
+          tablaEntrega.Columns.Add("observaciones");
+          tablaEntrega.Columns.Add("codigoTransporte");
+          tablaEntrega.Columns.Add("razonSocialTransporte");
+          tablaEntrega.Columns.Add("direccion");
+          tablaEntrega.Columns.Add("codigoDireccion");
+          tablaEntrega.Columns.Add("domicilio");
+          tablaEntrega.Columns.Add("localidad");
+          tablaEntrega.Columns.Add("cai");
+          tablaEntrega.Columns.Add("fechaVencimientoCai");
+          tablaEntrega.Columns.Add("codigoPuntoDeVenta");
+          tablaEntrega.Columns.Add("numeroPuntoDeVenta");
+          tablaEntrega.Columns.Add("descripcionPuntoDeVenta");
 
-            try
-            {
-                DataTable tablaEntrega = new DataTable();
-                tablaEntrega.Columns.Add("codigoEntrega");
-                tablaEntrega.Columns.Add("codigoNotaDePedido");
-                tablaEntrega.Columns.Add("codigoCliente");
-                tablaEntrega.Columns.Add("razonSocialCliente");
-                tablaEntrega.Columns.Add("cuitCliente");//Agrego nro documento
-                tablaEntrega.Columns.Add("codigoSCF");
-                tablaEntrega.Columns.Add("fechaEmision");
-                tablaEntrega.Columns.Add("numeroNotaDePedido");
-                tablaEntrega.Columns.Add("numeroRemito");
-                tablaEntrega.Columns.Add("codigoEstado");
-                tablaEntrega.Columns.Add("observaciones");
-                tablaEntrega.Columns.Add("codigoTransporte");
-                tablaEntrega.Columns.Add("razonSocialTransporte");
-                tablaEntrega.Columns.Add("direccion");
-                tablaEntrega.Columns.Add("codigoDireccion");
-                tablaEntrega.Columns.Add("domicilio");
-                tablaEntrega.Columns.Add("localidad");
-                tablaEntrega.Columns.Add("cai");
-                tablaEntrega.Columns.Add("fechaVencimientoCai");
+          var listaEntregas = new List<Entrega>();
 
-                List<Entrega> listaEntregas = new List<Entrega>();
+          if (sinFacturaAsociada)
+          {
+            var listaEntregasConFacturas = (from f in CatalogoFactura.RecuperarTodos(nhSesion) select f.Entregas).SelectMany(x => x).ToList();
+            listaEntregas = CatalogoEntrega.RecuperarLasQueNoEstanEnLaLista(listaEntregasConFacturas, nhSesion);
+          }
+          else
+          {
+            listaEntregas = CatalogoEntrega.RecuperarTodos(nhSesion);
+          }
 
-                if (sinFacturaAsociada)
-                {
-                    List<Entrega> listaEntregasConFacturas = (from f in CatalogoFactura.RecuperarTodos(nhSesion) select f.Entregas).SelectMany(x => x).ToList();
-                    listaEntregas = CatalogoEntrega.RecuperarLasQueNoEstanEnLaLista(listaEntregasConFacturas, nhSesion);
-                }
-                else
-                {
-                    listaEntregas = CatalogoEntrega.RecuperarTodos(nhSesion);
-                }
+          listaEntregas.OrderByDescending(x => x.CodigoEstado).Aggregate(tablaEntrega, (dt, r) =>
+          {
+            dt.Rows.Add(r.Codigo, r.NotaDePedido.Codigo, r.NotaDePedido.Cliente.Codigo,
+                r.NotaDePedido.Cliente.RazonSocial, r.NotaDePedido.Cliente.NumeroDocumento, r.NotaDePedido.Cliente.CodigoSCF,
+                r.FechaEmision.ToString("dd/MM/yyyy"), r.NotaDePedido.NumeroInternoCliente, r.NumeroRemito,
+                r.CodigoEstado, r.Observaciones, r.Transporte.Codigo, r.Transporte.RazonSocial,
+                r.Direccion.Descripcion + ", " + r.Direccion.Localidad + ", " + r.Direccion.Provincia, r.Direccion.Codigo, 
+                r.Direccion.Descripcion, r.Direccion.Localidad, r.Cai, r.FechaVencimientoCai.ToString("dd/MM/yyyy"),
+                r.PuntoDeVenta == null ? -1 : r.PuntoDeVenta.Codigo, r.PuntoDeVenta == null ? -1 : r.PuntoDeVenta.Numero, 
+                r.PuntoDeVenta == null ? string.Empty : r.PuntoDeVenta.Descripcion); return dt;
+          });
 
-                listaEntregas.OrderByDescending(x => x.CodigoEstado).Aggregate(tablaEntrega, (dt, r) =>
-                {
-                    dt.Rows.Add(r.Codigo, r.NotaDePedido.Codigo, r.NotaDePedido.Cliente.Codigo,
-                        r.NotaDePedido.Cliente.RazonSocial, r.NotaDePedido.Cliente.NumeroDocumento, r.NotaDePedido.Cliente.CodigoSCF,
-                        r.FechaEmision.ToString("dd/MM/yyyy"), r.NotaDePedido.NumeroInternoCliente, r.NumeroRemito,
-                        r.CodigoEstado, r.Observaciones, r.Transporte.Codigo, r.Transporte.RazonSocial,
-                        r.Direccion.Descripcion + ", " + r.Direccion.Localidad + ", " + r.Direccion.Provincia, r.Direccion.Codigo, r.Direccion.Descripcion, r.Direccion.Localidad,
-                        r.Cai, r.FechaVencimientoCai.ToString("dd/MM/yyyy")); return dt;
-                });
-
-                return tablaEntrega;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                nhSesion.Close();
-                nhSesion.Dispose();
-            }
+          return tablaEntrega;
         }
+        catch (Exception ex)
+        {
+          throw ex;
+        }
+        finally
+        {
+          nhSesion.Close();
+          nhSesion.Dispose();
+        }
+      }
 
         public static DataTable RecuperarUltimaEntrega()
         {
@@ -2276,98 +2281,99 @@ namespace BibliotecaSCF.Controladores
 
         #region Factura
 
-        public static DataTable RecuperarUltimaFactura()
+      public static DataTable RecuperarUltimaFactura(int? codigoPuntoDeVenta)
+      {
+        var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
         {
-            ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+          var tablaFacturas = new DataTable();
+          tablaFacturas.Columns.Add("codigoFactura");
+          tablaFacturas.Columns.Add("numeroFactura");
+          tablaFacturas.Columns.Add("fechaFacturacion");
+          tablaFacturas.Columns.Add("descripcionTipoComprobante");
+          tablaFacturas.Columns.Add("descripcionTipoMoneda");
+          tablaFacturas.Columns.Add("descripcionConcepto");
+          tablaFacturas.Columns.Add("descripcionIVA");
+          tablaFacturas.Columns.Add("subtotal");
+          tablaFacturas.Columns.Add("total");
+          tablaFacturas.Columns.Add("cae");
+          tablaFacturas.Columns.Add("fechaVencimientoCAE");
+          tablaFacturas.Columns.Add("codigoDireccion");
+          tablaFacturas.Columns.Add("direccion");
 
-            try
-            {
-                DataTable tablaFacturas = new DataTable();
-                tablaFacturas.Columns.Add("codigoFactura");
-                tablaFacturas.Columns.Add("numeroFactura");
-                tablaFacturas.Columns.Add("fechaFacturacion");
-                tablaFacturas.Columns.Add("descripcionTipoComprobante");
-                tablaFacturas.Columns.Add("descripcionTipoMoneda");
-                tablaFacturas.Columns.Add("descripcionConcepto");
-                tablaFacturas.Columns.Add("descripcionIVA");
-                tablaFacturas.Columns.Add("subtotal");
-                tablaFacturas.Columns.Add("total");
-                tablaFacturas.Columns.Add("cae");
-                tablaFacturas.Columns.Add("fechaVencimientoCAE");
-                tablaFacturas.Columns.Add("codigoDireccion");
-                tablaFacturas.Columns.Add("direccion");
+          var codigo = codigoPuntoDeVenta ?? -1;
+          var factura = CatalogoFactura.RecuperarUltima(codigo, nhSesion);
 
-                Factura factura = CatalogoFactura.RecuperarUltima(nhSesion);
+          if (factura != null)
+          {
+              tablaFacturas.Rows.Add(new object[] { factura.Codigo, factura.NumeroFactura,factura.FechaFacturacion,factura.TipoComprobante.Descripcion, factura.Moneda.Descripcion, 
+              factura.Concepto.Descripcion, factura.Iva.Descripcion,factura.Subtotal,factura.Total,factura.Cae,factura.FechaVencimiento, factura.Entregas[0].Direccion.Codigo,
+              factura.Entregas[0].Direccion.Descripcion +", "+factura.Entregas[0].Direccion.Localidad+", "+factura.Entregas[0].Direccion.Provincia});
+          }
 
-                if (factura != null)
-                {
-                    tablaFacturas.Rows.Add(new object[] { factura.Codigo, factura.NumeroFactura,factura.FechaFacturacion,factura.TipoComprobante.Descripcion, factura.Moneda.Descripcion, 
-                    factura.Concepto.Descripcion, factura.Iva.Descripcion,factura.Subtotal,factura.Total,factura.Cae,factura.FechaVencimiento, factura.Entregas[0].Direccion.Codigo,
-                    factura.Entregas[0].Direccion.Descripcion +", "+factura.Entregas[0].Direccion.Localidad+", "+factura.Entregas[0].Direccion.Provincia});
-                }
-
-                return tablaFacturas;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                nhSesion.Close();
-                nhSesion.Dispose();
-            }
+          return tablaFacturas;
         }
-
-        public static DataTable RecuperarTodasFacturas()
+        catch (Exception ex)
         {
-          var nhSesion = ManejoDeNHibernate.IniciarSesion();
-
-          try
-          {
-            var tablaFacturas = new DataTable();
-            tablaFacturas.Columns.Add("codigoFactura");
-            tablaFacturas.Columns.Add("numeroFactura");
-            tablaFacturas.Columns.Add("fechaFacturacion");
-            tablaFacturas.Columns.Add("descripcionTipoComprobante");
-            tablaFacturas.Columns.Add("descripcionTipoMoneda");
-            tablaFacturas.Columns.Add("descripcionConcepto");
-            tablaFacturas.Columns.Add("descripcionIVA");
-            tablaFacturas.Columns.Add("subtotal");
-            tablaFacturas.Columns.Add("total");
-            tablaFacturas.Columns.Add("cae");
-            tablaFacturas.Columns.Add("fechaVencimientoCAE");
-            tablaFacturas.Columns.Add("remitos");
-            tablaFacturas.Columns.Add("condicionVenta");
-            tablaFacturas.Columns.Add("codigoDireccion");
-            tablaFacturas.Columns.Add("direccion");
-            tablaFacturas.Columns.Add("domicilio");
-            tablaFacturas.Columns.Add("localidad");
-            tablaFacturas.Columns.Add("cotizacion");
-            tablaFacturas.Columns.Add("observaciones");
-
-            var listaFacturas = CatalogoFactura.RecuperarTodos(nhSesion);
-
-            listaFacturas.OrderByDescending(x => x.NumeroFactura).Aggregate(tablaFacturas, (dt, r) =>
-            {
-              dt.Rows.Add(r.Codigo, r.NumeroFactura, r.FechaFacturacion, r.TipoComprobante.Descripcion, r.Moneda.Descripcion,
-              r.Concepto.Descripcion, r.Iva.Descripcion, r.Subtotal, r.Total, r.Cae, r.FechaVencimiento, string.Join(", ", r.Entregas.Select(x => x.NumeroRemito)),
-              r.CondicionVenta, r.Entregas[0].Direccion.Codigo, r.Entregas[0].Direccion.Descripcion + ", " + r.Entregas[0].Direccion.Localidad + ", " +
-              r.Entregas[0].Direccion.Provincia, r.Entregas[0].Direccion.Descripcion, r.Entregas[0].Direccion.Localidad, r.Cotizacion, r.Entregas[0].Observaciones); return dt;
-            });
-
-            return tablaFacturas;
-          }
-          catch (Exception ex)
-          {
-              throw ex;
-          }
-          finally
-          {
-              nhSesion.Close();
-              nhSesion.Dispose();
-          }
+          throw ex;
         }
+        finally
+        {
+          nhSesion.Close();
+          nhSesion.Dispose();
+        }
+      }
+
+      public static DataTable RecuperarTodasFacturas()
+      {
+        var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
+        {
+          var tablaFacturas = new DataTable();
+          tablaFacturas.Columns.Add("codigoFactura");
+          tablaFacturas.Columns.Add("numeroFactura");
+          tablaFacturas.Columns.Add("fechaFacturacion");
+          tablaFacturas.Columns.Add("descripcionTipoComprobante");
+          tablaFacturas.Columns.Add("descripcionTipoMoneda");
+          tablaFacturas.Columns.Add("descripcionConcepto");
+          tablaFacturas.Columns.Add("descripcionIVA");
+          tablaFacturas.Columns.Add("subtotal");
+          tablaFacturas.Columns.Add("total");
+          tablaFacturas.Columns.Add("cae");
+          tablaFacturas.Columns.Add("fechaVencimientoCAE");
+          tablaFacturas.Columns.Add("remitos");
+          tablaFacturas.Columns.Add("condicionVenta");
+          tablaFacturas.Columns.Add("codigoDireccion");
+          tablaFacturas.Columns.Add("direccion");
+          tablaFacturas.Columns.Add("domicilio");
+          tablaFacturas.Columns.Add("localidad");
+          tablaFacturas.Columns.Add("cotizacion");
+          tablaFacturas.Columns.Add("observaciones");
+
+          var listaFacturas = CatalogoFactura.RecuperarTodos(nhSesion);
+
+          listaFacturas.OrderByDescending(x => x.NumeroFactura).Aggregate(tablaFacturas, (dt, r) =>
+          {
+            dt.Rows.Add(r.Codigo, r.NumeroFactura, r.FechaFacturacion, r.TipoComprobante.Descripcion, r.Moneda.Descripcion,
+            r.Concepto.Descripcion, r.Iva.Descripcion, r.Subtotal, r.Total, r.Cae, r.FechaVencimiento, string.Join(", ", r.Entregas.Select(x => x.NumeroRemito)),
+            r.CondicionVenta, r.Entregas[0].Direccion.Codigo, r.Entregas[0].Direccion.Descripcion + ", " + r.Entregas[0].Direccion.Localidad + ", " +
+            r.Entregas[0].Direccion.Provincia, r.Entregas[0].Direccion.Descripcion, r.Entregas[0].Direccion.Localidad, r.Cotizacion, r.Entregas[0].Observaciones); return dt;
+          });
+
+          return tablaFacturas;
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            nhSesion.Close();
+            nhSesion.Dispose();
+        }
+      }
 
         public static DataTable RecuperarFacturaPorCodigo(int codigoFactura)
         {
@@ -2396,180 +2402,181 @@ namespace BibliotecaSCF.Controladores
             return ultNroComprobante;
         }
 
-        public static string InsertarActualizarFactura(int codigoFactura, int numeroFactura, DateTime fechaFacturacion, List<int> listaCodigosEntrega, int codigoMoneda, int codigoConcepto, int codigoIva, double subtotal, double total, string condicionVenta, double cotizacion, DataTable tablaItemsEntrega)
+        public static string InsertarActualizarFactura(int codigoFactura, int codigoPuntoDeVenta, int numeroFactura, DateTime fechaFacturacion, List<int> listaCodigosEntrega, int codigoMoneda, int codigoConcepto, int codigoIva, double subtotal, double total, string condicionVenta, double cotizacion, DataTable tablaItemsEntrega)
         {
-            ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+          var nhSesion = ManejoDeNHibernate.IniciarSesion();
 
-            try
+          try
+          {
+            Factura factura;
+
+            if (codigoFactura == 0)
             {
-                Factura factura;
-
-                if (codigoFactura == 0)
-                {
-                    factura = new Factura();
-                }
-                else
-                {
-                    factura = CatalogoFactura.RecuperarPorCodigo(codigoFactura, nhSesion);
-
-                    if (!string.IsNullOrEmpty(factura.Cae))
-                    {
-                        return "TieneCAE";
-                    }
-                }
-
-                factura.Concepto = CatalogoConcepto.RecuperarPorCodigo(codigoConcepto, nhSesion);
-
-                //Borramos las entregas eliminadas en la pantalla
-                List<Entrega> listaEntregasBorradas = (from e in factura.Entregas where !listaCodigosEntrega.Contains(e.Codigo) select e).ToList();
-                foreach (Entrega entregaBorrar in listaEntregasBorradas)
-                {
-                    factura.Entregas.Remove(entregaBorrar);
-                }
-
-                //Agrego las entregas que no estaban en la factura hasta el momento
-                foreach (int codigoEntrega in listaCodigosEntrega)
-                {
-                    Entrega ent = (from e in factura.Entregas where e.Codigo == codigoEntrega select e).SingleOrDefault();
-
-                    if (ent == null)
-                    {
-                        factura.Entregas.Add(CatalogoEntrega.RecuperarPorCodigo(codigoEntrega, nhSesion));
-                    }
-                }
-
-                //Editamos los precios de los items entrega
-                foreach (DataRow row in tablaItemsEntrega.Rows)
-                {
-                    int codigoEntrega = Convert.ToInt32(row["codigoEntrega"]);
-                    Entrega entrega = (from e in factura.Entregas where e.Codigo == codigoEntrega select e).SingleOrDefault();
-
-                    int codigoItemEntrega = Convert.ToInt32(row["codigoItemEntrega"]);
-                    ItemEntrega itemEntrega = (from i in entrega.ItemsEntrega where i.Codigo == codigoItemEntrega select i).SingleOrDefault();
-
-                    double precio = Convert.ToDouble(row["precio"]);
-                    if (itemEntrega.Precio != precio)
-                    {
-                        itemEntrega.Precio = precio;
-                        CatalogoGenerico<ItemEntrega>.InsertarActualizar(itemEntrega, nhSesion);
-                    }
-                }
-
-
-                factura.FechaFacturacion = fechaFacturacion;
-                factura.Iva = CatalogoIva.RecuperarPorCodigo(codigoIva, nhSesion);
-                factura.Moneda = CatalogoMoneda.RecuperarPorCodigo(codigoMoneda, nhSesion);
-                factura.NumeroFactura = numeroFactura;
-                factura.Subtotal = subtotal;// (double)decimal.Round((decimal)subtotal, 2);
-                factura.TipoComprobante = CatalogoTipoComprobante.RecuperarPorCodigo(1, nhSesion);
-                factura.Total = total;
-                factura.FechaVencimiento = null;
-                factura.CondicionVenta = condicionVenta;
-                factura.Cotizacion = codigoMoneda == Constantes.Moneda.PESO ? 1 : cotizacion; //Si la moneda es peso guardamos 1 en cotizacion
-
-                CatalogoFactura.InsertarActualizar(factura, nhSesion);
-                return "ok";
+              factura = new Factura();
             }
-            catch (Exception ex)
+            else
             {
-                throw ex;
+              factura = CatalogoFactura.RecuperarPorCodigo(codigoFactura, nhSesion);
+
+              if (!string.IsNullOrEmpty(factura.Cae))
+              {
+                  return "TieneCAE";
+              }
             }
-            finally
+
+            factura.Concepto = CatalogoConcepto.RecuperarPorCodigo(codigoConcepto, nhSesion);
+
+            //Borramos las entregas eliminadas en la pantalla
+            var listaEntregasBorradas = (from e in factura.Entregas where !listaCodigosEntrega.Contains(e.Codigo) select e).ToList();
+            
+            foreach (var entregaBorrar in listaEntregasBorradas)
             {
-                nhSesion.Close();
-                nhSesion.Dispose();
+              factura.Entregas.Remove(entregaBorrar);
             }
+
+            //Agrego las entregas que no estaban en la factura hasta el momento
+            foreach (var codigoEntrega in listaCodigosEntrega)
+            {
+              var ent = (from e in factura.Entregas where e.Codigo == codigoEntrega select e).SingleOrDefault();
+
+              if (ent == null)
+              {
+                factura.Entregas.Add(CatalogoEntrega.RecuperarPorCodigo(codigoEntrega, nhSesion));
+              }
+            }
+
+            //Editamos los precios de los items entrega
+            foreach (DataRow row in tablaItemsEntrega.Rows)
+            {
+              var codigoEntrega = Convert.ToInt32(row["codigoEntrega"]);
+              var entrega = (from e in factura.Entregas where e.Codigo == codigoEntrega select e).SingleOrDefault();
+
+              var codigoItemEntrega = Convert.ToInt32(row["codigoItemEntrega"]);
+              var itemEntrega = (from i in entrega.ItemsEntrega where i.Codigo == codigoItemEntrega select i).SingleOrDefault();
+
+              var precio = Convert.ToDouble(row["precio"]);
+              if (itemEntrega.Precio != precio)
+              {
+                itemEntrega.Precio = precio;
+                CatalogoGenerico<ItemEntrega>.InsertarActualizar(itemEntrega, nhSesion);
+              }
+            }
+
+            factura.FechaFacturacion = fechaFacturacion;
+            factura.Iva = CatalogoIva.RecuperarPorCodigo(codigoIva, nhSesion);
+            factura.Moneda = CatalogoMoneda.RecuperarPorCodigo(codigoMoneda, nhSesion);
+            factura.NumeroFactura = numeroFactura;
+            factura.Subtotal = subtotal;// (double)decimal.Round((decimal)subtotal, 2);
+            factura.TipoComprobante = CatalogoTipoComprobante.RecuperarPorCodigo(1, nhSesion);
+            factura.Total = total;
+            factura.FechaVencimiento = null;
+            factura.CondicionVenta = condicionVenta;
+            factura.Cotizacion = codigoMoneda == Constantes.Moneda.PESO ? 1 : cotizacion; //Si la moneda es peso guardamos 1 en cotizacion
+            factura.PuntoDeVenta = CatalogoPuntosDeVenta.RecuperarPorCodigo(codigoPuntoDeVenta, nhSesion);
+
+            CatalogoFactura.InsertarActualizar(factura, nhSesion);
+            return "ok";
+          }
+          catch (Exception ex)
+          {
+            throw ex;
+          }
+          finally
+          {
+            nhSesion.Close();
+            nhSesion.Dispose();
+          }
         }
 
         public static string EmitirFactura(int codigoFactura)
         {
-            ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+          var nhSesion = ManejoDeNHibernate.IniciarSesion();
 
-            try
+          try
+          {
+            var factura = CatalogoFactura.RecuperarPorCodigo(codigoFactura, nhSesion);
+
+            var request = new FECAERequest();
+
+            var cabeceraReq = new FECAECabRequest();
+            cabeceraReq.CantReg = 1;
+            cabeceraReq.CbteTipo = 1; //factura A
+            cabeceraReq.PtoVta = factura.PuntoDeVenta.Numero;
+
+            request.FeCabReq = cabeceraReq;
+
+            var detalleReq = new FECAEDetRequest();
+            detalleReq.CbteDesde = factura.NumeroFactura;
+            detalleReq.CbteHasta = factura.NumeroFactura;
+            detalleReq.CbteFch = ConvertirFechaAFIP(factura.FechaFacturacion);
+            detalleReq.Concepto = factura.Concepto.Codigo;
+            detalleReq.DocNro = Convert.ToInt64(factura.Entregas[0].NotaDePedido.Cliente.NumeroDocumento.Replace("-", ""));
+            detalleReq.DocTipo = factura.Entregas[0].NotaDePedido.Cliente.TipoDocumento.Codigo;
+            //detalleReq.CbtesAsoc = ??????
+
+            if (factura.Concepto.Codigo != 1)
             {
-                Factura factura = CatalogoFactura.RecuperarPorCodigo(codigoFactura, nhSesion);
-
-                FECAERequest request = new FECAERequest();
-
-                FECAECabRequest cabeceraReq = new FECAECabRequest();
-                cabeceraReq.CantReg = 1;
-                cabeceraReq.CbteTipo = 1; //factura A
-                cabeceraReq.PtoVta = 2;
-
-                request.FeCabReq = cabeceraReq;
-
-                FECAEDetRequest detalleReq = new FECAEDetRequest();
-                detalleReq.CbteDesde = factura.NumeroFactura;
-                detalleReq.CbteHasta = factura.NumeroFactura;
-                detalleReq.CbteFch = ConvertirFechaAFIP(factura.FechaFacturacion);
-                detalleReq.Concepto = factura.Concepto.Codigo;
-                detalleReq.DocNro = Convert.ToInt64(factura.Entregas[0].NotaDePedido.Cliente.NumeroDocumento.Replace("-", ""));
-                detalleReq.DocTipo = factura.Entregas[0].NotaDePedido.Cliente.TipoDocumento.Codigo;
-                //detalleReq.CbtesAsoc = ??????
-
-                if (factura.Concepto.Codigo != 1)
-                {
-                    detalleReq.FchServDesde = ConvertirFechaAFIP(factura.FechaFacturacion);
-                    detalleReq.FchServHasta = ConvertirFechaAFIP(factura.FechaFacturacion);
-                    detalleReq.FchVtoPago = ConvertirFechaAFIP(factura.FechaFacturacion);
-                }
-
-                double cotizacion = factura.Moneda.Codigo == Constantes.Moneda.PESO ? 1 : factura.Cotizacion; // Si la moneda es peso argentino se pone la cotizacion ingresada, sino va 1
-
-                detalleReq.ImpIVA = (double)decimal.Round((decimal)(cotizacion * factura.Subtotal * 0.21), 2);
-                detalleReq.ImpNeto = (double)decimal.Round((decimal)cotizacion * (decimal)factura.Subtotal, 2);
-                detalleReq.ImpOpEx = 0; //por que??
-                //detalleReq.ImpTotal = detalleReq.ImpIVA + detalleReq.ImpNeto;
-                detalleReq.ImpTotal = (double)decimal.Round((decimal)detalleReq.ImpIVA + (decimal)detalleReq.ImpNeto, 2);
-                //detalleReq.ImpTotal = (double)decimal.Round((decimal)cotizacion * (decimal)factura.Total, 2);
-                detalleReq.ImpTotConc = 0; //por que ????
-                detalleReq.ImpTrib = 0; //ver tributos
-
-                AlicIva[] listaAlicIva = new AlicIva[1];
-
-                var ls = new List<AlicIva>();
-                AlicIva alicIva = new AlicIva();
-                alicIva.Id = factura.Iva.Codigo;
-                alicIva.BaseImp = (double)decimal.Round((decimal)cotizacion * (decimal)factura.Subtotal, 2);
-                alicIva.Importe = (double)decimal.Round((decimal)cotizacion * (decimal)factura.Subtotal * (decimal)0.21, 2);
-                ls.Add(alicIva);
-
-                detalleReq.Iva = ls.ToArray();
-
-                detalleReq.MonCotiz = 1; //siempre facturan en pesos ??
-                detalleReq.MonId = "PES";// factura.Moneda.CodigoAFIP;
-                //detalleReq.Opcionales = ?????
-                //detalleReq.Tributos = new Tributo[0];
-                detalleReq.ImpTrib = 0;
-
-                request.FeDetReq = new FECAEDetRequest[] { detalleReq };
-
-                clsFacturacion facturar = new clsFacturacion();
-                ResultadoFacturarAFIP resultado = facturar.FacturarAFIP(request, true, true);
-
-                string rta = string.Empty;
-                if (resultado.ResultadoAFIP == WSFEv1.Logica.EnumResultadoAFIP.Facturado)
-                {
-                    rta = string.Format("CAE: {0}\nFecha Vto.: {1}", resultado.CAE, resultado.FechaVtoCAE.ToString()) + " Todo Correcto!";
-                    factura.Cae = resultado.CAE;
-                    factura.FechaVencimiento = resultado.FechaVtoCAE;
-                    CatalogoFactura.InsertarActualizar(factura, nhSesion);
-                }
-                else
-                {
-                    rta = "Mensaje Afip/Error: " + resultado.MensajeAFIP + " Algo fallo!";
-                }
-                return rta;
+              detalleReq.FchServDesde = ConvertirFechaAFIP(factura.FechaFacturacion);
+              detalleReq.FchServHasta = ConvertirFechaAFIP(factura.FechaFacturacion);
+              detalleReq.FchVtoPago = ConvertirFechaAFIP(factura.FechaFacturacion);
             }
-            catch (Exception ex)
+
+            var cotizacion = factura.Moneda.Codigo == Constantes.Moneda.PESO ? 1 : factura.Cotizacion; // Si la moneda es peso argentino se pone la cotizacion ingresada, sino va 1
+
+            detalleReq.ImpIVA = (double)decimal.Round((decimal)(cotizacion * factura.Subtotal * 0.21), 2);
+            detalleReq.ImpNeto = (double)decimal.Round((decimal)cotizacion * (decimal)factura.Subtotal, 2);
+            detalleReq.ImpOpEx = 0; //por que??
+            //detalleReq.ImpTotal = detalleReq.ImpIVA + detalleReq.ImpNeto;
+            detalleReq.ImpTotal = (double)decimal.Round((decimal)detalleReq.ImpIVA + (decimal)detalleReq.ImpNeto, 2);
+            //detalleReq.ImpTotal = (double)decimal.Round((decimal)cotizacion * (decimal)factura.Total, 2);
+            detalleReq.ImpTotConc = 0; //por que ????
+            detalleReq.ImpTrib = 0; //ver tributos
+
+            AlicIva[] listaAlicIva = new AlicIva[1];
+
+            var ls = new List<AlicIva>();
+            var alicIva = new AlicIva();
+            alicIva.Id = factura.Iva.Codigo;
+            alicIva.BaseImp = (double)decimal.Round((decimal)cotizacion * (decimal)factura.Subtotal, 2);
+            alicIva.Importe = (double)decimal.Round((decimal)cotizacion * (decimal)factura.Subtotal * (decimal)0.21, 2);
+            ls.Add(alicIva);
+
+            detalleReq.Iva = ls.ToArray();
+
+            detalleReq.MonCotiz = 1; //siempre facturan en pesos ??
+            detalleReq.MonId = "PES";// factura.Moneda.CodigoAFIP;
+            //detalleReq.Opcionales = ?????
+            //detalleReq.Tributos = new Tributo[0];
+            detalleReq.ImpTrib = 0;
+
+            request.FeDetReq = new FECAEDetRequest[] { detalleReq };
+
+            clsFacturacion facturar = new clsFacturacion();
+            ResultadoFacturarAFIP resultado = facturar.FacturarAFIP(request, true, true);
+
+            string rta = string.Empty;
+            if (resultado.ResultadoAFIP == WSFEv1.Logica.EnumResultadoAFIP.Facturado)
             {
-                throw ex;
+                rta = string.Format("CAE: {0}\nFecha Vto.: {1}", resultado.CAE, resultado.FechaVtoCAE.ToString()) + " Todo Correcto!";
+                factura.Cae = resultado.CAE;
+                factura.FechaVencimiento = resultado.FechaVtoCAE;
+                CatalogoFactura.InsertarActualizar(factura, nhSesion);
             }
-            finally
+            else
             {
-                nhSesion.Close();
-                nhSesion.Dispose();
+                rta = "Mensaje Afip/Error: " + resultado.MensajeAFIP + " Algo fallo!";
             }
+            return rta;
+          }
+          catch (Exception ex)
+          {
+            throw ex;
+          }
+          finally
+          {
+            nhSesion.Close();
+            nhSesion.Dispose();
+          }
         }
 
         private static string ConvertirFechaAFIP(DateTime fecha)
@@ -2700,6 +2707,56 @@ namespace BibliotecaSCF.Controladores
                 nhSesion.Dispose();
             }
         }
+
+      public static DataTable RecuperarFacturaPorPuntoDeVenta(int codigoPuntoDeVenta)
+      {
+        var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
+        {
+          var tablaFacturas = new DataTable();
+          tablaFacturas.Columns.Add("codigoFactura");
+          tablaFacturas.Columns.Add("numeroFactura");
+          tablaFacturas.Columns.Add("fechaFacturacion");
+          tablaFacturas.Columns.Add("descripcionTipoComprobante");
+          tablaFacturas.Columns.Add("descripcionTipoMoneda");
+          tablaFacturas.Columns.Add("descripcionConcepto");
+          tablaFacturas.Columns.Add("descripcionIVA");
+          tablaFacturas.Columns.Add("subtotal");
+          tablaFacturas.Columns.Add("total");
+          tablaFacturas.Columns.Add("cae");
+          tablaFacturas.Columns.Add("fechaVencimientoCAE");
+          tablaFacturas.Columns.Add("remitos");
+          tablaFacturas.Columns.Add("condicionVenta");
+          tablaFacturas.Columns.Add("codigoDireccion");
+          tablaFacturas.Columns.Add("direccion");
+          tablaFacturas.Columns.Add("domicilio");
+          tablaFacturas.Columns.Add("localidad");
+          tablaFacturas.Columns.Add("cotizacion");
+          tablaFacturas.Columns.Add("observaciones");
+          
+          var listaFacturas = CatalogoFactura.RecuperarPorPuntoDeVenta(codigoPuntoDeVenta, nhSesion);
+
+          listaFacturas.OrderByDescending(x => x.NumeroFactura).Aggregate(tablaFacturas, (dt, r) =>
+          {
+            dt.Rows.Add(r.Codigo, r.NumeroFactura, r.FechaFacturacion, r.TipoComprobante.Descripcion, r.Moneda.Descripcion,
+            r.Concepto.Descripcion, r.Iva.Descripcion, r.Subtotal, r.Total, r.Cae, r.FechaVencimiento, string.Join(", ", r.Entregas.Select(x => x.NumeroRemito)),
+            r.CondicionVenta, r.Entregas[0].Direccion.Codigo, r.Entregas[0].Direccion.Descripcion + ", " + r.Entregas[0].Direccion.Localidad + ", " +
+            r.Entregas[0].Direccion.Provincia, r.Entregas[0].Direccion.Descripcion, r.Entregas[0].Direccion.Localidad, r.Cotizacion, r.Entregas[0].Observaciones); return dt;
+          });
+
+          return tablaFacturas;
+        }
+        catch (Exception ex)
+        {
+          throw ex;
+        }
+        finally
+        {
+          nhSesion.Close();
+          nhSesion.Dispose();
+        }
+      }
 
         #endregion
 
@@ -3580,5 +3637,117 @@ namespace BibliotecaSCF.Controladores
                 nhSesion.Dispose();
             }
         }
+
+      #region PuntoDeVenta
+
+      public static DataTable RecuperarPuntosDeVentaPorTipoComprobante(int? codigoTipoComprobante)
+      {
+        var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
+        {
+          var tablaPuntosDeVenta = new DataTable();
+          tablaPuntosDeVenta.Columns.Add("codigoPuntoDeVenta");
+          tablaPuntosDeVenta.Columns.Add("numeroPuntoDeVenta");
+          tablaPuntosDeVenta.Columns.Add("descripcion");
+          tablaPuntosDeVenta.Columns.Add("numeroInicial");
+          tablaPuntosDeVenta.Columns.Add("numeroActual");
+          tablaPuntosDeVenta.Columns.Add("numeroFinal");
+          tablaPuntosDeVenta.Columns.Add("codigoTipoComprobante");
+          tablaPuntosDeVenta.Columns.Add("descripcionTipoComprobante");
+          tablaPuntosDeVenta.Columns.Add("codigoPuntoDeVentaParent");
+          tablaPuntosDeVenta.Columns.Add("numeroPuntoDeVentaParent");
+
+          var listaPuntosDeVenta = codigoTipoComprobante <= -1 ? CatalogoPuntosDeVenta.RecuperarTodos(nhSesion) : CatalogoPuntosDeVenta.RecuperarPorTipoComprobante(codigoTipoComprobante, nhSesion);
+
+          foreach (var puntoDeVenta in listaPuntosDeVenta)
+          {
+            var dataRow = tablaPuntosDeVenta.NewRow();
+
+            dataRow["codigoPuntoDeVenta"] = puntoDeVenta.Codigo;
+            dataRow["numeroPuntoDeVenta"] = puntoDeVenta.Numero;
+            dataRow["descripcion"] = puntoDeVenta.Descripcion;
+            dataRow["numeroInicial"] = puntoDeVenta.NumeroInicial;
+            dataRow["numeroActual"] = puntoDeVenta.NumeroActual;
+            dataRow["numeroFinal"] = puntoDeVenta.NumeroFinal;
+            dataRow["codigoTipoComprobante"] = puntoDeVenta.TipoComprobante == null ? -1 : puntoDeVenta.TipoComprobante.Codigo;
+            dataRow["descripcionTipoComprobante"] = puntoDeVenta.TipoComprobante == null ? string.Empty : puntoDeVenta.TipoComprobante.Descripcion;
+            dataRow["codigoPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? -1 : puntoDeVenta.PuntoDeVentaSuperior.Codigo;
+            dataRow["numeroPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? -1 : puntoDeVenta.PuntoDeVentaSuperior.Numero;
+
+            tablaPuntosDeVenta.Rows.Add(dataRow);
+          }
+
+          return tablaPuntosDeVenta;
+        }
+        catch (Exception ex)
+        {
+          throw ex;
+        }
+        finally
+        {
+          nhSesion.Close();
+          nhSesion.Dispose();
+        }
+      }
+
+      public static DataTable RecuperarTodosPuntosDeVenta()
+      {
+        return RecuperarPuntosDeVentaPorTipoComprobante(-1);
+      }
+
+      public static DataTable RecuperarPuntosDeVentaPorCodigoSuperior(int codigoPuntoDeVentaSuperior)
+      {
+        var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
+        {
+          var tablaPuntosDeVenta = new DataTable();
+          tablaPuntosDeVenta.Columns.Add("codigoPuntoDeVenta");
+          tablaPuntosDeVenta.Columns.Add("numeroPuntoDeVenta");
+          tablaPuntosDeVenta.Columns.Add("descripcion");
+          tablaPuntosDeVenta.Columns.Add("numeroInicial");
+          tablaPuntosDeVenta.Columns.Add("numeroActual");
+          tablaPuntosDeVenta.Columns.Add("numeroFinal");
+          tablaPuntosDeVenta.Columns.Add("codigoTipoComprobante");
+          tablaPuntosDeVenta.Columns.Add("descripcionTipoComprobante");
+          tablaPuntosDeVenta.Columns.Add("codigoPuntoDeVentaParent");
+          tablaPuntosDeVenta.Columns.Add("numeroPuntoDeVentaParent");
+
+          var listaPuntosDeVenta = CatalogoPuntosDeVenta.RecuperarPorPuntoDeVentaSuperior(codigoPuntoDeVentaSuperior, nhSesion);
+
+          foreach (var puntoDeVenta in listaPuntosDeVenta)
+          {
+            var dataRow = tablaPuntosDeVenta.NewRow();
+
+            dataRow["codigoPuntoDeVenta"] = puntoDeVenta.Codigo;
+            dataRow["numeroPuntoDeVenta"] = puntoDeVenta.Numero;
+            dataRow["descripcion"] = puntoDeVenta.Descripcion;
+            dataRow["numeroInicial"] = puntoDeVenta.NumeroInicial;
+            dataRow["numeroActual"] = puntoDeVenta.NumeroActual;
+            dataRow["numeroFinal"] = puntoDeVenta.NumeroFinal;
+            dataRow["codigoTipoComprobante"] = puntoDeVenta.TipoComprobante == null ? -1 : puntoDeVenta.TipoComprobante.Codigo;
+            dataRow["descripcionTipoComprobante"] = puntoDeVenta.TipoComprobante == null ? string.Empty : puntoDeVenta.TipoComprobante.Descripcion;
+            dataRow["codigoPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? -1 : puntoDeVenta.PuntoDeVentaSuperior.Codigo;
+            dataRow["numeroPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? -1 : puntoDeVenta.PuntoDeVentaSuperior.Numero;
+
+            tablaPuntosDeVenta.Rows.Add(dataRow);
+          }
+
+          return tablaPuntosDeVenta;
+        }
+        catch (Exception ex)
+        {
+          throw ex;
+        }
+        finally
+        {
+          nhSesion.Close();
+          nhSesion.Dispose();
+        }
+      }
+
+      #endregion
+
     }
 }

@@ -70,6 +70,7 @@
                                                         <dx:GridViewDataColumn FieldName="razonSocialCliente" Caption="Cliente" Width="100%" />
                                                         <dx:GridViewDataColumn FieldName="cuitCliente" Caption="CUIT" Width="100%" />
                                                         <dx:GridViewDataColumn FieldName="codigoSCF" Caption="Codigo conSCF" Width="100%" />
+                                                        <dx:GridViewDataColumn FieldName="codigoPuntoDeVenta" Visible="false" Caption="Remito" Width="100%" />
                                                     </Columns>
                                                     <GridViewProperties>
                                                         <Settings ShowFilterRow="True" ShowStatusBar="Visible" />
@@ -157,6 +158,12 @@
                                                 <label class="control-label">Cotización</label>
                                                 <dx:ASPxTextBox ID="txtCotizacion" runat="server" OnTextChanged="txtCotizacion_TextChanged" AutoPostBack="true" CssClass="form-control" Width="100%" placeholder="Cotizacón" Text="1">
                                                 </dx:ASPxTextBox>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Punto de Venta</label>
+                                                <dx:ASPxTextBox ID="txtPuntoDeVenta" runat="server" CssClass="form-control" Width="100%" ReadOnly="True"></dx:ASPxTextBox>
                                             </div>
                                         </div>
                                         <!--/span-->

@@ -49,15 +49,30 @@
                         <div class="portlet-body form">
                             <!-- BEGIN FORM-->
                             <div class="form-actions top">
-                                <div class="btn-set pull-left">
-                                    <asp:Button type="button" ID="btnNuevo" runat="server" OnClick="btnNuevo_Click" UseSubmitBehavior="false" class="btn blue" Text="Nuevo" />
-                                    <asp:Button type="button" ID="btnEditar" Visible="false" runat="server" OnClick="btnEditar_Click" class="btn yellow" UseSubmitBehavior="false" Text="Editar" />
-                                    <asp:Button type="button" ID="btnEliminar" runat="server" OnClientClick="ShowConfirmarEliminarFactura()" UseSubmitBehavior="false" class="btn red" Text="Eliminar"/>
-                                </div>
-                                <div class="btn-set pull-right">
-                                    <asp:Button type="button" ID="Button2" runat="server" OnClick="btnGenerarPDF_Click" UseSubmitBehavior="false" class="btn red" Text="PDF" />
-                                    <asp:Button type="button" ID="btnDetalle" runat="server" OnClick="btnDetalle_Click" class="btn green" Text="Detalle" />
-                                </div>
+                              <div class="btn-set pull-left">
+                                <label class="control-label">Punto de Venta</label>
+                                <dx:ASPxComboBox ID="cbPuntoDeVenta" runat="server" DropDownStyle="DropDownList" CssClass="form-control"
+                                  ValueField="codigoPuntoDeVenta" IncrementalFilteringMode="Contains" ValueType="System.Int32" TextFormatString="{0} ({1})" Width="100%" EnableTheming="True" Theme="Metropolis" OnSelectedIndexChanged="cbPuntoDeVenta_SelectedIndexChanged" AutoPostBack="True">
+                                  <ValidationSettings>
+                                      <RequiredField IsRequired="true" />
+                                  </ValidationSettings>
+                                  <Columns>
+                                      <dx:ListBoxColumn FieldName="numeroPuntoDeVenta" Caption="Nro Punto de Venta" Width="30%" />
+                                      <dx:ListBoxColumn FieldName="descripcion" Caption="Descripción" />
+                                  </Columns>
+                                </dx:ASPxComboBox>
+                              </div>
+                            </div>
+                            <div class="form-actions top">
+                              <div class="btn-set pull-left">
+                                  <asp:Button type="button" ID="btnNuevo" runat="server" OnClick="btnNuevo_Click" UseSubmitBehavior="false" class="btn blue" Text="Nuevo" />
+                                  <asp:Button type="button" ID="btnEditar" Visible="false" runat="server" OnClick="btnEditar_Click" class="btn yellow" UseSubmitBehavior="false" Text="Editar" />
+                                  <asp:Button type="button" ID="btnEliminar" runat="server" OnClientClick="ShowConfirmarEliminarFactura()" UseSubmitBehavior="false" class="btn red" Text="Eliminar"/>
+                              </div>
+                              <div class="btn-set pull-right">
+                                  <asp:Button type="button" ID="Button2" runat="server" OnClick="btnGenerarPDF_Click" UseSubmitBehavior="false" class="btn red" Text="PDF" />
+                                  <asp:Button type="button" ID="btnDetalle" runat="server" OnClick="btnDetalle_Click" class="btn green" Text="Detalle" />
+                              </div>
                             </div>
                             <div class="form-body" style="height: 600px">
                                 <!-- devexpress-->
