@@ -129,6 +129,12 @@
                                         <dx:GridViewDataTextColumn FieldName="observaciones" Visible="false" VisibleIndex="9" Caption="Observaciones">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
+                                        <dx:GridViewDataTextColumn FieldName="codigoPuntoDeVenta" Visible="false" VisibleIndex="9">
+                                            <Settings AllowSort="True" AutoFilterCondition="Contains" />
+                                        </dx:GridViewDataTextColumn>
+                                        <dx:GridViewDataTextColumn FieldName="numeroPuntoDeVenta" Visible="false" VisibleIndex="9">
+                                            <Settings AllowSort="True" AutoFilterCondition="Contains" />
+                                        </dx:GridViewDataTextColumn>
                                     </Columns>
                                     <SettingsBehavior ColumnResizeMode="Control" AllowSort="false" />
                                     <SettingsBehavior AllowFocusedRow="True" />

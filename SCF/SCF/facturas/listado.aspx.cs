@@ -61,6 +61,8 @@ namespace SCF.facturas
       var localidad = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "localidad"));
       var cotizacion = Convert.ToDouble(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "cotizacion"));
       var observaciones = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "observaciones"));
+      var codigoPuntoDeVenta = Convert.ToInt32(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "codigoPuntoDeVenta"));
+      var numeroPuntoDeVenta = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "numeroPuntoDeVenta"));
 
       var tablaFactura = new DataTable();
       tablaFactura.Columns.Add("codigoFactura");
@@ -80,9 +82,11 @@ namespace SCF.facturas
       tablaFactura.Columns.Add("localidad");
       tablaFactura.Columns.Add("cotizacion");
       tablaFactura.Columns.Add("observaciones");
+      tablaFactura.Columns.Add("codigoPuntoDeVenta");
+      tablaFactura.Columns.Add("numeroPuntoDeVenta");
 
       tablaFactura.Rows.Add(new object[] { codigoFactura, numeroFactura, fechaFacturacion, descripcionTipoComprobante, descripcionTipoMoneda, descripcionConcepto, descripcionIVA, subtotal,
-      total, cae, fechaVencimientoCAE, condicionVenta, remitos, domicilio, localidad, cotizacion, observaciones});
+      total, cae, fechaVencimientoCAE, condicionVenta, remitos, domicilio, localidad, cotizacion, observaciones, codigoPuntoDeVenta, numeroPuntoDeVenta});
 
       return tablaFactura;
     }
@@ -120,23 +124,26 @@ namespace SCF.facturas
       if (gvFacturas.FocusedRowIndex != -1)
       {
         if (gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "cae").ToString() == "")
-        { btnEmitirComprobante.Visible = true; }
+        {
+          btnEmitirComprobante.Visible = true;
+        }
 
-        DataTable dtItemsFacturaActual = ControladorGeneral.RecuperarItemsEntregaPorFactura(Convert.ToInt32(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "codigoFactura")));
+        var dtItemsFacturaActual = ControladorGeneral.RecuperarItemsEntregaPorFactura(Convert.ToInt32(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "codigoFactura")));
         gvDetalleFactura.DataSource = dtItemsFacturaActual;
         gvDetalleFactura.DataBind();
 
-        string nroAMostrar = gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "cae").ToString();
-        lblNroFacturaAEmitir.Text = "0002 - " + Convert.ToInt32(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "numeroFactura")).ToString("D8");
-        lblNroRemitos.Text = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "remitos")).ToString(); //;remitos;
-        lblCondicionVenta.Text = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "condicionVenta")).ToString(); ;
+        var nroAMostrar = gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "cae").ToString();
+        var numeroPuntoDeVenta = Convert.ToInt32(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "numeroPuntoDeVenta")).ToString("D4");
+        lblNroFacturaAEmitir.Text = string.Format("{0} - {1}", numeroPuntoDeVenta, Convert.ToInt32(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "numeroFactura")).ToString("D8"));
+        lblNroRemitos.Text = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "remitos")); //;remitos;
+        lblCondicionVenta.Text = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "condicionVenta")); ;
         lblLocalidad.Text = Convert.ToString(dtItemsFacturaActual.Rows[0]["localidadCliente"]);
         lblDomicilio.Text = Convert.ToString(dtItemsFacturaActual.Rows[0]["direccionCliente"]);
         lblNombreApellidoCliente.Text = Convert.ToString(dtItemsFacturaActual.Rows[0]["razonSocialCliente"]);
         lblNumeroDocumento.Text = Convert.ToString(dtItemsFacturaActual.Rows[0]["nroDocumentoCliente"]);
 
-        lblSubtotal.Text = gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "subtotal").ToString();
-        lblImporteTotal.Text = Convert.ToString(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "total"));
+        lblSubtotal.Text = Convert.ToDecimal(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "subtotal")).ToString("C");
+        lblImporteTotal.Text = Convert.ToDecimal(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "total")).ToString("C");
                 
         if (gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "cae").ToString() != null)
         {

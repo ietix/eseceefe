@@ -21,13 +21,17 @@ namespace SCF.facturas
       CargarComboConcepto();
       CargarComboTipoMoneda();
       CargarPuntoDeVenta();
-      CargarNumeroDeFactura();
+      
+      if (((DataTable)Session["PuntoDeVenta"]) != null)
+      {
+        CargarNumeroDeFactura();
+      }
     }
 
     private void CargarNumeroDeFactura()
     {
       //Obtengo el Ultimo numero de factura y le sumo 1.
-      var tablaUltimaFactura = ControladorGeneral.RecuperarUltimaFactura(Convert.ToInt32(Session["PuntoDeVenta"]));
+      var tablaUltimaFactura = ControladorGeneral.RecuperarUltimaFactura(Convert.ToInt32(((DataTable)Session["PuntoDeVenta"]).Rows[0]["codigoPuntoDeVenta"]));
       txtNroFactura.Value = tablaUltimaFactura.Rows.Count > 0 ? (Convert.ToInt32(tablaUltimaFactura.Rows[0]["numeroFactura"]) + 1).ToString() : "1";
     }
 
@@ -46,7 +50,7 @@ namespace SCF.facturas
 
       if (tablaPuntoDeVenta.Rows.Count > 0)
       {
-        Session["PuntoDeVenta"] = tablaPuntoDeVenta.Rows[0]["codigoPuntoDeVenta"];
+        Session["PuntoDeVenta"] = tablaPuntoDeVenta;
         txtPuntoDeVenta.Text = string.Format("{0} ({1})", tablaPuntoDeVenta.Rows[0]["numeroPuntoDeVenta"], tablaPuntoDeVenta.Rows[0]["descripcion"]);
       }
     }
@@ -105,10 +109,12 @@ namespace SCF.facturas
         
         if (dtItemsFacturaActual != null)
         {
+          var puntoDeVenta = Convert.ToInt32(((DataTable)Session["PuntoDeVenta"]).Rows[0]["numeroPuntoDeVenta"]);
+          var numeroDeFactura = Convert.ToInt32(txtNroFactura.Value);
           gvDetalleFactura.DataSource = dtItemsFacturaActual;
           gvDetalleFactura.DataBind();
 
-          lblNroFacturaAEmitir.Text = "0002 - " + (Convert.ToInt32(txtNroFactura.Value)).ToString("D8");
+          lblNroFacturaAEmitir.Text = string.Format("{0} - {1}", puntoDeVenta.ToString("D4"), numeroDeFactura.ToString("D8"));
           lblCondicionVenta.Text = cbCondicionVenta.Text;
           lblLocalidad.Text = Convert.ToString(dtItemsFacturaActual.Rows[0]["localidadCliente"]);
           lblDomicilio.Text = Convert.ToString(dtItemsFacturaActual.Rows[0]["direccionCliente"]);
@@ -134,7 +140,7 @@ namespace SCF.facturas
 
       var arrayListRemitos = (List<object>)Session["listRemitos"];
       var codigoRemitos = new List<int>();
-      var codigoPuntoDeVenta = Convert.ToInt32(Session["PuntoDeVenta"]);
+      var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["PuntoDeVenta"]).Rows[0]["codigoPuntoDeVenta"]);
 
       foreach (object[] items in arrayListRemitos)
       {

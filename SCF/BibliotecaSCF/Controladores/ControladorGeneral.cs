@@ -2734,6 +2734,8 @@ namespace BibliotecaSCF.Controladores
           tablaFacturas.Columns.Add("localidad");
           tablaFacturas.Columns.Add("cotizacion");
           tablaFacturas.Columns.Add("observaciones");
+          tablaFacturas.Columns.Add("codigoPuntoDeVenta");
+          tablaFacturas.Columns.Add("numeroPuntoDeVenta");
           
           var listaFacturas = CatalogoFactura.RecuperarPorPuntoDeVenta(codigoPuntoDeVenta, nhSesion);
 
@@ -2742,7 +2744,8 @@ namespace BibliotecaSCF.Controladores
             dt.Rows.Add(r.Codigo, r.NumeroFactura, r.FechaFacturacion, r.TipoComprobante.Descripcion, r.Moneda.Descripcion,
             r.Concepto.Descripcion, r.Iva.Descripcion, r.Subtotal, r.Total, r.Cae, r.FechaVencimiento, string.Join(", ", r.Entregas.Select(x => x.NumeroRemito)),
             r.CondicionVenta, r.Entregas[0].Direccion.Codigo, r.Entregas[0].Direccion.Descripcion + ", " + r.Entregas[0].Direccion.Localidad + ", " +
-            r.Entregas[0].Direccion.Provincia, r.Entregas[0].Direccion.Descripcion, r.Entregas[0].Direccion.Localidad, r.Cotizacion, r.Entregas[0].Observaciones); return dt;
+            r.Entregas[0].Direccion.Provincia, r.Entregas[0].Direccion.Descripcion, r.Entregas[0].Direccion.Localidad, r.Cotizacion, 
+            r.Entregas[0].Observaciones, r.PuntoDeVenta.Codigo, r.PuntoDeVenta.Numero); return dt;
           });
 
           return tablaFacturas;
@@ -3492,6 +3495,25 @@ namespace BibliotecaSCF.Controladores
             }
         }
 
+      public static DataTable RecuperarNotaDeCreditoPorPuntoDeVenta(int codigoPuntoDeVenta)
+      {
+        var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
+        {
+          return NotaDeCredito.RecuperarTabla(CatalogoNotaDeCredito.RecuperarNotasDeCreditoPorPuntoDeVenta(codigoPuntoDeVenta, nhSesion));
+        }
+        catch (Exception ex)
+        {
+          throw ex;
+        }
+        finally
+        {
+          nhSesion.Close();
+          nhSesion.Dispose();
+        }
+      }
+
         #endregion
 
         #region ItemNotaDeCredito
@@ -3749,5 +3771,46 @@ namespace BibliotecaSCF.Controladores
 
       #endregion
 
+      #region Reporte
+
+      public static DataTable RecuperarReportesPorPuntoDeVenta(int codigoPuntoDeVenta)
+      {
+        var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
+        {
+          var tablaReportes = new DataTable();
+          tablaReportes.Columns.Add("codigoReporte");
+          tablaReportes.Columns.Add("nombreReporte");
+          tablaReportes.Columns.Add("pathReporte1");
+          tablaReportes.Columns.Add("pathReporte2");
+          tablaReportes.Columns.Add("pathReporte3");
+          tablaReportes.Columns.Add("codigoPuntoDeVenta");
+          tablaReportes.Columns.Add("numeroPuntoDeVenta");
+          tablaReportes.Columns.Add("descripcionPuntoDeVenta");
+
+          var listaReportes = CatalogoReporte.RecuperarPorPuntoDeVenta(codigoPuntoDeVenta, nhSesion);
+
+          listaReportes.OrderBy(x => x.Codigo).Aggregate(tablaReportes, (dt, r) =>
+          {
+            dt.Rows.Add(r.Codigo, r.NombreReporte, r.PathReporte1, r.PathReporte2, r.PathReporte3, r.PuntosDeVentas[0].Codigo,
+            r.PuntosDeVentas[0].Numero, r.PuntosDeVentas[0].Descripcion);
+            return dt;
+          });
+
+          return tablaReportes;
+        }
+        catch (Exception ex)
+        {
+          throw ex;
+        }
+        finally
+        {
+          nhSesion.Close();
+          nhSesion.Dispose();
+        }
+      }
+
+      #endregion
     }
 }

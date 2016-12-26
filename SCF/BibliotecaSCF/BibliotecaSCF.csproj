@@ -94,6 +94,7 @@
     <Compile Include="Catalogos\CatalogoUsuario.cs" />
     <Compile Include="Catalogos\CatalogoNotaDeCredito.cs" />
     <Compile Include="Catalogos\CatalogoPuntosDeVenta.cs" />
+    <Compile Include="Catalogos\CatalogoReporte.cs" />
     <Compile Include="ClasesComplementarias\Constantes.cs" />
     <Compile Include="ClasesComplementarias\ManejoDeNHibernate.cs" />
     <Compile Include="Clases\Articulo.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Clases\Cliente.cs" />
     <Compile Include="Clases\Concepto.cs" />
     <Compile Include="Clases\ContratoMarco.cs" />
+    <Compile Include="Clases\Reporte.cs" />
     <Compile Include="Clases\PuntosDeVenta.cs" />
     <Compile Include="Clases\DatosEmpresa.cs" />
     <Compile Include="Clases\Direccion.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Mapeos\ClienteMap.cs" />
     <Compile Include="Mapeos\ConceptoMap.cs" />
     <Compile Include="Mapeos\ContratoMarcoMap.cs" />
+    <Compile Include="Mapeos\ReporteMap.cs" />
     <Compile Include="Mapeos\PuntosDeVentaMap.cs" />
     <Compile Include="Mapeos\DatosEmpresaMap.cs" />
     <Compile Include="Mapeos\DireccionMap.cs" />

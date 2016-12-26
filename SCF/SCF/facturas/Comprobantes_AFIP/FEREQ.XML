@@ -7,28 +7,25 @@
   </FeCabReq>
   <FeDetReq xmlns="http://ar.gov.afip.dif.FEV1/">
     <FECAEDetRequest>
-      <Concepto>3</Concepto>
+      <Concepto>1</Concepto>
       <DocTipo>80</DocTipo>
       <DocNro>30516888241</DocNro>
-      <CbteDesde>22</CbteDesde>
-      <CbteHasta>22</CbteHasta>
-      <CbteFch>20160328</CbteFch>
-      <ImpTotal>2110.14</ImpTotal>
+      <CbteDesde>899</CbteDesde>
+      <CbteHasta>899</CbteHasta>
+      <CbteFch>20161223</CbteFch>
+      <ImpTotal>4274.6</ImpTotal>
       <ImpTotConc>0</ImpTotConc>
-      <ImpNeto>1743.92</ImpNeto>
+      <ImpNeto>3532.73</ImpNeto>
       <ImpOpEx>0</ImpOpEx>
       <ImpTrib>0</ImpTrib>
-      <ImpIVA>366.22</ImpIVA>
-      <FchServDesde>20160328</FchServDesde>
-      <FchServHasta>20160328</FchServHasta>
-      <FchVtoPago>20160328</FchVtoPago>
+      <ImpIVA>741.87</ImpIVA>
       <MonId>PES</MonId>
       <MonCotiz>1</MonCotiz>
       <Iva>
         <AlicIva>
           <Id>5</Id>
-          <BaseImp>1743.92</BaseImp>
-          <Importe>366.22</Importe>
+          <BaseImp>3532.73</BaseImp>
+          <Importe>741.87</Importe>
         </AlicIva>
       </Iva>
     </FECAEDetRequest>

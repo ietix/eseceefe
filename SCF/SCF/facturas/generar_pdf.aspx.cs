@@ -29,22 +29,26 @@ namespace SCF.facturas
         {
           var dtFacturaActual = (DataTable)Session["tablaFactura"];
           var dtItemsFacturaActual = ControladorGeneral.RecuperarItemsEntregaPorFactura(Convert.ToInt32(dtFacturaActual.Rows[0]["codigoFactura"]));
-
+          var tablaReportes = ControladorGeneral.RecuperarReportesPorPuntoDeVenta(Convert.ToInt32(dtFacturaActual.Rows[0]["codigoPuntoDeVenta"]));
+          
           rvFacturaA.ProcessingMode = ProcessingMode.Local;
 
           if (Convert.ToString(dtFacturaActual.Rows[0]["descripcionTipoMoneda"]) == "Dolar")
           {
-            rvFacturaA.LocalReport.ReportPath = Server.MapPath("..") + "\\reportes\\facturaA_Obs.rdlc";
+            rvFacturaA.LocalReport.ReportPath = Server.MapPath("..") + Convert.ToString(tablaReportes.Rows[0]["pathReporte2"]);
           }
           else
           {
-            rvFacturaA.LocalReport.ReportPath = Server.MapPath("..") + "\\reportes\\facturaA.rdlc";
+            rvFacturaA.LocalReport.ReportPath = Server.MapPath("..") + Convert.ToString(tablaReportes.Rows[0]["pathReporte1"]);
           }
 
           rvFacturaA.LocalReport.EnableExternalImages = true;
 
+          var numeroPuntoDeVenta = Convert.ToInt32(dtFacturaActual.Rows[0]["numeroPuntoDeVenta"]).ToString("D4");
+          var numeroFactura = Convert.ToInt32(dtFacturaActual.Rows[0]["numeroFactura"]).ToString("D8").Trim();
+
           var txtRespInsc = new ReportParameter("txtRespInsc", "X");
-          var txtNroFactura = new ReportParameter("txtNroFactura", "0002 - " + Convert.ToInt32(dtFacturaActual.Rows[0]["numeroFactura"]).ToString("D8").Trim());
+          var txtNroFactura = new ReportParameter("txtNroFactura", string.Format("{0} - {1}", numeroPuntoDeVenta, numeroFactura));
           var txtCliente = new ReportParameter("txtCliente", Convert.ToString(dtItemsFacturaActual.Rows[0]["razonSocialCliente"]).Trim());
           var txtDomicilio = new ReportParameter("txtDomicilio", Convert.ToString(dtFacturaActual.Rows[0]["domicilio"]).Trim());
           var txtLocalidad = new ReportParameter("txtLocalidad", Convert.ToString(dtFacturaActual.Rows[0]["localidad"]).Trim());
