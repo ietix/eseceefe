@@ -45,6 +45,21 @@
                         </div>
                         <div class="portlet-body form">
                             <div class="form-actions top">
+                              <div class="btn-set pull-left">
+                                <label class="control-label">Punto de Venta</label>
+                                <dx:ASPxComboBox ID="cbPuntoDeVenta" runat="server" DropDownStyle="DropDownList" CssClass="form-control"
+                                  ValueField="codigoPuntoDeVenta" IncrementalFilteringMode="Contains" ValueType="System.Int32" TextFormatString="{0} ({1})" Width="100%" EnableTheming="True" Theme="Metropolis" OnSelectedIndexChanged="cbPuntoDeVenta_SelectedIndexChanged" AutoPostBack="True">
+                                  <ValidationSettings>
+                                      <RequiredField IsRequired="true" />
+                                  </ValidationSettings>
+                                  <Columns>
+                                      <dx:ListBoxColumn FieldName="numeroPuntoDeVenta" Caption="Nro Punto de Venta" Width="30%" />
+                                      <dx:ListBoxColumn FieldName="descripcion" Caption="Descripción" />
+                                  </Columns>
+                                </dx:ASPxComboBox>
+                              </div>
+                            </div>
+                            <div class="form-actions top">
                                 <div class="btn-set pull-left">
                                     <asp:Button type="button" ID="btnUltimoNroComprobante" runat="server" OnClick="btnUltimoNroComprobante_Click" UseSubmitBehavior="false" class="btn blue" Text="Ult. Nro Comprobante" />
                                 </div>
