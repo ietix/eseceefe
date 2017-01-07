@@ -9,20 +9,28 @@ using NHibernate.Linq;
 
 namespace BibliotecaSCF.Catalogos
 {
-    public class CatalogoEntrega : CatalogoGenerico<Entrega>
+  
+
+  public class CatalogoEntrega : CatalogoGenerico<Entrega>
     {
-        public static Entrega RecuperarUltima(ISession nhSesion)
+      public static Entrega RecuperarUltima(int codigoPuntoDeVenta, ISession nhSesion)
+      {
+        try
         {
-            try
-            {
-                Entrega entrega = nhSesion.QueryOver<Entrega>().OrderBy(x => x.Codigo).Desc.Take(1).SingleOrDefault();
-                return entrega;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+          var entrega = codigoPuntoDeVenta < 0 ? nhSesion.QueryOver<Entrega>() : nhSesion.QueryOver<Entrega>().Where(x => x.PuntoDeVenta.Codigo == codigoPuntoDeVenta);
+          
+          return entrega.OrderBy(x => x.Codigo).Desc.Take(1).SingleOrDefault();
         }
+        catch (Exception ex)
+        {
+          throw ex;
+        }
+      }
+
+      public static Entrega RecuperarUltima(ISession nhSesion)
+      {
+        return RecuperarUltima(-1, nhSesion);
+      }
 
         /// <summary>
         /// Devuelve TRUE si un item entrega esta asociado a un remito sino devuelve FALSE
@@ -55,5 +63,18 @@ namespace BibliotecaSCF.Catalogos
                 throw ex;
             }
         }
+
+      public static List<Entrega> RecuperarPorPuntoDeVenta(int codigoPuntoDeVenta, NHibernate.ISession nhSession)
+      {
+        try
+        {
+          var listaEntregas = nhSession.Query<Entrega>().Where(x => x.PuntoDeVenta.Codigo == codigoPuntoDeVenta).ToList();
+          return listaEntregas;
+        }
+        catch (Exception ex)
+        {
+          throw ex;
+        }
+      }
     }
 }

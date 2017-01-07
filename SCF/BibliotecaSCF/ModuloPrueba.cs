@@ -26,7 +26,7 @@ namespace BibliotecaSCF
             t.Rows.Add(new object[] { 0, 50, 2 });
             t.Rows.Add(new object[] { 0, 52, 3 });
 
-            ControladorGeneral.InsertarActualizarNotaDeCreditoIncompleta(1, 4, 19, 15, 5, DateTime.Now, 1, t);
+            ControladorGeneral.InsertarActualizarNotaDeCreditoIncompleta(1, 2, 4, 19, 15, 5, DateTime.Now, 1, t);
 
             DataTable t2 = ControladorGeneral.RecuperarItemsNotaDeCredito(1);
 

@@ -1115,38 +1115,39 @@ namespace BibliotecaSCF.Controladores
         }
       }
 
-        public static DataTable RecuperarUltimaEntrega()
+      public static DataTable RecuperarUltimaEntrega(int? codigoPuntoDeVenta)
+      {
+        var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
         {
-            ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+          var tablaEntrega = new DataTable();
+          tablaEntrega.Columns.Add("codigoEntrega");
+          tablaEntrega.Columns.Add("fechaEmision");
+          tablaEntrega.Columns.Add("numeroRemito");
+          tablaEntrega.Columns.Add("codigoEstado");
+          tablaEntrega.Columns.Add("observaciones");
 
-            try
-            {
-                DataTable tablaEntrega = new DataTable();
-                tablaEntrega.Columns.Add("codigoEntrega");
-                tablaEntrega.Columns.Add("fechaEmision");
-                tablaEntrega.Columns.Add("numeroRemito");
-                tablaEntrega.Columns.Add("codigoEstado");
-                tablaEntrega.Columns.Add("observaciones");
+          var codigo = codigoPuntoDeVenta ?? -1;
+          var entrega = CatalogoEntrega.RecuperarUltima(codigo, nhSesion);
 
-                Entrega entrega = CatalogoEntrega.RecuperarUltima(nhSesion);
+          if (entrega != null)
+          {
+            tablaEntrega.Rows.Add(new object[] { entrega.Codigo, entrega.FechaEmision, entrega.NumeroRemito, entrega.CodigoEstado, entrega.Observaciones });
+          }
 
-                if (entrega != null)
-                {
-                    tablaEntrega.Rows.Add(new object[] { entrega.Codigo, entrega.FechaEmision, entrega.NumeroRemito, entrega.CodigoEstado, entrega.Observaciones });
-                }
-
-                return tablaEntrega;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                nhSesion.Close();
-                nhSesion.Dispose();
-            }
+          return tablaEntrega;
         }
+        catch (Exception ex)
+        {
+          throw ex;
+        }
+        finally
+        {
+          nhSesion.Close();
+          nhSesion.Dispose();
+        }
+      }
 
         public static DataTable RecuperarUltimaNotaDePedido()
         {
@@ -1182,82 +1183,84 @@ namespace BibliotecaSCF.Controladores
             }
         }
 
-        public static void InsertarActualizarEntrega(int codigoEntrega, DateTime fechaEmision, int codigoNotaPedido, int numeroRemito, string observaciones, DataTable tablaItemsEntrega, int codigoTransporte, int codigoDireccion, string cai, DateTime fechaVencimientoCai)
-        {
-            ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
-            ITransaction tran = nhSesion.BeginTransaction();
+      public static void InsertarActualizarEntrega(int codigoPuntoDeVenta, int codigoEntrega, DateTime fechaEmision, int codigoNotaPedido, int numeroRemito, string observaciones, DataTable tablaItemsEntrega, int codigoTransporte, int codigoDireccion, string cai, DateTime fechaVencimientoCai)
+      {
+          var nhSesion = ManejoDeNHibernate.IniciarSesion();
+          var tran = nhSesion.BeginTransaction();
 
-            try
+          try
+          {
+            Entrega entrega;
+              
+            if (codigoEntrega == 0)
             {
-                Entrega entrega;
-                if (codigoEntrega == 0)
+                entrega = new Entrega();
+            }
+            else
+            {
+                entrega = CatalogoEntrega.RecuperarPorCodigo(codigoEntrega, nhSesion);
+            }
+
+            var notaDePedido = CatalogoNotaDePedido.RecuperarPorCodigo(codigoNotaPedido, nhSesion);
+
+            entrega.CodigoEstado = Constantes.Estados.VIGENTE;
+            entrega.FechaEmision = fechaEmision;
+            entrega.NotaDePedido = notaDePedido;
+            entrega.NumeroRemito = numeroRemito;
+            entrega.Observaciones = observaciones;
+            entrega.Transporte = CatalogoTransporte.RecuperarPorCodigo(codigoTransporte, nhSesion);
+            entrega.Direccion = CatalogoDireccion.RecuperarPorCodigo(codigoDireccion, nhSesion);
+            entrega.Cai = cai;
+            entrega.FechaVencimientoCai = fechaVencimientoCai;
+            entrega.PuntoDeVenta = CatalogoPuntosDeVenta.RecuperarPorCodigo(codigoPuntoDeVenta, nhSesion);
+
+            foreach (DataRow filaItem in tablaItemsEntrega.Rows)
+            {
+              var codigoItemEntrega = Convert.ToInt32(filaItem["codigoItemEntrega"]);
+              ItemEntrega item;
+
+              if (codigoItemEntrega < 1)
+              {
+                item = new ItemEntrega();
+                item.Precio = (from i in notaDePedido.ItemsNotaDePedido where i.Codigo == Convert.ToInt32(filaItem["codigoItemNotaDePedido"]) select i.Precio).SingleOrDefault();
+                entrega.ItemsEntrega.Add(item);
+              }
+              else
+              {
+                item = (from i in entrega.ItemsEntrega where i.Codigo == codigoItemEntrega select i).SingleOrDefault();
+
+                if (item.Precio == 0)
                 {
-                    entrega = new Entrega();
-                }
-                else
-                {
-                    entrega = CatalogoEntrega.RecuperarPorCodigo(codigoEntrega, nhSesion);
-                }
-
-                NotaDePedido notaDePedido = CatalogoNotaDePedido.RecuperarPorCodigo(codigoNotaPedido, nhSesion);
-
-                entrega.CodigoEstado = Constantes.Estados.VIGENTE;
-                entrega.FechaEmision = fechaEmision;
-                entrega.NotaDePedido = notaDePedido;
-                entrega.NumeroRemito = numeroRemito;
-                entrega.Observaciones = observaciones;
-                entrega.Transporte = CatalogoTransporte.RecuperarPorCodigo(codigoTransporte, nhSesion);
-                entrega.Direccion = CatalogoDireccion.RecuperarPorCodigo(codigoDireccion, nhSesion);
-                entrega.Cai = cai;
-                entrega.FechaVencimientoCai = fechaVencimientoCai;
-
-                foreach (DataRow filaItem in tablaItemsEntrega.Rows)
-                {
-                    int codigoItemEntrega = Convert.ToInt32(filaItem["codigoItemEntrega"]);
-                    ItemEntrega item;
-
-                    if (codigoItemEntrega < 1)
-                    {
-                        item = new ItemEntrega();
-                        item.Precio = (from i in notaDePedido.ItemsNotaDePedido where i.Codigo == Convert.ToInt32(filaItem["codigoItemNotaDePedido"]) select i.Precio).SingleOrDefault();
-                        entrega.ItemsEntrega.Add(item);
-                    }
-                    else
-                    {
-                        item = (from i in entrega.ItemsEntrega where i.Codigo == codigoItemEntrega select i).SingleOrDefault();
-
-                        if (item.Precio == 0)
-                        {
-                            item.Precio = (from i in notaDePedido.ItemsNotaDePedido where i.Codigo == Convert.ToInt32(filaItem["codigoItemNotaDePedido"]) select i.Precio).SingleOrDefault();
-                        }
-
-                        if (!Convert.IsDBNull(filaItem["isEliminada"]) && Convert.ToBoolean(filaItem["isEliminada"]))
-                        {
-                            entrega.ItemsEntrega.Remove(item);
-                        }
-                    }
-
-                    item.CantidadAEntregar = Convert.ToInt32(filaItem["cantidad"]);
-                    item.ArticuloProveedor = null;
-                    item.ItemNotaDePedido = (from i in notaDePedido.ItemsNotaDePedido where i.Codigo == Convert.ToInt32(filaItem["codigoItemNotaDePedido"]) select i).SingleOrDefault();
+                  item.Precio = (from i in notaDePedido.ItemsNotaDePedido where i.Codigo == Convert.ToInt32(filaItem["codigoItemNotaDePedido"]) select i.Precio).SingleOrDefault();
                 }
 
-                CatalogoEntrega.InsertarActualizar(entrega, nhSesion);
-                ValidarNotaDePedido(notaDePedido, nhSesion);
+                if (!Convert.IsDBNull(filaItem["isEliminada"]) && Convert.ToBoolean(filaItem["isEliminada"]))
+                {
+                  entrega.ItemsEntrega.Remove(item);
+                }
+              }
 
-                tran.Commit();
+              item.CantidadAEntregar = Convert.ToInt32(filaItem["cantidad"]);
+              item.ArticuloProveedor = null;
+              item.ItemNotaDePedido = (from i in notaDePedido.ItemsNotaDePedido where i.Codigo == Convert.ToInt32(filaItem["codigoItemNotaDePedido"]) select i).SingleOrDefault();
             }
-            catch (Exception ex)
-            {
-                tran.Rollback();
-                throw ex;
-            }
-            finally
-            {
-                nhSesion.Close();
-                nhSesion.Dispose();
-            }
-        }
+
+            CatalogoEntrega.InsertarActualizar(entrega, nhSesion);
+            ValidarNotaDePedido(notaDePedido, nhSesion);
+
+            tran.Commit();
+          }
+          catch (Exception ex)
+          {
+            tran.Rollback();
+            throw ex;
+          }
+          finally
+          {
+            nhSesion.Close();
+            nhSesion.Dispose();
+          }
+      }
 
         private static void ValidarNotaDePedido(NotaDePedido notaDePedido, ISession nhSesion)
         {
@@ -1400,6 +1403,63 @@ namespace BibliotecaSCF.Controladores
                 nhSesion.Dispose();
             }
         }
+
+      public static DataTable RecuperarEntregaPorPuntoDeVenta(int codigoPuntoDeVenta)
+      {
+        var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
+        {
+          var tablaEntrega = new DataTable();
+          tablaEntrega.Columns.Add("codigoEntrega");
+          tablaEntrega.Columns.Add("codigoNotaDePedido");
+          tablaEntrega.Columns.Add("codigoCliente");
+          tablaEntrega.Columns.Add("razonSocialCliente");
+          tablaEntrega.Columns.Add("cuitCliente");//Agrego nro documento
+          tablaEntrega.Columns.Add("codigoSCF");
+          tablaEntrega.Columns.Add("fechaEmision");
+          tablaEntrega.Columns.Add("numeroNotaDePedido");
+          tablaEntrega.Columns.Add("numeroRemito");
+          tablaEntrega.Columns.Add("codigoEstado");
+          tablaEntrega.Columns.Add("observaciones");
+          tablaEntrega.Columns.Add("codigoTransporte");
+          tablaEntrega.Columns.Add("razonSocialTransporte");
+          tablaEntrega.Columns.Add("direccion");
+          tablaEntrega.Columns.Add("codigoDireccion");
+          tablaEntrega.Columns.Add("domicilio");
+          tablaEntrega.Columns.Add("localidad");
+          tablaEntrega.Columns.Add("cai");
+          tablaEntrega.Columns.Add("fechaVencimientoCai");
+          tablaEntrega.Columns.Add("codigoPuntoDeVenta");
+          tablaEntrega.Columns.Add("numeroPuntoDeVenta");
+          tablaEntrega.Columns.Add("descripcionPuntoDeVenta");
+
+          var listaEntregas = CatalogoEntrega.RecuperarPorPuntoDeVenta(codigoPuntoDeVenta, nhSesion);
+
+          listaEntregas.OrderByDescending(x => x.CodigoEstado).Aggregate(tablaEntrega, (dt, r) =>
+          {
+            dt.Rows.Add(r.Codigo, r.NotaDePedido.Codigo, r.NotaDePedido.Cliente.Codigo,
+                r.NotaDePedido.Cliente.RazonSocial, r.NotaDePedido.Cliente.NumeroDocumento, r.NotaDePedido.Cliente.CodigoSCF,
+                r.FechaEmision.ToString("dd/MM/yyyy"), r.NotaDePedido.NumeroInternoCliente, r.NumeroRemito,
+                r.CodigoEstado, r.Observaciones, r.Transporte.Codigo, r.Transporte.RazonSocial,
+                r.Direccion.Descripcion + ", " + r.Direccion.Localidad + ", " + r.Direccion.Provincia, r.Direccion.Codigo,
+                r.Direccion.Descripcion, r.Direccion.Localidad, r.Cai, r.FechaVencimientoCai.ToString("dd/MM/yyyy"),
+                r.PuntoDeVenta == null ? -1 : r.PuntoDeVenta.Codigo, r.PuntoDeVenta == null ? -1 : r.PuntoDeVenta.Numero,
+                r.PuntoDeVenta == null ? string.Empty : r.PuntoDeVenta.Descripcion); return dt;
+          });
+
+          return tablaEntrega;
+        }
+        catch (Exception ex)
+        {
+          throw ex;
+        }
+        finally
+        {
+          nhSesion.Close();
+          nhSesion.Dispose();
+        }
+      }
 
         #endregion
 
@@ -3327,130 +3387,131 @@ namespace BibliotecaSCF.Controladores
         /// <param name="total"></param>
         /// <param name="isFacturaCompleta"></param>
         /// <param name="tablaItemsEntrega"></param>
-        public static string InsertarActualizarNotaDeCreditoCompleta(int codigoNotaDeCredito, int numeroNotaDeCredito, int codigoFactura, double total, double subtotal, DateTime fechaHoraNotaDeCredito, int codigoTipoComprobante, int codigoEntrega)
+      public static string InsertarActualizarNotaDeCreditoCompleta(int codigoNotaDeCredito, int codigoPuntoDeVenta, int numeroNotaDeCredito, int codigoFactura, double total, double subtotal, DateTime fechaHoraNotaDeCredito, int codigoTipoComprobante, int codigoEntrega)
+      {
+
+        var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
         {
+          NotaDeCredito notaDeCredito;
 
-            ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+          if (codigoNotaDeCredito == 0)
+          {
+            notaDeCredito = new NotaDeCredito();
+          }
+          else
+          {
+            notaDeCredito = CatalogoGenerico<NotaDeCredito>.RecuperarPorCodigo(codigoNotaDeCredito, nhSesion);
 
-            try
+            if (!string.IsNullOrEmpty(notaDeCredito.CAE))
             {
-                NotaDeCredito notaDeCredito;
-
-                if (codigoNotaDeCredito == 0)
-                {
-                    notaDeCredito = new NotaDeCredito();
-                }
-                else
-                {
-                    notaDeCredito = CatalogoGenerico<NotaDeCredito>.RecuperarPorCodigo(codigoNotaDeCredito, nhSesion);
-
-                    if (!string.IsNullOrEmpty(notaDeCredito.CAE))
-                    {
-                        return "TieneCAE";
-                    }
-                }
-
-                notaDeCredito.NumeroNotaDeCredito = numeroNotaDeCredito;
-                notaDeCredito.Factura = CatalogoGenerico<Factura>.RecuperarPorCodigo(codigoFactura, nhSesion);
-                notaDeCredito.IsFacturaCompleta = true;
-                notaDeCredito.Total = total;
-                notaDeCredito.Subtotal = subtotal;
-                notaDeCredito.FechaHoraNotaDeCredito = fechaHoraNotaDeCredito;
-                notaDeCredito.TipoComprobante = CatalogoGenerico<TipoComprobante>.RecuperarPorCodigo(codigoTipoComprobante, nhSesion);
-                notaDeCredito.FechaHoraVencimientoCAE = null;
-
-                //Si no es una nota de credito para una factura completa le creo sus items con sus cantidades, sino esta lista queda vacia ya que se puede acceder por la factura
-                if (codigoNotaDeCredito== 0) //Si la nota de credito es nueva sino ya tendria los items creados
-                {
-                    Entrega ent = CatalogoEntrega.RecuperarPorCodigo(codigoEntrega,nhSesion);
-                    foreach (ItemEntrega item in ent.ItemsEntrega)
-                    {
-                        ItemNotaDeCredito itemNC = new ItemNotaDeCredito();
-                        notaDeCredito.ItemsNotaDeCredito.Add(itemNC);
-                        itemNC.Cantidad = item.CantidadAEntregar;
-                        itemNC.ItemEntrega = item;
-                    }
-                }
-
-                CatalogoGenerico<NotaDeCredito>.InsertarActualizar(notaDeCredito, nhSesion);
-                return "ok";
+                return "TieneCAE";
             }
-            catch (Exception ex)
+          }
+
+          notaDeCredito.NumeroNotaDeCredito = numeroNotaDeCredito;
+          notaDeCredito.Factura = CatalogoGenerico<Factura>.RecuperarPorCodigo(codigoFactura, nhSesion);
+          notaDeCredito.IsFacturaCompleta = true;
+          notaDeCredito.Total = total;
+          notaDeCredito.Subtotal = subtotal;
+          notaDeCredito.FechaHoraNotaDeCredito = fechaHoraNotaDeCredito;
+          notaDeCredito.TipoComprobante = CatalogoGenerico<TipoComprobante>.RecuperarPorCodigo(codigoTipoComprobante, nhSesion);
+          notaDeCredito.FechaHoraVencimientoCAE = null;
+          notaDeCredito.PuntoDeVenta = CatalogoGenerico<PuntosDeVenta>.RecuperarPorCodigo(codigoPuntoDeVenta, nhSesion);
+
+          //Si no es una nota de credito para una factura completa le creo sus items con sus cantidades, sino esta lista queda vacia ya que se puede acceder por la factura
+          if (codigoNotaDeCredito== 0) //Si la nota de credito es nueva sino ya tendria los items creados
+          {
+            var ent = CatalogoEntrega.RecuperarPorCodigo(codigoEntrega,nhSesion);
+            foreach (ItemEntrega item in ent.ItemsEntrega)
             {
-                throw ex;
+                var itemNC = new ItemNotaDeCredito();
+                notaDeCredito.ItemsNotaDeCredito.Add(itemNC);
+                itemNC.Cantidad = item.CantidadAEntregar;
+                itemNC.ItemEntrega = item;
             }
-            finally
-            {
-                nhSesion.Close();
-                nhSesion.Dispose();
-            }
+          }
+
+          CatalogoGenerico<NotaDeCredito>.InsertarActualizar(notaDeCredito, nhSesion);
+          return "ok";
         }
-
-        public static string InsertarActualizarNotaDeCreditoIncompleta(int codigoNotaDeCredito, int numeroNotaDeCredito, int codigoFactura, double total, double subtotal, DateTime fechaHoraNotaDeCredito, int codigoTipoComprobante, DataTable tablaItemsNotaDeCredito)
+        catch (Exception ex)
         {
-
-            ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
-
-            try
-            {
-                NotaDeCredito notaDeCredito;
-
-                if (codigoNotaDeCredito == 0)
-                {
-                    notaDeCredito = new NotaDeCredito();
-                }
-                else
-                {
-                    notaDeCredito = CatalogoGenerico<NotaDeCredito>.RecuperarPorCodigo(codigoNotaDeCredito, nhSesion);
-
-                    if (!string.IsNullOrEmpty(notaDeCredito.CAE))
-                    {
-                        return "TieneCAE";
-                    }
-                }
-
-                notaDeCredito.NumeroNotaDeCredito = numeroNotaDeCredito;
-                notaDeCredito.Factura = CatalogoGenerico<Factura>.RecuperarPorCodigo(codigoFactura, nhSesion);
-                notaDeCredito.IsFacturaCompleta = false;
-                notaDeCredito.Total = total;
-                notaDeCredito.Subtotal = subtotal;
-                notaDeCredito.FechaHoraNotaDeCredito = fechaHoraNotaDeCredito;
-                notaDeCredito.TipoComprobante = CatalogoGenerico<TipoComprobante>.RecuperarPorCodigo(codigoTipoComprobante, nhSesion);
-                notaDeCredito.FechaHoraVencimientoCAE = null;
-
-                //Si no es una nota de credito para una factura completa le creo sus items con sus cantidades, sino esta lista queda vacia ya que se puede acceder por la factura
-                foreach (DataRow fila in tablaItemsNotaDeCredito.Rows)
-                {
-                    ItemNotaDeCredito item;
-                    int codigoItemNotaDeCredito = Convert.ToInt32(fila["codigoItemNotaDeCredito"]);
-
-                    if (codigoItemNotaDeCredito == 0)
-                    {
-                        item = new ItemNotaDeCredito();
-                        notaDeCredito.ItemsNotaDeCredito.Add(item);
-                    }
-                    else
-                    {
-                        item = notaDeCredito.ItemsNotaDeCredito.Where(x => x.Codigo == codigoItemNotaDeCredito).SingleOrDefault();
-                    }
-
-                    item.Cantidad = Convert.ToInt32(fila["cantidad"]);
-                    item.ItemEntrega = CatalogoGenerico<ItemEntrega>.RecuperarPorCodigo(Convert.ToInt32(fila["codigoItemEntrega"]), nhSesion);
-                }
-
-                CatalogoGenerico<NotaDeCredito>.InsertarActualizar(notaDeCredito, nhSesion);
-                return "ok";
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                nhSesion.Close();
-                nhSesion.Dispose();
-            }
+          throw ex;
         }
+        finally
+        {
+          nhSesion.Close();
+          nhSesion.Dispose();
+        }
+      }
+
+      public static string InsertarActualizarNotaDeCreditoIncompleta(int codigoNotaDeCredito, int codigoPuntoDeVenta, int numeroNotaDeCredito, int codigoFactura, double total, double subtotal, DateTime fechaHoraNotaDeCredito, int codigoTipoComprobante, DataTable tablaItemsNotaDeCredito)
+      {
+        var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
+        {
+          NotaDeCredito notaDeCredito;
+
+          if (codigoNotaDeCredito == 0)
+          {
+            notaDeCredito = new NotaDeCredito();
+          }
+          else
+          {
+            notaDeCredito = CatalogoGenerico<NotaDeCredito>.RecuperarPorCodigo(codigoNotaDeCredito, nhSesion);
+
+            if (!string.IsNullOrEmpty(notaDeCredito.CAE))
+            {
+              return "TieneCAE";
+            }
+          }
+
+          notaDeCredito.NumeroNotaDeCredito = numeroNotaDeCredito;
+          notaDeCredito.Factura = CatalogoGenerico<Factura>.RecuperarPorCodigo(codigoFactura, nhSesion);
+          notaDeCredito.IsFacturaCompleta = false;
+          notaDeCredito.Total = total;
+          notaDeCredito.Subtotal = subtotal;
+          notaDeCredito.FechaHoraNotaDeCredito = fechaHoraNotaDeCredito;
+          notaDeCredito.TipoComprobante = CatalogoGenerico<TipoComprobante>.RecuperarPorCodigo(codigoTipoComprobante, nhSesion);
+          notaDeCredito.FechaHoraVencimientoCAE = null;
+          notaDeCredito.PuntoDeVenta = CatalogoGenerico<PuntosDeVenta>.RecuperarPorCodigo(codigoPuntoDeVenta, nhSesion);
+
+          //Si no es una nota de credito para una factura completa le creo sus items con sus cantidades, sino esta lista queda vacia ya que se puede acceder por la factura
+          foreach (DataRow fila in tablaItemsNotaDeCredito.Rows)
+          {
+            ItemNotaDeCredito item;
+            var codigoItemNotaDeCredito = Convert.ToInt32(fila["codigoItemNotaDeCredito"]);
+
+            if (codigoItemNotaDeCredito == 0)
+            {
+              item = new ItemNotaDeCredito();
+              notaDeCredito.ItemsNotaDeCredito.Add(item);
+            }
+            else
+            {
+              item = notaDeCredito.ItemsNotaDeCredito.SingleOrDefault(x => x.Codigo == codigoItemNotaDeCredito);
+            }
+
+            item.Cantidad = Convert.ToInt32(fila["cantidad"]);
+            item.ItemEntrega = CatalogoGenerico<ItemEntrega>.RecuperarPorCodigo(Convert.ToInt32(fila["codigoItemEntrega"]), nhSesion);
+          }
+
+          CatalogoGenerico<NotaDeCredito>.InsertarActualizar(notaDeCredito, nhSesion);
+          return "ok";
+        }
+        catch (Exception ex)
+        {
+          throw ex;
+        }
+        finally
+        {
+          nhSesion.Close();
+          nhSesion.Dispose();
+        }
+      }
 
         public static DataTable RecuperarUltimaNotaDeCredito()
         {
@@ -3553,7 +3614,7 @@ namespace BibliotecaSCF.Controladores
                 FECAECabRequest cabeceraReq = new FECAECabRequest();
                 cabeceraReq.CantReg = 1;
                 cabeceraReq.CbteTipo = 3; //factura A
-                cabeceraReq.PtoVta = 2;
+                cabeceraReq.PtoVta = notaDeCredito.PuntoDeVenta.Numero;
 
                 request.FeCabReq = cabeceraReq;
 
