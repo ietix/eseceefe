@@ -75,7 +75,7 @@ namespace SCF.facturas
 
     private void CargarComboRemito()
     {
-      gluRemito.DataSource = ControladorGeneral.RecuperarTodasEntregas(false);
+      gluRemito.DataSource = ControladorGeneral.RecuperarTodasEntregas(true);
       gluRemito.DataBind();
     }
 
