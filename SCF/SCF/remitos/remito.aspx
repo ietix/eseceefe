@@ -106,8 +106,8 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="control-label">Nro Remito</label>
-                                                <dx:ASPxTextBox ID="txtCodigoRemito" runat="server" CssClass="form-control" Width="100%" placeholder="Codigo">
+                                                <label class="control-label">Nro Punto de Venta</label>
+                                                <dx:ASPxTextBox ID="txtPuntoDeVenta" runat="server" CssClass="form-control" Width="100%" ReadOnly="true" placeholder="Codigo">
                                                     <ValidationSettings>
                                                         <RequiredField IsRequired="true" />
                                                     </ValidationSettings>
@@ -116,6 +116,16 @@
                                         </div>
                                         <!--/span-->
                                         <!--/span-->
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">Nro Remito</label>
+                                                <dx:ASPxTextBox ID="txtCodigoRemito" runat="server" CssClass="form-control" Width="100%" ReadOnly="true" placeholder="Codigo">
+                                                    <ValidationSettings>
+                                                        <RequiredField IsRequired="true" />
+                                                    </ValidationSettings>
+                                                </dx:ASPxTextBox>
+                                            </div>
+                                        </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Transporte</label>
@@ -130,10 +140,6 @@
                                                         <dx:ListBoxColumn FieldName="razonSocial" Caption="Transporte" />
                                                     </Columns>
                                                 </dx:ASPxComboBox>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
                                             </div>
                                         </div>
                                     </div>
