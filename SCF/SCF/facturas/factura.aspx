@@ -66,11 +66,12 @@
                                                     <Columns>
                                                         <dx:GridViewCommandColumn ShowSelectCheckbox="True" Width="100%" Caption=" " />
                                                         <dx:GridViewDataColumn FieldName="codigoEntrega" Visible="false" Caption="Remito" Width="100%" />
+                                                        <dx:GridViewDataColumn FieldName="numeroPuntoDeVenta" Caption="Pto. Venta" Width="100%" />
                                                         <dx:GridViewDataColumn FieldName="numeroRemito" Caption="Remito" Width="100%" />
                                                         <dx:GridViewDataColumn FieldName="razonSocialCliente" Caption="Cliente" Width="100%" />
                                                         <dx:GridViewDataColumn FieldName="cuitCliente" Caption="CUIT" Width="100%" />
                                                         <dx:GridViewDataColumn FieldName="codigoSCF" Caption="Codigo conSCF" Width="100%" />
-                                                        <dx:GridViewDataColumn FieldName="codigoPuntoDeVenta" Visible="false" Caption="Remito" Width="100%" />
+                                                        <dx:GridViewDataColumn FieldName="codigoPuntoDeVenta" Visible="False" Caption="Pto. Venta" Width="100%" />
                                                     </Columns>
                                                     <GridViewProperties>
                                                         <Settings ShowFilterRow="True" ShowStatusBar="Visible" />

@@ -31,8 +31,33 @@ namespace SCF.facturas
 
     protected void btnNuevo_Click(object sender, EventArgs e)
     {
-      Session["tablaFactura"] = null;
-      Response.Redirect("factura.aspx");
+      if (string.IsNullOrEmpty(cbPuntoDeVenta.Text))
+      {
+        lblMensaje.Text = "Debe seleccionar un punto de venta!!!";
+        pcError.ShowOnPageLoad = true;
+      }
+      else
+      {
+        var tablaPuntoDeVenta = new DataTable();
+
+        tablaPuntoDeVenta.Columns.Add("codigoPuntoDeVenta");
+        tablaPuntoDeVenta.Columns.Add("numeroPuntoDeVenta");
+        tablaPuntoDeVenta.Columns.Add("descripcion");
+        tablaPuntoDeVenta.Columns.Add("codigoPuntoDeVentaSuperior");
+
+        var dataRow = tablaPuntoDeVenta.NewRow();
+        dataRow["codigoPuntoDeVenta"] = cbPuntoDeVenta.SelectedItem.Value;
+        dataRow["numeroPuntoDeVenta"] = cbPuntoDeVenta.SelectedItem.GetValue("numeroPuntoDeVenta");
+        dataRow["descripcion"] = cbPuntoDeVenta.SelectedItem.GetValue("descripcion");
+        dataRow["codigoPuntoDeVentaSuperior"] = cbPuntoDeVenta.SelectedItem.GetValue("codigoPuntoDeVentaParent");
+        tablaPuntoDeVenta.Rows.Add(dataRow);
+
+        Session["puntoDeVenta"] = tablaPuntoDeVenta;
+        Session["tablaFactura"] = null;
+        Response.Redirect("factura.aspx");
+      }
+
+      
     }
 
     protected void btnEditar_Click(object sender, EventArgs e)

@@ -75,7 +75,8 @@ namespace SCF.facturas
 
     private void CargarComboRemito()
     {
-      gluRemito.DataSource = ControladorGeneral.RecuperarTodasEntregas(true);
+      var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVentaSuperior"]);
+      gluRemito.DataSource = ControladorGeneral.RecuperarEntregaPorPuntoDeVenta(codigoPuntoDeVenta, false);
       gluRemito.DataBind();
     }
 
@@ -85,7 +86,8 @@ namespace SCF.facturas
     {
       try
       {
-        lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(2, 1));
+        var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVentaSuperior"]);
+        lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(codigoPuntoDeVenta, 1));
         pcUltimoComprobanteAfip.ShowOnPageLoad = true;
       }
       catch
