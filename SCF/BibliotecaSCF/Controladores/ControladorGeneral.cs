@@ -14,7 +14,10 @@ using WSFEv1.Logica.Wsfe;
 
 namespace BibliotecaSCF.Controladores
 {
-    public class ControladorGeneral
+  using FluentNHibernate.Conventions;
+  using FluentNHibernate.Utils;
+
+  public class ControladorGeneral
     {
         #region Articulo
 
@@ -1046,7 +1049,7 @@ namespace BibliotecaSCF.Controladores
 
         #endregion
 
-        #region Entregas/Remitos
+      #region Entregas/Remitos
 
       public static DataTable RecuperarTodasEntregas(bool sinFacturaAsociada)
       {
@@ -1404,7 +1407,7 @@ namespace BibliotecaSCF.Controladores
             }
         }
 
-      public static DataTable RecuperarEntregaPorPuntoDeVenta(int codigoPuntoDeVenta)
+      public static DataTable RecuperarEntregaPorPuntoDeVenta(int codigoPuntoDeVenta, bool sinFacturaAsociada = false)
       {
         var nhSesion = ManejoDeNHibernate.IniciarSesion();
 
@@ -1436,6 +1439,13 @@ namespace BibliotecaSCF.Controladores
 
           var listaEntregas = CatalogoEntrega.RecuperarPorPuntoDeVenta(codigoPuntoDeVenta, nhSesion);
 
+          if (sinFacturaAsociada)
+          {
+            var listaEntregasConFacturas = (from f in CatalogoFactura.RecuperarTodos(nhSesion) select f.Entregas).SelectMany(x => x).ToList();
+            listaEntregasConFacturas = listaEntregasConFacturas.Where(x => x.PuntoDeVenta.Codigo == codigoPuntoDeVenta).ToList();
+            listaEntregas = listaEntregas.Count >= listaEntregasConFacturas.Count ? listaEntregas.Except(listaEntregasConFacturas).ToList() : listaEntregas.Where(x => x.IsNotAny(listaEntregasConFacturas.ToArray())).ToList();
+          }
+
           listaEntregas.OrderByDescending(x => x.CodigoEstado).Aggregate(tablaEntrega, (dt, r) =>
           {
             dt.Rows.Add(r.Codigo, r.NotaDePedido.Codigo, r.NotaDePedido.Cliente.Codigo,
@@ -1461,7 +1471,7 @@ namespace BibliotecaSCF.Controladores
         }
       }
 
-        #endregion
+      #endregion
 
         #region ItemEntrega
 
