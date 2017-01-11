@@ -13,15 +13,6 @@ namespace SCF.credito {
     public partial class credito {
         
         /// <summary>
-        /// cbPuntoDeVenta control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxComboBox cbPuntoDeVenta;
-        
-        /// <summary>
         /// btnUltimoNroComprobante control.
         /// </summary>
         /// <remarks>

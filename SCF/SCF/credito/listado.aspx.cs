@@ -14,7 +14,14 @@ namespace SCF.credito
       protected void Page_Load(object sender, EventArgs e)
       {
         CargarCombo();
-        //cargarGrilla();
+
+        if (!string.IsNullOrEmpty(Request.QueryString["codigoPuntoDeVenta"]))
+        {
+          var tablaPuntoDeVenta = (DataTable)Session["puntoDeVenta"];
+          cbPuntoDeVenta.Text = string.Format("{0} ({1})", tablaPuntoDeVenta.Rows[0]["numeroPuntoDeVenta"].ToString(), tablaPuntoDeVenta.Rows[0]["descripcion"].ToString());
+          gvNotaCredito.DataSource = ControladorGeneral.RecuperarNotaDeCreditoPorPuntoDeVenta(Convert.ToInt32(Request.QueryString["codigoPuntoDeVenta"]));
+          gvNotaCredito.DataBind();
+        }
       }
 
       private void CargarGrilla()
@@ -32,9 +39,32 @@ namespace SCF.credito
 
       protected void btnNuevo_Click(object sender, EventArgs e)
       {
-        Session["tablaNotaCredito"] = null;
-        Session["tablaItemsNotaCredito"] = null;
-        Response.Redirect("credito.aspx");
+        if (string.IsNullOrEmpty(cbPuntoDeVenta.Text))
+        {
+          lblMensaje.Text = "Debe seleccionar un punto de venta!!!";
+          pcError.ShowOnPageLoad = true;
+        }
+        else
+        {
+          var tablaPuntoDeVenta = new DataTable();
+
+          tablaPuntoDeVenta.Columns.Add("codigoPuntoDeVenta");
+          tablaPuntoDeVenta.Columns.Add("numeroPuntoDeVenta");
+          tablaPuntoDeVenta.Columns.Add("descripcion");
+          tablaPuntoDeVenta.Columns.Add("codigoPuntoDeVentaSuperior");
+
+          var dataRow = tablaPuntoDeVenta.NewRow();
+          dataRow["codigoPuntoDeVenta"] = cbPuntoDeVenta.SelectedItem.Value;
+          dataRow["numeroPuntoDeVenta"] = cbPuntoDeVenta.SelectedItem.GetValue("numeroPuntoDeVenta");
+          dataRow["descripcion"] = cbPuntoDeVenta.SelectedItem.GetValue("descripcion");
+          dataRow["codigoPuntoDeVentaSuperior"] = cbPuntoDeVenta.SelectedItem.GetValue("codigoPuntoDeVentaParent");
+          tablaPuntoDeVenta.Rows.Add(dataRow);
+
+          Session["puntoDeVenta"] = tablaPuntoDeVenta;
+          Session["tablaNotaCredito"] = null;
+          Session["tablaItemsNotaCredito"] = null;
+          Response.Redirect("credito.aspx");
+        }
       }
 
       protected void btnGenerarPDF_Click(object sender, EventArgs e)

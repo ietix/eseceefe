@@ -21,27 +21,23 @@ namespace SCF.credito
             }
         }
 
-        CargarComboPuntoDeVenta();
+        CargarComboFacturas();
         txtFechaEmision.Value = DateTime.Now;
       }
 
       private void CargarComboFacturas()
       {
-        var puntoDeVenta = Convert.ToInt32(cbPuntoDeVenta.SelectedItem.Value);
-        cbFactura.DataSource = ControladorGeneral.RecuperarFacturaPorPuntoDeVenta(puntoDeVenta);
+        var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVentaSuperior"]);
+        
+        cbFactura.DataSource = ControladorGeneral.RecuperarFacturaPorPuntoDeVenta(codigoPuntoDeVenta);
         cbFactura.DataBind();
-      }
-
-      private void CargarComboPuntoDeVenta()
-      {
-        cbPuntoDeVenta.DataSource = ControladorGeneral.RecuperarPuntosDeVentaPorTipoComprobante(1);
-        cbPuntoDeVenta.DataBind();
       }
 
       private void CargarNumeroNotaCredito()
       {
         //Obtengo el Ultimo numero de nota de Credito y le sumo 1.
-        var tablaUltimaNotaCredito = ControladorGeneral.RecuperarUltimaNotaDeCredito();
+        var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVenta"]);
+        var tablaUltimaNotaCredito = ControladorGeneral.RecuperarNotaDeCreditoPorPuntoDeVenta(codigoPuntoDeVenta);
         try
         {
           txtNotaCredito.Value = tablaUltimaNotaCredito.Rows.Count > 0 ? (Convert.ToInt32(tablaUltimaNotaCredito.Rows[0]["numeroNotaDeCredito"]) + 1).ToString() : "1";
@@ -58,7 +54,9 @@ namespace SCF.credito
       {
         try
         {
-          lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(2, 3));
+          var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVentaSuperior"]);
+
+          lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(codigoPuntoDeVenta, 3));
           pcUltimoComprobanteAfip.ShowOnPageLoad = true;
         }
         catch
@@ -232,7 +230,7 @@ namespace SCF.credito
         */
         var itemsNotaDeCredito = (DataTable)Session["tablaItemsNotaDeCredito"];
         var dtFacturaActual = (DataTable)Session["dtFacturaActual"];
-        var codigoPuntoDeVenta = Convert.ToInt32(ControladorGeneral.RecuperarPuntosDeVentaPorCodigoSuperior(Convert.ToInt32(dtFacturaActual.Rows[0]["codigoPuntoDeVenta"])).Rows[0]["codigoPuntoDeVenta"]);
+        var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVenta"]);
         pcValidarComprobante.ShowOnPageLoad = false;
 
         if (gvItemsFactura.VisibleRowCount == gvItemsNotaDeCredito.VisibleRowCount)
@@ -242,7 +240,7 @@ namespace SCF.credito
         }
         else
         {
-          ControladorGeneral.InsertarActualizarNotaDeCreditoIncompleta(0, Convert.ToInt32(dtFacturaActual.Rows[0]["codigoPuntoDeVenta"]), Convert.ToInt32(txtNotaCredito.Text), Convert.ToInt32(dtFacturaActual.Rows[0]["codigoFactura"].ToString()), Convert.ToDouble(txtTotal.Text), Convert.ToDouble(txtSubtotal.Text),
+          ControladorGeneral.InsertarActualizarNotaDeCreditoIncompleta(0, codigoPuntoDeVenta, Convert.ToInt32(txtNotaCredito.Text), Convert.ToInt32(dtFacturaActual.Rows[0]["codigoFactura"].ToString()), Convert.ToDouble(txtTotal.Text), Convert.ToDouble(txtSubtotal.Text),
           Convert.ToDateTime(txtFechaEmision.Text), 3,itemsNotaDeCredito);
         }
 
@@ -256,6 +254,7 @@ namespace SCF.credito
           pcError.HeaderText = "Nota de Credito Emitida";
           lblError.Text = status;
           pcError.ShowOnPageLoad = true;
+          Response.Redirect(string.Format("listado.aspx?codigoPuntoDeVenta={0}", codigoPuntoDeVenta.ToString()));
         }
         catch
         {
@@ -263,11 +262,6 @@ namespace SCF.credito
           lblError.Text = "Ha ocurrido un error. No hay conexion con los servidor de AFIP, vuelva a intentar.";
           pcError.ShowOnPageLoad = true;
         }
-      }
-
-      protected void cbPuntoDeVenta_SelectedIndexChanged(object sender, EventArgs e)
-      {
-        CargarComboFacturas();
       }
     }
 }

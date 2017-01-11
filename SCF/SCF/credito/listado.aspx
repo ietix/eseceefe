@@ -56,6 +56,7 @@
                                   <Columns>
                                       <dx:ListBoxColumn FieldName="numeroPuntoDeVenta" Caption="Nro Punto de Venta" Width="30%" />
                                       <dx:ListBoxColumn FieldName="descripcion" Caption="Descripción" />
+                                      <dx:ListBoxColumn FieldName="codigoPuntoDeVentaParent" Caption="Parent" Visible="False" />
                                   </Columns>
                                 </dx:ASPxComboBox>
                               </div>
