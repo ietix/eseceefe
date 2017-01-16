@@ -16,7 +16,11 @@ namespace SCF.facturas
     protected void Page_Load(object sender, EventArgs e)
     {
       txtFechaFacturacion.Value = DateTime.Now;
-      CargarComboRemito();
+      if (!IsPostBack)
+      {
+        CargarComboRemito();
+      }
+      
       CargarComboTipoComprobante();
       CargarComboConcepto();
       CargarComboTipoMoneda();
@@ -76,7 +80,7 @@ namespace SCF.facturas
     private void CargarComboRemito()
     {
       var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVentaSuperior"]);
-      gluRemito.DataSource = ControladorGeneral.RecuperarEntregaPorPuntoDeVenta(codigoPuntoDeVenta, false);
+      gluRemito.DataSource = ControladorGeneral.RecuperarEntregaPorPuntoDeVenta(codigoPuntoDeVenta, true);
       gluRemito.DataBind();
     }
 
@@ -174,11 +178,14 @@ namespace SCF.facturas
       try
       {
         var status = ControladorGeneral.EmitirFactura(Convert.ToInt32(codigoFactura));
+        pcError.HeaderText = "Factura Emitida";
         lblError.Text = status;
         pcError.ShowOnPageLoad = true;
+        Response.Redirect(string.Format("listado.aspx?codigoPuntoDeVenta={0}", codigoPuntoDeVenta.ToString()));
       }
       catch
       {
+        pcError.HeaderText = "Error";
         lblError.Text = "Ha ocurrido un error. No hay conexion con los servidor de AFIP, vuelva a intentar.";
         pcError.ShowOnPageLoad = true;
       }

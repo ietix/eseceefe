@@ -62,7 +62,7 @@
                                             <div class="input-group">
                                                 <dx:ASPxGridLookup ID="gluRemito" runat="server" SelectionMode="Multiple" CssClass="form-control"
                                                     ClientInstanceName="gridLookup" Theme="Metropolis" AutoPostBack="false"
-                                                    KeyFieldName="codigoEntrega" Width="100%" TextFormatString="{1}" MultiTextSeparator=", ">
+                                                    KeyFieldName="codigoEntrega" Width="100%" TextFormatString="{2} ({3})" MultiTextSeparator=", ">
                                                     <Columns>
                                                         <dx:GridViewCommandColumn ShowSelectCheckbox="True" Width="100%" Caption=" " />
                                                         <dx:GridViewDataColumn FieldName="codigoEntrega" Visible="false" Caption="Remito" Width="100%" />

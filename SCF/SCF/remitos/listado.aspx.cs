@@ -16,6 +16,14 @@ namespace SCF.remitos
       protected void Page_Load(object sender, EventArgs e)
       {
         CargarCombo();
+
+        if (!string.IsNullOrEmpty(Request.QueryString["codigoPuntoDeVenta"]))
+        {
+          var tablaPuntoDeVenta = (DataTable)Session["puntoDeVenta"];
+          cbPuntoDeVenta.Text = string.Format("{0} ({1})", tablaPuntoDeVenta.Rows[0]["numeroPuntoDeVenta"].ToString(), tablaPuntoDeVenta.Rows[0]["descripcion"].ToString());
+          gvEntregas.DataSource = ControladorGeneral.RecuperarEntregaPorPuntoDeVenta(Convert.ToInt32(Request.QueryString["codigoPuntoDeVenta"]));
+          gvEntregas.DataBind();
+        }
       }
 
       private void CargarCombo()

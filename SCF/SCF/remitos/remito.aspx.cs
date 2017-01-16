@@ -234,7 +234,7 @@ namespace SCF.remitos
                 
           ControladorGeneral.InsertarActualizarEntrega(codigoPuntoDeVenta, codigoEntrega, Convert.ToDateTime(txtFechaEmision.Value), Convert.ToInt32(cbNotaDePedido.Value), Convert.ToInt32(txtCodigoRemito.Text), txtObservacion.InnerText, tablaItemsEntrega, Convert.ToInt32(cbTransporte.Value), Convert.ToInt32(cbDireccion.SelectedItem.Value),caiAfip,fechaVencimientoCaiAfip);
 
-          Response.Redirect("listado.aspx");
+          Response.Redirect(string.Format("listado.aspx?codigoPuntoDeVenta={0}", codigoPuntoDeVenta.ToString()));
         }
       }
 

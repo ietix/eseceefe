@@ -14,6 +14,14 @@ namespace SCF.facturas
     protected void Page_Load(object sender, EventArgs e)
     {
       CargarCombo();
+
+      if (!string.IsNullOrEmpty(Request.QueryString["codigoPuntoDeVenta"]))
+      {
+        var tablaPuntoDeVenta = (DataTable)Session["puntoDeVenta"];
+        cbPuntoDeVenta.Text = string.Format("{0} ({1})", tablaPuntoDeVenta.Rows[0]["numeroPuntoDeVenta"].ToString(), tablaPuntoDeVenta.Rows[0]["descripcion"].ToString());
+        gvFacturas.DataSource = ControladorGeneral.RecuperarFacturaPorPuntoDeVenta(Convert.ToInt32(Request.QueryString["codigoPuntoDeVenta"]));
+        gvFacturas.DataBind();
+      }
     }
 
     private void CargarGrilla()
@@ -56,8 +64,6 @@ namespace SCF.facturas
         Session["tablaFactura"] = null;
         Response.Redirect("factura.aspx");
       }
-
-      
     }
 
     protected void btnEditar_Click(object sender, EventArgs e)
