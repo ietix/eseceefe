@@ -22,13 +22,20 @@ namespace SCF.facturas
         gvFacturas.DataSource = ControladorGeneral.RecuperarFacturaPorPuntoDeVenta(Convert.ToInt32(Request.QueryString["codigoPuntoDeVenta"]));
         gvFacturas.DataBind();
       }
+      else
+      {
+        CargarGrilla();
+      }
     }
 
     private void CargarGrilla()
     {
-      var puntoDeVenta = Convert.ToInt32(cbPuntoDeVenta.SelectedItem.Value);
-      gvFacturas.DataSource = ControladorGeneral.RecuperarFacturaPorPuntoDeVenta(puntoDeVenta);
-      gvFacturas.DataBind();
+      if (cbPuntoDeVenta.SelectedIndex > -1)
+      {
+        var puntoDeVenta = Convert.ToInt32(cbPuntoDeVenta.SelectedItem.Value);
+        gvFacturas.DataSource = ControladorGeneral.RecuperarFacturaPorPuntoDeVenta(puntoDeVenta);
+        gvFacturas.DataBind();
+      }
     }
 
     private void CargarCombo()
@@ -51,13 +58,13 @@ namespace SCF.facturas
         tablaPuntoDeVenta.Columns.Add("codigoPuntoDeVenta");
         tablaPuntoDeVenta.Columns.Add("numeroPuntoDeVenta");
         tablaPuntoDeVenta.Columns.Add("descripcion");
-        tablaPuntoDeVenta.Columns.Add("codigoPuntoDeVentaSuperior");
+        tablaPuntoDeVenta.Columns.Add("codigoPuntoDeVentaParent");
 
         var dataRow = tablaPuntoDeVenta.NewRow();
         dataRow["codigoPuntoDeVenta"] = cbPuntoDeVenta.SelectedItem.Value;
         dataRow["numeroPuntoDeVenta"] = cbPuntoDeVenta.SelectedItem.GetValue("numeroPuntoDeVenta");
         dataRow["descripcion"] = cbPuntoDeVenta.SelectedItem.GetValue("descripcion");
-        dataRow["codigoPuntoDeVentaSuperior"] = cbPuntoDeVenta.SelectedItem.GetValue("codigoPuntoDeVentaParent");
+        dataRow["codigoPuntoDeVentaParent"] = cbPuntoDeVenta.SelectedItem.GetValue("codigoPuntoDeVentaParent");
         tablaPuntoDeVenta.Rows.Add(dataRow);
 
         Session["puntoDeVenta"] = tablaPuntoDeVenta;

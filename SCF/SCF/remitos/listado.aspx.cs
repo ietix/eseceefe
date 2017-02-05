@@ -24,6 +24,10 @@ namespace SCF.remitos
           gvEntregas.DataSource = ControladorGeneral.RecuperarEntregaPorPuntoDeVenta(Convert.ToInt32(Request.QueryString["codigoPuntoDeVenta"]));
           gvEntregas.DataBind();
         }
+        else
+        {
+          CargarGrilla();
+        }
       }
 
       private void CargarCombo()
@@ -34,9 +38,12 @@ namespace SCF.remitos
 
       private void CargarGrilla()
       {
-        var puntoDeVenta = Convert.ToInt32(cbPuntoDeVenta.SelectedItem.Value);
-        gvEntregas.DataSource = ControladorGeneral.RecuperarEntregaPorPuntoDeVenta(puntoDeVenta);
-        gvEntregas.DataBind();
+        if (cbPuntoDeVenta.SelectedIndex > -1)
+        {
+          var puntoDeVenta = Convert.ToInt32(cbPuntoDeVenta.SelectedItem.Value);
+          gvEntregas.DataSource = ControladorGeneral.RecuperarEntregaPorPuntoDeVenta(puntoDeVenta);
+          gvEntregas.DataBind();
+        }
       }
 
       protected void btnNuevo_Click(object sender, EventArgs e)

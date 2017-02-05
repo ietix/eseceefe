@@ -16,11 +16,7 @@ namespace SCF.facturas
     protected void Page_Load(object sender, EventArgs e)
     {
       txtFechaFacturacion.Value = DateTime.Now;
-      if (!IsPostBack)
-      {
-        CargarComboRemito();
-      }
-      
+      CargarComboRemito();
       CargarComboTipoComprobante();
       CargarComboConcepto();
       CargarComboTipoMoneda();
@@ -79,7 +75,7 @@ namespace SCF.facturas
 
     private void CargarComboRemito()
     {
-      var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVentaSuperior"]);
+      var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVentaParent"]);
       gluRemito.DataSource = ControladorGeneral.RecuperarEntregaPorPuntoDeVenta(codigoPuntoDeVenta, true);
       gluRemito.DataBind();
     }
@@ -90,8 +86,9 @@ namespace SCF.facturas
     {
       try
       {
-        var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVentaSuperior"]);
-        lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(codigoPuntoDeVenta, 1));
+        var numeroPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["numeroPuntoDeVenta"]);
+        lblPuntoDeVenta.Text = Convert.ToString(numeroPuntoDeVenta);
+        lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(numeroPuntoDeVenta, 1));
         pcUltimoComprobanteAfip.ShowOnPageLoad = true;
       }
       catch
@@ -112,7 +109,7 @@ namespace SCF.facturas
       else
       {
         var dtItemsFacturaActual = (DataTable)Session["dtItemsFacturaActual"];
-        
+
         if (dtItemsFacturaActual != null)
         {
           var puntoDeVenta = Convert.ToInt32(((DataTable)Session["PuntoDeVenta"]).Rows[0]["numeroPuntoDeVenta"]);
@@ -217,16 +214,19 @@ namespace SCF.facturas
 
     private void CargarItemsDeLaFactura(List<object> nroRemitosActual)
     {
-      DataTable dtItemsFactura = new DataTable();
+      var dtItemsFactura = new DataTable();
+      
       foreach (object[] item in nroRemitosActual)
       {
-        DataTable dtToMerge = new DataTable();
+        var dtToMerge = new DataTable();
         dtToMerge = ControladorGeneral.RecuperarItemsEntrega(Convert.ToInt32(item[0].ToString()));
         dtItemsFactura.Merge(dtToMerge);
       }
+
       gvItemsFactura.DataSource = dtItemsFactura;
       gvItemsFactura.DataBind();
 
+      Session["dtItemsEntregaActual"] = dtItemsFactura;
       Session["dtItemsFacturaActual"] = dtItemsFactura;
 
       CalcularImporteTotal();
@@ -241,8 +241,6 @@ namespace SCF.facturas
       {
         subtotal = subtotal + Convert.ToDouble(dtItemsFacturaActual.Rows[i]["precioTotal"].ToString());
       }
-
-      //subtotal = subtotal * Convert.ToDouble(txtCotizacion.Text);
 
       txtSubtotal.Text = Convert.ToString((double)decimal.Round((decimal)subtotal, 2));
       txtImporteIVA.Text = Convert.ToString((double)decimal.Round((decimal)(subtotal * 0.21), 2));

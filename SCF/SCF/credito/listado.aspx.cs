@@ -22,13 +22,20 @@ namespace SCF.credito
           gvNotaCredito.DataSource = ControladorGeneral.RecuperarNotaDeCreditoPorPuntoDeVenta(Convert.ToInt32(Request.QueryString["codigoPuntoDeVenta"]));
           gvNotaCredito.DataBind();
         }
+        else
+        {
+          CargarGrilla();
+        }
       }
 
       private void CargarGrilla()
       {
-        var puntoDeVenta = Convert.ToInt32(cbPuntoDeVenta.SelectedItem.Value);
-        gvNotaCredito.DataSource = ControladorGeneral.RecuperarNotaDeCreditoPorPuntoDeVenta(puntoDeVenta);
-        gvNotaCredito.DataBind();
+        if (cbPuntoDeVenta.SelectedIndex > -1)
+        {
+          var puntoDeVenta = Convert.ToInt32(cbPuntoDeVenta.SelectedItem.Value);
+          gvNotaCredito.DataSource = ControladorGeneral.RecuperarNotaDeCreditoPorPuntoDeVenta(puntoDeVenta);
+          gvNotaCredito.DataBind();
+        }
       }
 
       private void CargarCombo()

@@ -610,8 +610,8 @@
                                         <!--/span-->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label class="control-label col-md-12">Punto de Venta: 002</label>
-
+                                                <label class="control-label col-md-12">Punto de Venta:&nbsp; 
+                                                  <asp:Label runat="server" ID="lblPuntoDeVenta" /></label>
                                             </div>
                                         </div>
                                         <!--/span-->
