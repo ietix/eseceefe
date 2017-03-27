@@ -111,7 +111,7 @@
     </div>
     <!-- END CONTENT -->
 
-    <!-- BEGIN POPUP ELIMINAR ARTICULO -->
+    <!-- BEGIN POPUP ELIMINAR NOTA DE PEDIDO -->
     <dx:ASPxPopupControl ID="pcConfirmarEliminarNotaPedido" runat="server" CloseAction="CloseButton" CloseOnEscape="true"
         PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" ClientInstanceName="pcConfirmarEliminarNotaPedido"
         HeaderText="Eliminar Nota de Pedido" AllowDragging="True" Modal="True" PopupAnimationType="Fade" Width="300"

@@ -14,13 +14,19 @@ namespace SCF.facturas
     protected void Page_Load(object sender, EventArgs e)
     {
       CargarCombo();
-
+     
       if (!string.IsNullOrEmpty(Request.QueryString["codigoPuntoDeVenta"]))
       {
         var tablaPuntoDeVenta = (DataTable)Session["puntoDeVenta"];
-        cbPuntoDeVenta.Text = string.Format("{0} ({1})", tablaPuntoDeVenta.Rows[0]["numeroPuntoDeVenta"].ToString(), tablaPuntoDeVenta.Rows[0]["descripcion"].ToString());
-        gvFacturas.DataSource = ControladorGeneral.RecuperarFacturaPorPuntoDeVenta(Convert.ToInt32(Request.QueryString["codigoPuntoDeVenta"]));
-        gvFacturas.DataBind();
+        var codigoPuntoDeVenta = Convert.ToInt32(Request.QueryString["codigoPuntoDeVenta"]);
+        var dataRow = tablaPuntoDeVenta.AsEnumerable().FirstOrDefault(x => Convert.ToInt32(x["codigoPuntoDeVenta"]) == codigoPuntoDeVenta);
+        
+        if (dataRow != null)
+        {
+          cbPuntoDeVenta.Text = string.Format("{0} ({1})", dataRow["numeroPuntoDeVenta"], dataRow["descripcion"]);
+          gvFacturas.DataSource = ControladorGeneral.RecuperarFacturaPorPuntoDeVenta(codigoPuntoDeVenta);
+          gvFacturas.DataBind();
+        }
       }
       else
       {
@@ -40,7 +46,9 @@ namespace SCF.facturas
 
     private void CargarCombo()
     {
-      cbPuntoDeVenta.DataSource = ControladorGeneral.RecuperarPuntosDeVentaPorTipoComprobante(1);
+      var tablaPuntosDeVenta = ControladorGeneral.RecuperarPuntosDeVentaPorTipoComprobante(1);
+      tablaPuntosDeVenta.Merge(ControladorGeneral.RecuperarPuntosDeVentaPorTipoComprobante(6));
+      cbPuntoDeVenta.DataSource = tablaPuntosDeVenta;
       cbPuntoDeVenta.DataBind();
     }
 
@@ -59,12 +67,14 @@ namespace SCF.facturas
         tablaPuntoDeVenta.Columns.Add("numeroPuntoDeVenta");
         tablaPuntoDeVenta.Columns.Add("descripcion");
         tablaPuntoDeVenta.Columns.Add("codigoPuntoDeVentaParent");
+        tablaPuntoDeVenta.Columns.Add("codigoTipoComprobante");
 
         var dataRow = tablaPuntoDeVenta.NewRow();
         dataRow["codigoPuntoDeVenta"] = cbPuntoDeVenta.SelectedItem.Value;
         dataRow["numeroPuntoDeVenta"] = cbPuntoDeVenta.SelectedItem.GetValue("numeroPuntoDeVenta");
         dataRow["descripcion"] = cbPuntoDeVenta.SelectedItem.GetValue("descripcion");
         dataRow["codigoPuntoDeVentaParent"] = cbPuntoDeVenta.SelectedItem.GetValue("codigoPuntoDeVentaParent");
+        dataRow["codigoTipoComprobante"] = cbPuntoDeVenta.SelectedItem.GetValue("codigoTipoComprobante");
         tablaPuntoDeVenta.Rows.Add(dataRow);
 
         Session["puntoDeVenta"] = tablaPuntoDeVenta;

@@ -25,7 +25,8 @@ namespace SCF.remitos
           
           if (Session["tablaEntrega"] != null)
           {
-            cbNotaDePedido.DataSource = ControladorGeneral.RecuperarTodasNotasDePedido(false);
+            //cbNotaDePedido.DataSource = ControladorGeneral.RecuperarTodasNotasDePedido(false);
+            cbNotaDePedido.DataSource = ControladorGeneral.RecuperarNotasDePedidoActivas();
             cbNotaDePedido.DataBind();
 
             var tablaEntrega = (DataTable)Session["tablaEntrega"];
@@ -59,7 +60,8 @@ namespace SCF.remitos
           {
             var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVenta"]);
             txtPuntoDeVenta.Text = ((DataTable)Session["puntoDeVenta"]).Rows[0]["numeroPuntoDeVenta"].ToString();
-            cbNotaDePedido.DataSource = ControladorGeneral.RecuperarTodasNotasDePedido(true);
+            //cbNotaDePedido.DataSource = ControladorGeneral.RecuperarTodasNotasDePedido(false);
+            cbNotaDePedido.DataSource = ControladorGeneral.RecuperarNotasDePedidoActivas();
             cbNotaDePedido.DataBind();
 
             var tablaUltimaEntrega = ControladorGeneral.RecuperarUltimaEntrega(codigoPuntoDeVenta);
@@ -70,7 +72,8 @@ namespace SCF.remitos
         {
           if (Session["tablaEntrega"] != null)
           {
-            cbNotaDePedido.DataSource = ControladorGeneral.RecuperarTodasNotasDePedido(false);
+            //cbNotaDePedido.DataSource = ControladorGeneral.RecuperarTodasNotasDePedido(false);
+            cbNotaDePedido.DataSource = ControladorGeneral.RecuperarNotasDePedidoActivas();
             cbNotaDePedido.DataBind();
 
             var tablaEntrega = (DataTable)Session["tablaEntrega"];
@@ -85,7 +88,8 @@ namespace SCF.remitos
           }
           else
           {
-            cbNotaDePedido.DataSource = ControladorGeneral.RecuperarTodasNotasDePedido(true);
+            //cbNotaDePedido.DataSource = ControladorGeneral.RecuperarTodasNotasDePedido(false);
+            cbNotaDePedido.DataSource = ControladorGeneral.RecuperarNotasDePedidoActivas();
             cbNotaDePedido.DataBind();
 
             if (cbNotaDePedido.SelectedItem != null)
@@ -228,9 +232,10 @@ namespace SCF.remitos
         }
         else
         {
-          var dtDatosEmpresa = ControladorGeneral.RecuperarTodosDatosEmpresa(false);
-          var caiAfip = Convert.ToString(dtDatosEmpresa.Rows[0]["cai"]);
-          var fechaVencimientoCaiAfip = Convert.ToDateTime(dtDatosEmpresa.Rows[0]["fechaVencimientoCai"]);
+          //var dtDatosEmpresa = ControladorGeneral.RecuperarTodosDatosEmpresa(false);
+          var puntoDeVenta = ControladorGeneral.RecuperarPuntosDeVentaPorCodigo(codigoPuntoDeVenta);
+          var caiAfip = Convert.ToString(puntoDeVenta.Rows[0]["cai"]);
+          var fechaVencimientoCaiAfip = Convert.ToDateTime(puntoDeVenta.Rows[0]["vencimientoCai"]);
                 
           ControladorGeneral.InsertarActualizarEntrega(codigoPuntoDeVenta, codigoEntrega, Convert.ToDateTime(txtFechaEmision.Value), Convert.ToInt32(cbNotaDePedido.Value), Convert.ToInt32(txtCodigoRemito.Text), txtObservacion.InnerText, tablaItemsEntrega, Convert.ToInt32(cbTransporte.Value), Convert.ToInt32(cbDireccion.SelectedItem.Value),caiAfip,fechaVencimientoCaiAfip);
 

@@ -20,38 +20,64 @@ namespace SCF.facturas
       CargarComboTipoComprobante();
       CargarComboConcepto();
       CargarComboTipoMoneda();
-      CargarPuntoDeVenta();
-      
-      if (((DataTable)Session["PuntoDeVenta"]) != null)
+
+      if (!IsPostBack)
       {
-        CargarNumeroDeFactura();
+        CargarPuntoDeVenta();
       }
+      
+      //if (((DataTable)Session["PuntoDeVenta"]) != null)
+      //{
+      //  CargarNumeroDeFactura();
+      //}
     }
 
-    private void CargarNumeroDeFactura()
+    private int RetornarPuntoDeVenta()
+    {
+      var codigoTipoComprobante = Convert.ToInt32(cbTipoComprobante.SelectedItem.Value);
+      var dataRow = ((DataTable)Session["PuntoDeVenta"]).AsEnumerable().FirstOrDefault(x => Convert.ToInt32(x["codigoTipoComprobante"]) == codigoTipoComprobante);
+
+      if (dataRow == null)
+      {
+        lblError.Text = "Debe seleccionar el tipo de comprobante";
+        pcError.ShowOnPageLoad = true;
+        return -1;
+      }
+
+      var codigoPuntoDeVenta = Convert.ToInt32(dataRow["codigoPuntoDeVenta"]);
+      var numeroPuntoDeVenta = Convert.ToInt32(dataRow["numeroPuntoDeVenta"]);
+
+      txtPuntoDeVenta.Text = string.Format("{0} ({1})", numeroPuntoDeVenta, dataRow["descripcion"]);
+      lblTipoDocumento.Text = codigoPuntoDeVenta == 1 ? "CUIT" : "DNI/CUIL";
+      lblTituloDocumento.Text = lblTipoDocumento.Text;
+      lblSubtotalDesc.Visible = codigoTipoComprobante == 1;
+      txtSubtotal.Visible = codigoTipoComprobante == 1;
+      cbCondicionIVA.Visible = codigoTipoComprobante == 1;
+      txtImporteIVA.Visible = codigoTipoComprobante == 1;
+      lblTituloIVA.Visible = codigoTipoComprobante == 1;
+      lblImporteIVA.Visible = codigoTipoComprobante == 1;
+
+      lblPuntoDeVenta.Text = Convert.ToString(numeroPuntoDeVenta);
+      lblTextoTipoComprabante.Text = string.Format("Tipo de Comprobante: Factura Tipo {0}", codigoTipoComprobante == 1 ? "A" : "B");
+
+      return codigoPuntoDeVenta;
+    }
+
+    private void CarCargarNumeroDeFactura(int codigoPuntoDeVenta)
     {
       //Obtengo el Ultimo numero de factura y le sumo 1.
-      var tablaUltimaFactura = ControladorGeneral.RecuperarUltimaFactura(Convert.ToInt32(((DataTable)Session["PuntoDeVenta"]).Rows[0]["codigoPuntoDeVenta"]));
+      var tablaUltimaFactura = ControladorGeneral.RecuperarUltimaFactura(codigoPuntoDeVenta);
       txtNroFactura.Value = tablaUltimaFactura.Rows.Count > 0 ? (Convert.ToInt32(tablaUltimaFactura.Rows[0]["numeroFactura"]) + 1).ToString() : "1";
     }
 
     private void CargarPuntoDeVenta()
     {
-      string[] queryFields = { "codigoPuntoDeVenta" };
-      var values = gluRemito.GridView.GetSelectedFieldValues(queryFields);
-      var puntoDeVentaRemito = -1;
-
-      foreach (var item in values)
-      {
-        puntoDeVentaRemito = Convert.ToInt32(item);
-      }
-
+      var puntoDeVentaRemito = Convert.ToInt32(((DataTable)Session["PuntoDeVenta"]).Rows[0]["codigoPuntoDeVentaParent"]);
       var tablaPuntoDeVenta = ControladorGeneral.RecuperarPuntosDeVentaPorCodigoSuperior(puntoDeVentaRemito);
 
       if (tablaPuntoDeVenta.Rows.Count > 0)
       {
         Session["PuntoDeVenta"] = tablaPuntoDeVenta;
-        txtPuntoDeVenta.Text = string.Format("{0} ({1})", tablaPuntoDeVenta.Rows[0]["numeroPuntoDeVenta"], tablaPuntoDeVenta.Rows[0]["descripcion"]);
       }
     }
 
@@ -69,7 +95,7 @@ namespace SCF.facturas
 
     private void CargarComboTipoComprobante()
     {
-      cbTipoComprobante.DataSource = ControladorGeneral.RecuperarTodosTipoComprobantes();
+      cbTipoComprobante.DataSource = ControladorGeneral.RecuperarTiposDeFactura();
       cbTipoComprobante.DataBind();
     }
 
@@ -86,12 +112,19 @@ namespace SCF.facturas
     {
       try
       {
-        var numeroPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["numeroPuntoDeVenta"]);
-        lblPuntoDeVenta.Text = Convert.ToString(numeroPuntoDeVenta);
-        lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(numeroPuntoDeVenta, 1));
-        pcUltimoComprobanteAfip.ShowOnPageLoad = true;
+        if (Session["PuntoDeVenta"] != null && cbTipoComprobante.SelectedIndex > 0)
+        {
+          this.RetornarPuntoDeVenta();
+          lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(Convert.ToInt32(lblPuntoDeVenta.Text), Convert.ToInt32(cbTipoComprobante.SelectedItem.Value)));
+          pcUltimoComprobanteAfip.ShowOnPageLoad = true;
+        }
+        else
+        {
+          lblError.Text = "Debe seleccionar el tipo de comprobante";
+          pcError.ShowOnPageLoad = true;
+        }
       }
-      catch
+      catch(Exception ex)
       {
         lblError.Text = "Ha ocurrido un error. No hay conexion con los servidor de AFIP, vuelva a intentar.";
         pcError.ShowOnPageLoad = true;
@@ -112,7 +145,8 @@ namespace SCF.facturas
 
         if (dtItemsFacturaActual != null)
         {
-          var puntoDeVenta = Convert.ToInt32(((DataTable)Session["PuntoDeVenta"]).Rows[0]["numeroPuntoDeVenta"]);
+          this.RetornarPuntoDeVenta();  
+          var puntoDeVenta = Convert.ToInt32(lblPuntoDeVenta.Text);
           var numeroDeFactura = Convert.ToInt32(txtNroFactura.Value);
           gvDetalleFactura.DataSource = dtItemsFacturaActual;
           gvDetalleFactura.DataBind();
@@ -143,8 +177,10 @@ namespace SCF.facturas
 
       var arrayListRemitos = (List<object>)Session["listRemitos"];
       var codigoRemitos = new List<int>();
-      var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["PuntoDeVenta"]).Rows[0]["codigoPuntoDeVenta"]);
-
+      var codigoTipoComprobante = Convert.ToInt32(cbTipoComprobante.SelectedItem.Value);
+      var dataRow = ((DataTable)Session["PuntoDeVenta"]).AsEnumerable().FirstOrDefault(x => Convert.ToInt32(x["codigoTipoComprobante"]) == codigoTipoComprobante);
+      var codigoPuntoDeVenta = Convert.ToInt32(dataRow["codigoPuntoDeVenta"]);
+      
       foreach (object[] items in arrayListRemitos)
       {
         codigoRemitos.Add(Convert.ToInt32(items[0].ToString()));
@@ -164,7 +200,7 @@ namespace SCF.facturas
         tablaItemsEntrega.Rows.Add(row); 
       }
 
-      ControladorGeneral.InsertarActualizarFactura(0, codigoPuntoDeVenta, Convert.ToInt32(txtNroFactura.Text), Convert.ToDateTime(txtFechaFacturacion.Text), codigoRemitos, Convert.ToInt32(cbTipoMoneda.Value), 
+      ControladorGeneral.InsertarActualizarFactura(0, codigoTipoComprobante, codigoPuntoDeVenta, Convert.ToInt32(txtNroFactura.Text), Convert.ToDateTime(txtFechaFacturacion.Text), codigoRemitos, Convert.ToInt32(cbTipoMoneda.Value), 
       Convert.ToInt32(cbConcepto.Value), Convert.ToInt32(cbCondicionIVA.Value), Convert.ToDouble(txtSubtotal.Text), Convert.ToDouble(txtTotal.Text), 
       Convert.ToString(cbCondicionVenta.Text), Convert.ToDouble(txtCotizacion.Text), tablaItemsEntrega);
 
@@ -191,6 +227,15 @@ namespace SCF.facturas
     protected void btnObtenerDatosRemito_Click(object sender, EventArgs e)
     {
       ObtenerDatosRemito();
+    }
+
+    protected void cbTipoComprobante_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      if (Session["PuntoDeVenta"] != null && cbTipoComprobante.SelectedIndex >= 0)
+      {
+        var codigoPuntoDeVenta = this.RetornarPuntoDeVenta();
+        this.CarCargarNumeroDeFactura(codigoPuntoDeVenta);
+      }
     }
 
     private void ObtenerDatosRemito()

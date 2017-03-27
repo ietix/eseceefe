@@ -13,6 +13,7 @@ using WSFEv1.Logica;
 using WSFEv1.Logica.Wsfe;
 using FluentNHibernate.Conventions;
 using FluentNHibernate.Utils;
+using System.Diagnostics;
 
 namespace BibliotecaSCF.Controladores
 {
@@ -1616,119 +1617,118 @@ namespace BibliotecaSCF.Controladores
 
     #endregion
 
-      #region ItemNotaDePedido
+    #region ItemNotaDePedido
 
-      public static DataTable RecuperarItemsNotaDePedido(int codigoNotaDePedido)
+    public static DataTable RecuperarItemsNotaDePedido(int codigoNotaDePedido)
+    {
+      ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
       {
-          ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+        DataTable tablaItemsNotaDePedido = new DataTable();
+        tablaItemsNotaDePedido.Columns.Add("codigoItemNotaDePedido");
+        tablaItemsNotaDePedido.Columns.Add("codigoArticulo");
+        tablaItemsNotaDePedido.Columns.Add("descripcionCorta");
+        tablaItemsNotaDePedido.Columns.Add("descripcionLarga");
+        tablaItemsNotaDePedido.Columns.Add("marca");
+        tablaItemsNotaDePedido.Columns.Add("precio");
+        tablaItemsNotaDePedido.Columns.Add("cantidad");
+        tablaItemsNotaDePedido.Columns.Add("fechaEntrega");
+        tablaItemsNotaDePedido.Columns.Add("cantidadEntregada");
+        tablaItemsNotaDePedido.Columns.Add("codigoMoneda");
+        tablaItemsNotaDePedido.Columns.Add("descripcionMoneda");
+        tablaItemsNotaDePedido.Columns.Add("posicion");
+        tablaItemsNotaDePedido.Columns.Add("subtotal");
+        NotaDePedido notaDePedido = CatalogoNotaDePedido.RecuperarPorCodigo(codigoNotaDePedido, nhSesion);
 
-          try
-          {
-              DataTable tablaItemsNotaDePedido = new DataTable();
-              tablaItemsNotaDePedido.Columns.Add("codigoItemNotaDePedido");
-              tablaItemsNotaDePedido.Columns.Add("codigoArticulo");
-              tablaItemsNotaDePedido.Columns.Add("descripcionCorta");
-              tablaItemsNotaDePedido.Columns.Add("descripcionLarga");
-              tablaItemsNotaDePedido.Columns.Add("marca");
-              tablaItemsNotaDePedido.Columns.Add("precio");
-              tablaItemsNotaDePedido.Columns.Add("cantidad");
-              tablaItemsNotaDePedido.Columns.Add("fechaEntrega");
-              tablaItemsNotaDePedido.Columns.Add("cantidadEntregada");
-              tablaItemsNotaDePedido.Columns.Add("codigoMoneda");
-              tablaItemsNotaDePedido.Columns.Add("descripcionMoneda");
-              tablaItemsNotaDePedido.Columns.Add("posicion");
-              tablaItemsNotaDePedido.Columns.Add("subtotal");
-              NotaDePedido notaDePedido = CatalogoNotaDePedido.RecuperarPorCodigo(codigoNotaDePedido, nhSesion);
+        List<Entrega> listaEntregas = CatalogoEntrega.RecuperarLista(x => x.NotaDePedido.Codigo == codigoNotaDePedido, nhSesion);
 
-              List<Entrega> listaEntregas = CatalogoEntrega.RecuperarLista(x => x.NotaDePedido.Codigo == codigoNotaDePedido, nhSesion);
+        foreach (ItemNotaDePedido item in notaDePedido.ItemsNotaDePedido)
+        {
+          int cantidadEntregada = (from e in listaEntregas select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == item.Codigo select i.CantidadAEntregar).SingleOrDefault()).Sum();
 
-              foreach (ItemNotaDePedido item in notaDePedido.ItemsNotaDePedido)
-              {
-                  int cantidadEntregada = (from e in listaEntregas select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == item.Codigo select i.CantidadAEntregar).SingleOrDefault()).Sum();
+          tablaItemsNotaDePedido.Rows.Add(item.Codigo, item.Articulo.Codigo, item.Articulo.DescripcionCorta, item.Articulo.DescripcionLarga, item.Articulo.Marca,
+          item.Precio, item.CantidadPedida, item.FechaEntrega.ToString("dd/MM/yyyy"), cantidadEntregada, item.Articulo.RecuperarHistorialPrecioActual().Moneda.Codigo,
+          item.Articulo.RecuperarHistorialPrecioActual().Moneda.Descripcion, item.Posicion, item.CantidadPedida * item.Precio);
+        }
 
-                  tablaItemsNotaDePedido.Rows.Add(item.Codigo, item.Articulo.Codigo, item.Articulo.DescripcionCorta, item.Articulo.DescripcionLarga, item.Articulo.Marca,
-                  item.Precio, item.CantidadPedida, item.FechaEntrega.ToString("dd/MM/yyyy"), cantidadEntregada, item.Articulo.RecuperarHistorialPrecioActual().Moneda.Codigo,
-                  item.Articulo.RecuperarHistorialPrecioActual().Moneda.Descripcion, item.Posicion, item.CantidadPedida * item.Precio);
-              }
-
-
-              return tablaItemsNotaDePedido;
-          }
-          catch (Exception ex)
-          {
-              throw ex;
-          }
-          finally
-          {
-              nhSesion.Close();
-              nhSesion.Dispose();
-          }
+        return tablaItemsNotaDePedido;
       }
-
-      #endregion
-
-      #region Moneda
-
-      public static DataTable RecuperarTodasMonedas()
+      catch (Exception ex)
       {
-          ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
-
-          try
-          {
-              DataTable tablaMonedas = new DataTable();
-              tablaMonedas.Columns.Add("codigo");
-              tablaMonedas.Columns.Add("descripcion");
-              tablaMonedas.Columns.Add("abreviatura");
-
-              List<TipoMoneda> listaMonedas = CatalogoMoneda.RecuperarTodos(nhSesion);
-
-              listaMonedas.Aggregate(tablaMonedas, (dt, r) => { dt.Rows.Add(r.Codigo, r.Descripcion, r.Abreviatura); return dt; });
-
-              return tablaMonedas;
-          }
-          catch (Exception ex)
-          {
-              throw ex;
-          }
-          finally
-          {
-              nhSesion.Close();
-              nhSesion.Dispose();
-          }
+        throw ex;
       }
-
-      #endregion
-
-      public static DataTable RecuperarContratosMarcoVigente()
+      finally
       {
-          ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
-
-          try
-          {
-              DataTable tablaContratosMarco = new DataTable();
-              tablaContratosMarco.Columns.Add("codigoContratoMarco");
-              tablaContratosMarco.Columns.Add("fechaInicio");
-              tablaContratosMarco.Columns.Add("fechaFin");
-              tablaContratosMarco.Columns.Add("descripcion");
-
-              List<ContratoMarco> listaContratosMarco = CatalogoContratoMarco.RecuperarLista(x => x.FechaInicio < DateTime.Now, nhSesion);
-
-              listaContratosMarco.Aggregate(tablaContratosMarco, (dt, r) => { dt.Rows.Add(r.Codigo, r.FechaInicio, r.FechaFin, r.Descripcion); return dt; });
-
-              return tablaContratosMarco;
-          }
-          catch (Exception ex)
-          {
-              throw ex;
-          }
-          finally
-          {
-              nhSesion.Close();
-              nhSesion.Dispose();
-          }
+        nhSesion.Close();
+        nhSesion.Dispose();
       }
+    }
 
-      #region NotaDePedido
+    #endregion
+
+    #region Moneda
+
+    public static DataTable RecuperarTodasMonedas()
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
+      {
+        var tablaMonedas = new DataTable();
+        tablaMonedas.Columns.Add("codigo");
+        tablaMonedas.Columns.Add("descripcion");
+        tablaMonedas.Columns.Add("abreviatura");
+
+        var listaMonedas = CatalogoMoneda.RecuperarTodos(nhSesion);
+
+        listaMonedas.Aggregate(tablaMonedas, (dt, r) => { dt.Rows.Add(r.Codigo, r.Descripcion, r.Abreviatura); return dt; });
+
+        return tablaMonedas;
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      finally
+      {
+        nhSesion.Close();
+        nhSesion.Dispose();
+      }
+    }
+
+    #endregion
+
+    public static DataTable RecuperarContratosMarcoVigente()
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
+      {
+          var tablaContratosMarco = new DataTable();
+          tablaContratosMarco.Columns.Add("codigoContratoMarco");
+          tablaContratosMarco.Columns.Add("fechaInicio");
+          tablaContratosMarco.Columns.Add("fechaFin");
+          tablaContratosMarco.Columns.Add("descripcion");
+
+          var listaContratosMarco = CatalogoContratoMarco.RecuperarLista(x => x.FechaInicio < DateTime.Now, nhSesion);
+
+          listaContratosMarco.Aggregate(tablaContratosMarco, (dt, r) => { dt.Rows.Add(r.Codigo, r.FechaInicio, r.FechaFin, r.Descripcion); return dt; });
+
+          return tablaContratosMarco;
+      }
+      catch (Exception ex)
+      {
+          throw ex;
+      }
+      finally
+      {
+          nhSesion.Close();
+          nhSesion.Dispose();
+      }
+    }
+
+    #region NotaDePedido
 
       public static DataTable RecuperarTodasNotasDePedido(bool soloVigentes)
       {
@@ -1869,121 +1869,174 @@ namespace BibliotecaSCF.Controladores
           }
       }
 
-      /// <summary>
-      /// Columnas del DataTabla tablaItemsNotaDePedido: codigoItemNotaDePedido, codigoArticulo, cantidad, fechaEntrega
-      /// Devuelve un string.Empty si está todo OK, si algun item nota de pedido tiene asociado un remito, devuelve "TieneAsociadoRemito"
-      /// </summary>
-      public static string InsertarActualizarNotaDePedido(int codigoNotaDePedido, string numeroInternoCliente, DateTime fechaEmision, string observaciones, int codigoContratoMarco, int codigoCliente, DataTable tablaItemsNotaDePedido)
+    public static DataTable RecuperarNotasDePedidoActivas()
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
       {
-          ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
-          ITransaction transaccion = nhSesion.BeginTransaction();
+        var tablaNotasDePedido = new DataTable();
+        tablaNotasDePedido.Columns.Add("codigoNotaDePedido");
+        tablaNotasDePedido.Columns.Add("numeroInternoCliente");
+        tablaNotasDePedido.Columns.Add("fechaEmision");
+        tablaNotasDePedido.Columns.Add("codigoEstado");
+        tablaNotasDePedido.Columns.Add("codigoContratoMarco");
+        tablaNotasDePedido.Columns.Add("descripcionContratoMarco");
+        tablaNotasDePedido.Columns.Add("codigoCliente");
+        tablaNotasDePedido.Columns.Add("razonSocialCliente");
+        tablaNotasDePedido.Columns.Add("fechaHoraProximaEntrega");
+        tablaNotasDePedido.Columns.Add("observaciones");
 
-          string rta = string.Empty;
+        var listaNotasDePedido = CatalogoNotaDePedido.RecuperarLista(x => x.CodigoEstado != Constantes.Estados.ANULADA, nhSesion);
 
-          try
-          {
-              NotaDePedido notaDePedido;
+        foreach (var nota in listaNotasDePedido)
+        {
+          var dataRow = tablaNotasDePedido.NewRow();
 
-              if (codigoNotaDePedido == 0)
-              {
-                  notaDePedido = new NotaDePedido();
-                  notaDePedido.CodigoEstado = Constantes.Estados.VIGENTE;
-              }
-              else
-              {
-                  notaDePedido = CatalogoNotaDePedido.RecuperarPorCodigo(codigoNotaDePedido, nhSesion);
-              }
+          Debug.WriteLine(nota.CodigoEstado.ToString());
 
-              notaDePedido.Cliente = CatalogoCliente.RecuperarPorCodigo(codigoCliente, nhSesion);
-              notaDePedido.ContratoMarco = codigoContratoMarco == 0 ? null : CatalogoContratoMarco.RecuperarPorCodigo(codigoContratoMarco, nhSesion);
-              notaDePedido.FechaEmision = fechaEmision;
-              notaDePedido.NumeroInternoCliente = numeroInternoCliente;
-              notaDePedido.Observaciones = observaciones;
+          dataRow["codigoNotaDePedido"] = nota.Codigo;
+          dataRow["numeroInternoCliente"] = nota.NumeroInternoCliente;
+          dataRow["fechaEmision"] = nota.FechaEmision;
+          dataRow["codigoEstado"] = nota.CodigoEstado;
+          dataRow["codigoContratoMarco"] = nota.ContratoMarco == null ? 0 : nota.ContratoMarco.Codigo;
+          dataRow["descripcionContratoMarco"] = nota.ContratoMarco == null ? string.Empty : nota.ContratoMarco.Descripcion;
+          dataRow["codigoCliente"] = nota.Cliente.Codigo;
+          dataRow["razonSocialCliente"] = nota.Cliente.RazonSocial;
+          dataRow["fechaHoraProximaEntrega"] = nota.ItemsNotaDePedido.OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
+          dataRow["observaciones"] = nota.Observaciones;
 
-              foreach (DataRow filaItemNotaDePedido in tablaItemsNotaDePedido.Rows)
-              {
-                  int codigoItemNotaDePedido = Convert.ToInt32(filaItemNotaDePedido["codigoItemNotaDePedido"]);
-                  ItemNotaDePedido item;
+          tablaNotasDePedido.Rows.Add(dataRow);
+        }
 
-                  if (codigoItemNotaDePedido < 1)
-                  {
-                      item = new ItemNotaDePedido();
-                      notaDePedido.ItemsNotaDePedido.Add(item);
-                  }
-                  else
-                  {
-                      item = (from n in notaDePedido.ItemsNotaDePedido where n.Codigo == codigoItemNotaDePedido select n).SingleOrDefault();
-
-                      //Me fijo si el item esta eliminado
-                      if (!Convert.IsDBNull(filaItemNotaDePedido["isEliminada"]) && Convert.ToBoolean(filaItemNotaDePedido["isEliminada"]))
-                      {
-                          //Valido que el item nota de pedido no tenga asociado un remito
-                          if (CatalogoEntrega.TieneRemito(item.Codigo, nhSesion)) //POR AHORA QUEDA COMENTADO POR QUE EL METODO DEL CATALOGO NO FUNCIONA
-                          {
-                              notaDePedido.ItemsNotaDePedido.Remove(item);
-                          }
-                          else
-                          {
-                              rta = "TieneAsociadoRemito";
-                          }
-                      }
-                  }
-
-                  item.Articulo = CatalogoArticulo.RecuperarPorCodigo(Convert.ToInt32(filaItemNotaDePedido["codigoArticulo"]), nhSesion);
-                  item.CantidadPedida = Convert.ToInt32(filaItemNotaDePedido["cantidad"]);
-                  item.FechaEntrega = Convert.ToDateTime(filaItemNotaDePedido["fechaEntrega"]);
-                  item.Precio = Convert.ToDouble(filaItemNotaDePedido["precio"]);
-                  item.Posicion = Convert.ToInt32(filaItemNotaDePedido["posicion"]);
-              }
-
-              CatalogoNotaDePedido.InsertarActualizar(notaDePedido, nhSesion);
-              transaccion.Commit();
-
-              return rta;
-          }
-          catch (Exception ex)
-          {
-              transaccion.Rollback();
-              throw ex;
-          }
-          finally
-          {
-              nhSesion.Close();
-              nhSesion.Dispose();
-          }
+        return tablaNotasDePedido;
       }
-
-      public static void ActivarAnularNotaDePedido(int codigoNotaDePedido, string observaciones)
+      catch (Exception ex)
       {
-          ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
-
-          try
-          {
-              NotaDePedido notaDePedido = CatalogoNotaDePedido.RecuperarPorCodigo(codigoNotaDePedido, nhSesion);
-
-              if (notaDePedido.CodigoEstado == Constantes.Estados.ANULADA)
-              {
-                  notaDePedido.CodigoEstado = Constantes.Estados.VIGENTE;
-              }
-              else
-              {
-                  notaDePedido.CodigoEstado = Constantes.Estados.ANULADA;
-              }
-
-              notaDePedido.Observaciones = observaciones;
-
-              CatalogoNotaDePedido.InsertarActualizar(notaDePedido, nhSesion);
-          }
-          catch (Exception ex)
-          {
-              throw ex;
-          }
-          finally
-          {
-              nhSesion.Close();
-              nhSesion.Dispose();
-          }
+        throw ex;
       }
+      finally
+      {
+        nhSesion.Close();
+        nhSesion.Dispose();
+      }
+    }
+
+    /// <summary>
+    /// Columnas del DataTabla tablaItemsNotaDePedido: codigoItemNotaDePedido, codigoArticulo, cantidad, fechaEntrega
+    /// Devuelve un string.Empty si está todo OK, si algun item nota de pedido tiene asociado un remito, devuelve "TieneAsociadoRemito"
+    /// </summary>
+    public static string InsertarActualizarNotaDePedido(int codigoNotaDePedido, string numeroInternoCliente, DateTime fechaEmision, string observaciones, int codigoContratoMarco, int codigoCliente, DataTable tablaItemsNotaDePedido)
+    {
+        ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+        ITransaction transaccion = nhSesion.BeginTransaction();
+
+        string rta = string.Empty;
+
+        try
+        {
+            NotaDePedido notaDePedido;
+
+            if (codigoNotaDePedido == 0)
+            {
+                notaDePedido = new NotaDePedido();
+                notaDePedido.CodigoEstado = Constantes.Estados.VIGENTE;
+            }
+            else
+            {
+                notaDePedido = CatalogoNotaDePedido.RecuperarPorCodigo(codigoNotaDePedido, nhSesion);
+            }
+
+            notaDePedido.Cliente = CatalogoCliente.RecuperarPorCodigo(codigoCliente, nhSesion);
+            notaDePedido.ContratoMarco = codigoContratoMarco == 0 ? null : CatalogoContratoMarco.RecuperarPorCodigo(codigoContratoMarco, nhSesion);
+            notaDePedido.FechaEmision = fechaEmision;
+            notaDePedido.NumeroInternoCliente = numeroInternoCliente;
+            notaDePedido.Observaciones = observaciones;
+
+            foreach (DataRow filaItemNotaDePedido in tablaItemsNotaDePedido.Rows)
+            {
+                int codigoItemNotaDePedido = Convert.ToInt32(filaItemNotaDePedido["codigoItemNotaDePedido"]);
+                ItemNotaDePedido item;
+
+                if (codigoItemNotaDePedido < 1)
+                {
+                    item = new ItemNotaDePedido();
+                    notaDePedido.ItemsNotaDePedido.Add(item);
+                }
+                else
+                {
+                    item = (from n in notaDePedido.ItemsNotaDePedido where n.Codigo == codigoItemNotaDePedido select n).SingleOrDefault();
+
+                    //Me fijo si el item esta eliminado
+                    if (!Convert.IsDBNull(filaItemNotaDePedido["isEliminada"]) && Convert.ToBoolean(filaItemNotaDePedido["isEliminada"]))
+                    {
+                        //Valido que el item nota de pedido no tenga asociado un remito
+                        if (CatalogoEntrega.TieneRemito(item.Codigo, nhSesion)) //POR AHORA QUEDA COMENTADO POR QUE EL METODO DEL CATALOGO NO FUNCIONA
+                        {
+                            notaDePedido.ItemsNotaDePedido.Remove(item);
+                        }
+                        else
+                        {
+                            rta = "TieneAsociadoRemito";
+                        }
+                    }
+                }
+
+                item.Articulo = CatalogoArticulo.RecuperarPorCodigo(Convert.ToInt32(filaItemNotaDePedido["codigoArticulo"]), nhSesion);
+                item.CantidadPedida = Convert.ToInt32(filaItemNotaDePedido["cantidad"]);
+                item.FechaEntrega = Convert.ToDateTime(filaItemNotaDePedido["fechaEntrega"]);
+                item.Precio = Convert.ToDouble(filaItemNotaDePedido["precio"]);
+                item.Posicion = Convert.ToInt32(filaItemNotaDePedido["posicion"]);
+            }
+
+            CatalogoNotaDePedido.InsertarActualizar(notaDePedido, nhSesion);
+            transaccion.Commit();
+
+            return rta;
+        }
+        catch (Exception ex)
+        {
+            transaccion.Rollback();
+            throw ex;
+        }
+        finally
+        {
+            nhSesion.Close();
+            nhSesion.Dispose();
+        }
+    }
+
+    public static void ActivarAnularNotaDePedido(int codigoNotaDePedido, string observaciones)
+    {
+        ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+        try
+        {
+            NotaDePedido notaDePedido = CatalogoNotaDePedido.RecuperarPorCodigo(codigoNotaDePedido, nhSesion);
+
+            if (notaDePedido.CodigoEstado == Constantes.Estados.ANULADA)
+            {
+                notaDePedido.CodigoEstado = Constantes.Estados.VIGENTE;
+            }
+            else
+            {
+                notaDePedido.CodigoEstado = Constantes.Estados.ANULADA;
+            }
+
+            notaDePedido.Observaciones = observaciones;
+
+            CatalogoNotaDePedido.InsertarActualizar(notaDePedido, nhSesion);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            nhSesion.Close();
+            nhSesion.Dispose();
+        }
+    }
 
     /// <summary>
     /// Calcula los kpis de entregas
@@ -2464,13 +2517,13 @@ namespace BibliotecaSCF.Controladores
 
       public static int ConsultarUltimoNroComprobante(int ptoVenta, int tipoComptobanteAfip)
       {
-          var clsFac = new clsFacturacion();
+        var clsFac = new clsFacturacion();
 
-          var ultNroComprobante = clsFac.ConsultarUltNroOrden(ptoVenta, tipoComptobanteAfip);
-          return ultNroComprobante;
+        var ultNroComprobante = clsFac.ConsultarUltNroOrden(ptoVenta, tipoComptobanteAfip);
+        return ultNroComprobante;
       }
 
-      public static string InsertarActualizarFactura(int codigoFactura, int codigoPuntoDeVenta, int numeroFactura, DateTime fechaFacturacion, List<int> listaCodigosEntrega, int codigoMoneda, int codigoConcepto, int codigoIva, double subtotal, double total, string condicionVenta, double cotizacion, DataTable tablaItemsEntrega)
+      public static string InsertarActualizarFactura(int codigoFactura, int codigoTipoComprobante, int codigoPuntoDeVenta, int numeroFactura, DateTime fechaFacturacion, List<int> listaCodigosEntrega, int codigoMoneda, int codigoConcepto, int codigoIva, double subtotal, double total, string condicionVenta, double cotizacion, DataTable tablaItemsEntrega)
       {
         var nhSesion = ManejoDeNHibernate.IniciarSesion();
 
@@ -2535,9 +2588,9 @@ namespace BibliotecaSCF.Controladores
           factura.Moneda = CatalogoMoneda.RecuperarPorCodigo(codigoMoneda, nhSesion);
           factura.NumeroFactura = numeroFactura;
           factura.Subtotal = subtotal;// (double)decimal.Round((decimal)subtotal, 2);
-          factura.TipoComprobante = CatalogoTipoComprobante.RecuperarPorCodigo(1, nhSesion);
+          factura.TipoComprobante = CatalogoTipoComprobante.RecuperarPorCodigo(codigoTipoComprobante, nhSesion);
           factura.Total = total;
-          factura.FechaVencimiento = null;
+          factura.FechaVencimiento = DateTime.Parse("1900-01-01 00:00:00");
           factura.CondicionVenta = condicionVenta;
           factura.Cotizacion = codigoMoneda == Constantes.Moneda.PESO ? 1 : cotizacion; //Si la moneda es peso guardamos 1 en cotizacion
           factura.PuntoDeVenta = CatalogoPuntosDeVenta.RecuperarPorCodigo(codigoPuntoDeVenta, nhSesion);
@@ -2568,7 +2621,7 @@ namespace BibliotecaSCF.Controladores
 
           var cabeceraReq = new FECAECabRequest();
           cabeceraReq.CantReg = 1;
-          cabeceraReq.CbteTipo = 1; //factura A
+          cabeceraReq.CbteTipo = factura.TipoComprobante.Codigo;
           cabeceraReq.PtoVta = factura.PuntoDeVenta.Numero;
 
           request.FeCabReq = cabeceraReq;
@@ -2862,36 +2915,64 @@ namespace BibliotecaSCF.Controladores
 
       #endregion
 
-      #region TipoComprobante
+    #region TipoComprobante
 
-      public static DataTable RecuperarTodosTipoComprobantes()
+    public static DataTable RecuperarTiposDeFactura()
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
       {
-          ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+        var tablaTipoComprobantes = new DataTable();
+        tablaTipoComprobantes.Columns.Add("codigoTipoComprobante");
+        tablaTipoComprobantes.Columns.Add("descripcion");
 
-          try
-          {
-              DataTable tablaTipoComprobantes = new DataTable();
-              tablaTipoComprobantes.Columns.Add("codigoTipoComprobante");
-              tablaTipoComprobantes.Columns.Add("descripcion");
+        var listaTipoComprobantes = CatalogoTipoComprobante.RecuperarLista(x => x.Codigo != 3, nhSesion);
 
-              List<TipoComprobante> listaTipoComprobantes = CatalogoTipoComprobante.RecuperarTodos(nhSesion);
+        listaTipoComprobantes.Aggregate(tablaTipoComprobantes, (dt, r) => { dt.Rows.Add(r.Codigo, r.Descripcion); return dt; });
 
-              listaTipoComprobantes.Aggregate(tablaTipoComprobantes, (dt, r) => { dt.Rows.Add(r.Codigo, r.Descripcion); return dt; });
-
-              return tablaTipoComprobantes;
-          }
-          catch (Exception ex)
-          {
-              throw ex;
-          }
-          finally
-          {
-              nhSesion.Close();
-              nhSesion.Dispose();
-          }
+        return tablaTipoComprobantes;
       }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      finally
+      {
+        nhSesion.Close();
+        nhSesion.Dispose();
+      }
+      
+    }
 
-      #endregion
+    public static DataTable RecuperarTodosTipoComprobantes()
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
+      {
+        var tablaTipoComprobantes = new DataTable();
+        tablaTipoComprobantes.Columns.Add("codigoTipoComprobante");
+        tablaTipoComprobantes.Columns.Add("descripcion");
+
+        var listaTipoComprobantes = CatalogoTipoComprobante.RecuperarTodos(nhSesion);
+
+        listaTipoComprobantes.Aggregate(tablaTipoComprobantes, (dt, r) => { dt.Rows.Add(r.Codigo, r.Descripcion); return dt; });
+
+        return tablaTipoComprobantes;
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      finally
+      {
+        nhSesion.Close();
+        nhSesion.Dispose();
+      }
+    }
+
+    #endregion
 
       #region Transporte
 
@@ -3731,6 +3812,45 @@ namespace BibliotecaSCF.Controladores
 
     #region PuntoDeVenta
 
+    public static void InsertarActualizarPuntoDeVenta(int codigoPuntoDeVenta, int numero, string descripcion, string cai, DateTime fechaVencimientoCai, int? codigoPuntoDeVentaSuperior = null, int? codigoTipoDeComprobante = null, int? numeroInicial = null, int? numeroFinal = null, int? numeroActual = null)
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
+      {
+        var puntoDeVenta = codigoPuntoDeVenta == 0 ? new PuntosDeVenta() : CatalogoPuntosDeVenta.RecuperarPorCodigo(codigoPuntoDeVenta, nhSesion);
+
+        puntoDeVenta.Descripcion = descripcion;
+        puntoDeVenta.Numero = numero;
+        puntoDeVenta.NumeroFinal = numeroFinal ?? 999999;
+        puntoDeVenta.NumeroInicial = numeroInicial ?? 0;
+        puntoDeVenta.NumeroActual = numeroActual ?? 0;
+        puntoDeVenta.Cai = cai;
+        puntoDeVenta.VencimientoCai = fechaVencimientoCai;
+        
+        if (codigoPuntoDeVentaSuperior != null)
+        {
+          puntoDeVenta.PuntoDeVentaSuperior = CatalogoPuntosDeVenta.RecuperarPorCodigo((int)codigoPuntoDeVentaSuperior, nhSesion);
+        }
+
+        if (codigoTipoDeComprobante != null)
+        {
+          puntoDeVenta.TipoComprobante = CatalogoTipoComprobante.RecuperarPorCodigo((int)codigoTipoDeComprobante, nhSesion);
+        }
+
+        CatalogoPuntosDeVenta.InsertarActualizar(puntoDeVenta, nhSesion);
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      finally
+      {
+        nhSesion.Close();
+        nhSesion.Dispose();
+      }
+    }
+
     public static DataTable RecuperarPuntosDeVentaPorTipoComprobante(int? codigoTipoComprobante)
     {
       var nhSesion = ManejoDeNHibernate.IniciarSesion();
@@ -3748,6 +3868,9 @@ namespace BibliotecaSCF.Controladores
         tablaPuntosDeVenta.Columns.Add("descripcionTipoComprobante");
         tablaPuntosDeVenta.Columns.Add("codigoPuntoDeVentaParent");
         tablaPuntosDeVenta.Columns.Add("numeroPuntoDeVentaParent");
+        tablaPuntosDeVenta.Columns.Add("descripcionPuntoDeVentaParent");
+        tablaPuntosDeVenta.Columns.Add("cai");
+        tablaPuntosDeVenta.Columns.Add("vencimientoCai");
 
         var listaPuntosDeVenta = codigoTipoComprobante <= -1 ? CatalogoPuntosDeVenta.RecuperarTodos(nhSesion) : CatalogoPuntosDeVenta.RecuperarPorTipoComprobante(codigoTipoComprobante, nhSesion);
 
@@ -3765,6 +3888,9 @@ namespace BibliotecaSCF.Controladores
           dataRow["descripcionTipoComprobante"] = puntoDeVenta.TipoComprobante == null ? string.Empty : puntoDeVenta.TipoComprobante.Descripcion;
           dataRow["codigoPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? -1 : puntoDeVenta.PuntoDeVentaSuperior.Codigo;
           dataRow["numeroPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? -1 : puntoDeVenta.PuntoDeVentaSuperior.Numero;
+          dataRow["descripcionPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? string.Empty : puntoDeVenta.PuntoDeVentaSuperior.Descripcion;
+          dataRow["cai"] = puntoDeVenta.Cai ?? string.Empty;
+          dataRow["vencimientoCai"] = puntoDeVenta.VencimientoCai;
 
           tablaPuntosDeVenta.Rows.Add(dataRow);
         }
@@ -3804,6 +3930,9 @@ namespace BibliotecaSCF.Controladores
         tablaPuntosDeVenta.Columns.Add("descripcionTipoComprobante");
         tablaPuntosDeVenta.Columns.Add("codigoPuntoDeVentaParent");
         tablaPuntosDeVenta.Columns.Add("numeroPuntoDeVentaParent");
+        tablaPuntosDeVenta.Columns.Add("descripcionPuntoDeVentaParent");
+        tablaPuntosDeVenta.Columns.Add("cai");
+        tablaPuntosDeVenta.Columns.Add("vencimientoCai");
 
         var listaPuntosDeVenta = CatalogoPuntosDeVenta.RecuperarPorPuntoDeVentaSuperior(codigoPuntoDeVentaSuperior, nhSesion);
 
@@ -3821,6 +3950,9 @@ namespace BibliotecaSCF.Controladores
           dataRow["descripcionTipoComprobante"] = puntoDeVenta.TipoComprobante == null ? string.Empty : puntoDeVenta.TipoComprobante.Descripcion;
           dataRow["codigoPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? -1 : puntoDeVenta.PuntoDeVentaSuperior.Codigo;
           dataRow["numeroPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? -1 : puntoDeVenta.PuntoDeVentaSuperior.Numero;
+          dataRow["descripcionPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? string.Empty : puntoDeVenta.PuntoDeVentaSuperior.Descripcion;
+          dataRow["cai"] = puntoDeVenta.Cai ?? string.Empty;
+          dataRow["vencimientoCai"] = puntoDeVenta.VencimientoCai;
 
           tablaPuntosDeVenta.Rows.Add(dataRow);
         }
@@ -3838,11 +3970,157 @@ namespace BibliotecaSCF.Controladores
       }
     }
 
+    public static DataTable RecuperarPuntosDeVentaPorCodigo(int codigoPuntoDeVenta)
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
+      {
+        var tablaPuntosDeVenta = new DataTable();
+        tablaPuntosDeVenta.Columns.Add("codigoPuntoDeVenta");
+        tablaPuntosDeVenta.Columns.Add("numeroPuntoDeVenta");
+        tablaPuntosDeVenta.Columns.Add("descripcion");
+        tablaPuntosDeVenta.Columns.Add("numeroInicial");
+        tablaPuntosDeVenta.Columns.Add("numeroActual");
+        tablaPuntosDeVenta.Columns.Add("numeroFinal");
+        tablaPuntosDeVenta.Columns.Add("codigoTipoComprobante");
+        tablaPuntosDeVenta.Columns.Add("descripcionTipoComprobante");
+        tablaPuntosDeVenta.Columns.Add("codigoPuntoDeVentaParent");
+        tablaPuntosDeVenta.Columns.Add("numeroPuntoDeVentaParent");
+        tablaPuntosDeVenta.Columns.Add("descripcionPuntoDeVentaParent");
+        tablaPuntosDeVenta.Columns.Add("cai");
+        tablaPuntosDeVenta.Columns.Add("vencimientoCai");
+
+        var puntoDeVenta = CatalogoPuntosDeVenta.RecuperarPorCodigo(codigoPuntoDeVenta, nhSesion);
+        var dataRow = tablaPuntosDeVenta.NewRow();
+
+        dataRow["codigoPuntoDeVenta"] = puntoDeVenta.Codigo;
+        dataRow["numeroPuntoDeVenta"] = puntoDeVenta.Numero;
+        dataRow["descripcion"] = puntoDeVenta.Descripcion;
+        dataRow["numeroInicial"] = puntoDeVenta.NumeroInicial;
+        dataRow["numeroActual"] = puntoDeVenta.NumeroActual;
+        dataRow["numeroFinal"] = puntoDeVenta.NumeroFinal;
+        dataRow["codigoTipoComprobante"] = puntoDeVenta.TipoComprobante == null ? -1 : puntoDeVenta.TipoComprobante.Codigo;
+        dataRow["descripcionTipoComprobante"] = puntoDeVenta.TipoComprobante == null ? string.Empty : puntoDeVenta.TipoComprobante.Descripcion;
+        dataRow["codigoPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? -1 : puntoDeVenta.PuntoDeVentaSuperior.Codigo;
+        dataRow["numeroPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? -1 : puntoDeVenta.PuntoDeVentaSuperior.Numero;
+        dataRow["descripcionPuntoDeVentaParent"] = puntoDeVenta.PuntoDeVentaSuperior == null ? string.Empty : puntoDeVenta.PuntoDeVentaSuperior.Descripcion;
+        dataRow["cai"] = puntoDeVenta.Cai ?? string.Empty;
+        dataRow["vencimientoCai"] = puntoDeVenta.VencimientoCai;
+
+        tablaPuntosDeVenta.Rows.Add(dataRow);
+
+        return tablaPuntosDeVenta;
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      finally
+      {
+        nhSesion.Close();
+        nhSesion.Dispose();
+      }
+    }
+
+    public static DataTable RecuperarPuntosDeVentaPorReporte(int codigoReporte)
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
+      {
+        var tablaPuntosDeVenta = new DataTable();
+        tablaPuntosDeVenta.Columns.Add("codigoPuntoDeVenta");
+        tablaPuntosDeVenta.Columns.Add("numeroPuntoDeVenta");
+        tablaPuntosDeVenta.Columns.Add("descripcion");
+
+        var reporte = CatalogoReporte.RecuperarPorCodigo(codigoReporte, nhSesion);
+
+        foreach (var puntoDeVenta in reporte.PuntosDeVentas)
+        {
+          var dataRow = tablaPuntosDeVenta.NewRow();
+
+          dataRow["codigoPuntoDeVenta"] = puntoDeVenta.Codigo;
+          dataRow["numeroPuntoDeVenta"] = puntoDeVenta.Numero;
+          dataRow["descripcion"] = puntoDeVenta.Descripcion;
+
+          tablaPuntosDeVenta.Rows.Add(dataRow);  
+        }
+
+        return tablaPuntosDeVenta;
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      finally
+      {
+        nhSesion.Close();
+        nhSesion.Dispose();
+      }
+    }
+
+    public static void EliminarPuntoDeVenta(int codigoPuntoDeVenta)
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
+      {
+        var puntoDeVenta = CatalogoPuntosDeVenta.RecuperarPorCodigo(codigoPuntoDeVenta, nhSesion);
+
+        CatalogoPuntosDeVenta.Eliminar(puntoDeVenta, nhSesion);
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      finally
+      {
+        nhSesion.Close();
+        nhSesion.Dispose();
+      }
+    }
+
     #endregion
 
     #region Reporte
 
-    public static DataTable RecuperarReportesPorPuntoDeVenta(int codigoPuntoDeVenta)
+    public void RelacionarReporteConPuntoDeVenta(int codigoReporte, int codigoPuntoDeVenta)
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      var reporte = CatalogoReporte.RecuperarPorCodigo(codigoReporte, nhSesion);
+
+      var puntoDeVenta = CatalogoPuntosDeVenta.RecuperarPorCodigo(codigoPuntoDeVenta, nhSesion);
+
+      if (!reporte.PuntosDeVentas.Contains(puntoDeVenta))
+      {
+        reporte.PuntosDeVentas.Add(puntoDeVenta);
+        CatalogoReporte.InsertarActualizar(reporte, nhSesion);
+      }
+    }
+
+    public void DisociarReporteDePuntoDeVenta(int codigoReporte, int codigoPuntoDeVenta)
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      var reporte = CatalogoReporte.RecuperarPorCodigo(codigoReporte, nhSesion);
+
+      var puntoDeVenta = CatalogoPuntosDeVenta.RecuperarPorCodigo(codigoPuntoDeVenta, nhSesion);
+
+      if (reporte.PuntosDeVentas.Contains(puntoDeVenta))
+      {
+        reporte.PuntosDeVentas.Remove(puntoDeVenta);
+        CatalogoReporte.InsertarActualizar(reporte, nhSesion);
+      }
+    }
+
+    public static DataTable RecuperarTodosReportes()
+    {
+      return RecuperarReportesPorPuntoDeVenta(-1);
+    }
+
+    public static DataTable RecuperarReportesPorPuntoDeVenta(int? codigoPuntoDeVenta)
     {
       var nhSesion = ManejoDeNHibernate.IniciarSesion();
 
@@ -3858,7 +4136,7 @@ namespace BibliotecaSCF.Controladores
         tablaReportes.Columns.Add("numeroPuntoDeVenta");
         tablaReportes.Columns.Add("descripcionPuntoDeVenta");
 
-        var listaReportes = CatalogoReporte.RecuperarPorPuntoDeVenta(codigoPuntoDeVenta, nhSesion);
+        var listaReportes = codigoPuntoDeVenta <= -1 ? CatalogoReporte.RecuperarTodos(nhSesion) : CatalogoReporte.RecuperarPorPuntoDeVenta(codigoPuntoDeVenta, nhSesion);
 
         listaReportes.OrderBy(x => x.Codigo).Aggregate(tablaReportes, (dt, r) =>
         {

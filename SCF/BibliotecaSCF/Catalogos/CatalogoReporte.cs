@@ -16,7 +16,7 @@ namespace BibliotecaSCF.Catalogos
       /// <param name="codigoPuntoDeVenta">Id of PuntoDeVenta</param>
       /// <param name="nhSession">Hibernate session</param>
       /// <returns>A list of Reporte</returns>
-      public static List<Reporte> RecuperarPorPuntoDeVenta(int codigoPuntoDeVenta, NHibernate.ISession nhSession)
+      public static List<Reporte> RecuperarPorPuntoDeVenta(int? codigoPuntoDeVenta, NHibernate.ISession nhSession)
       {
         try
         {

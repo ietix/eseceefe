@@ -88,7 +88,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label class="control-label">Tipo de Comprobante</label>
-                                                <dx:ASPxComboBox ID="cbTipoComprobante" runat="server" ValueField="codigoTipoComprobante" TextField="descripcion" DropDownStyle="DropDownList" EnableTheming="True" Theme="Metropolis" CssClass="form-control" Width="100%">
+                                                <dx:ASPxComboBox ID="cbTipoComprobante" runat="server" AutoPostBack="True" ValueField="codigoTipoComprobante" OnSelectedIndexChanged="cbTipoComprobante_SelectedIndexChanged" TextField="descripcion" DropDownStyle="DropDownList" EnableTheming="True" Theme="Metropolis" CssClass="form-control" Width="100%">
                                                 </dx:ASPxComboBox>
                                             </div>
                                         </div>
@@ -183,7 +183,7 @@
                                         <!--/span-->
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label class="control-label">CUIT</label>
+                                                <dx:ASPxLabel ID="lblTipoDocumento" runat="server" Text="CUIT" class="control-label"></dx:ASPxLabel>
                                                 <dx:ASPxTextBox runat="server" ID="txtNroDocumento" CssClass="form-control" Width="100%">
                                                 </dx:ASPxTextBox>
                                             </div>
@@ -302,7 +302,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="control-label col-md-3">SUBTOTAL</label>
+                                                        <dx:ASPxLabel ID="lblSubtotalDesc" runat="server" Text="SUBTOTAL" class="control-label"></dx:ASPxLabel>
                                                         <div class="col-md-9">
                                                             <dx:ASPxLabel ID="txtSubtotal" runat="server" Text=" "></dx:ASPxLabel>
                                                         </div>
@@ -431,7 +431,7 @@
                                                                 <!--/span-->
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
-                                                                        <label class="control-label col-md-6">CUIT: &nbsp;&nbsp;<asp:Label ID="lblNumeroDocumento" runat="server"></asp:Label></label>
+                                                                        <asp:Label ID="lblTituloDocumento" runat="server" class="control-label col-md-6">CUIT: &nbsp;&nbsp;<asp:Label ID="lblNumeroDocumento" runat="server"></asp:Label></asp:Label>
                                                                     </div>
                                                                 </div>
                                                                 <!--/span-->
@@ -546,7 +546,7 @@
                                                                 <!--/span-->
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
-                                                                        <label class="control-label col-md-6">IVA: &nbsp;&nbsp;<asp:Label ID="lblImporteIVA" runat="server"></asp:Label></label>
+                                                                        <asp:Label ID="lblTituloIVA" runat="server" class="control-label col-md-6">IVA: &nbsp;&nbsp;<asp:Label ID="lblImporteIVA" runat="server"></asp:Label></asp:Label>
                                                                     </div>
                                                                 </div>
                                                                 <!--/span-->
@@ -617,7 +617,7 @@
                                         <!--/span-->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label class="control-label col-md-12">Tipo de Comprobante: Factura Tipo A</label>
+                                                <asp:Label runat="server" class="control-label col-md-12" ID="lblTextoTipoComprabante">Tipo de Comprobante: Factura Tipo A</asp:Label>
 
                                             </div>
                                         </div>
