@@ -8,20 +8,22 @@ using FluentNHibernate.Mapping;
 
 namespace BibliotecaSCF.Mapeos
 {
-    public class PuntosDeVentaMap : ClassMap<PuntosDeVenta>
+  public class PuntosDeVentaMap : ClassMap<PuntosDeVenta>
+  {
+    public PuntosDeVentaMap()
     {
-      public PuntosDeVentaMap()
-        {
-          Table("PuntosDeVenta");
-          Id(x => x.Codigo).Column("codigoPuntoDeVenta").GeneratedBy.Identity();
-          Map(x => x.Descripcion).Column("descripcion");
-          Map(x => x.Numero).Column("numeroPuntoDeVenta");
-          Map(x => x.NumeroActual).Column("numeroActual");
-          Map(x => x.NumeroFinal).Column("numeroFinal");
-          Map(x => x.NumeroInicial).Column("numeroInicial");
+      Table("PuntosDeVenta");
+      Id(x => x.Codigo).Column("codigoPuntoDeVenta").GeneratedBy.Identity();
+      Map(x => x.Descripcion).Column("descripcion");
+      Map(x => x.Numero).Column("numeroPuntoDeVenta");
+      Map(x => x.NumeroActual).Column("numeroActual");
+      Map(x => x.NumeroFinal).Column("numeroFinal");
+      Map(x => x.NumeroInicial).Column("numeroInicial");
+      Map(x => x.Cai).Column("cai");
+      Map(x => x.VencimientoCai).Column("vencimientoCai");
 
-          References(x => x.TipoComprobante).Column("codigoTipoComprobante").Cascade.None().LazyLoad(Laziness.Proxy);
-          References(x => x.PuntoDeVentaSuperior).Column("codigoPuntoDeVentaParent").Cascade.None().LazyLoad(Laziness.Proxy);
-        }
+      References(x => x.TipoComprobante).Column("codigoTipoComprobante").Cascade.None().LazyLoad(Laziness.Proxy);
+      References(x => x.PuntoDeVentaSuperior).Column("codigoPuntoDeVentaParent").Cascade.None().LazyLoad(Laziness.Proxy);
     }
+  }
 }

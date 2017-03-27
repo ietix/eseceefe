@@ -10,133 +10,97 @@
 namespace SCF.config {
     
     
-    public partial class empresa {
+    public partial class puntoDeVenta {
         
         /// <summary>
-        /// txtRazonSocial control.
+        /// txtCodigo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtRazonSocial;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtCodigo;
         
         /// <summary>
-        /// txtPersonaContacto control.
+        /// txtNumero control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtPersonaContacto;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtNumero;
         
         /// <summary>
-        /// cbTipoDocumento control.
+        /// cbPuntoDeVentaParent control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxComboBox cbTipoDocumento;
+        protected global::DevExpress.Web.ASPxEditors.ASPxComboBox cbPuntoDeVentaParent;
         
         /// <summary>
-        /// txtNroDocumento control.
+        /// txtDescripcion control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtNroDocumento;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtDescripcion;
         
         /// <summary>
-        /// txtDireccion control.
+        /// txtNroInicial control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtDireccion;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtNroInicial;
         
         /// <summary>
-        /// txtMail control.
+        /// txtNroFinal control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtMail;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtNroFinal;
         
         /// <summary>
-        /// txtProvincia control.
+        /// txtNroActual control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtProvincia;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtNroActual;
         
         /// <summary>
-        /// txtCiudad control.
+        /// cbTipoComprobante control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtCiudad;
+        protected global::DevExpress.Web.ASPxEditors.ASPxComboBox cbTipoComprobante;
         
         /// <summary>
-        /// txtTelefono control.
+        /// txtCai control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtTelefono;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText txtCai;
         
         /// <summary>
-        /// txtFax control.
+        /// deFechaVencimiento control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtFax;
-        
-        /// <summary>
-        /// txtBanco control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtBanco;
-        
-        /// <summary>
-        /// txtCBU control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtCBU;
-        
-        /// <summary>
-        /// txtNroCuentaBancaria control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText txtNroCuentaBancaria;
-        
-        /// <summary>
-        /// txtObservacion control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTextArea txtObservacion;
+        protected global::DevExpress.Web.ASPxEditors.ASPxDateEdit deFechaVencimiento;
         
         /// <summary>
         /// btnGuardar control.

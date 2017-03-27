@@ -14,6 +14,9 @@ namespace BibliotecaSCF.Clases
     public virtual int NumeroInicial { get; set; }
     public virtual int NumeroActual { get; set; }
     public virtual int NumeroFinal { get; set; }
+    public virtual string Cai { get; set; }
+    public virtual DateTime VencimientoCai { get; set; }
+
     public virtual TipoComprobante TipoComprobante { get; set; }
     public virtual PuntosDeVenta PuntoDeVentaSuperior { get; set; }
   }

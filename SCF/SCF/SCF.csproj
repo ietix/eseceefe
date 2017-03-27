@@ -4079,6 +4079,10 @@
     <Content Include="assets\sweetalert.css" />
     <Content Include="assets\sweetalert.min.js" />
     <Content Include="clientes\cliente.js" />
+    <Content Include="comprobantes\listado.aspx" />
+    <Content Include="comprobantes\comprobante.aspx" />
+    <Content Include="config\punto_venta.aspx" />
+    <Content Include="config\listado.aspx" />
     <Content Include="credito\credito.aspx" />
     <Content Include="credito\generar_pdf.aspx" />
     <Content Include="credito\listado.aspx" />
@@ -4139,6 +4143,34 @@
     </Compile>
     <Compile Include="articulos\articulo.aspx.designer.cs">
       <DependentUpon>articulo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="comprobantes\listado.aspx.cs">
+      <DependentUpon>listado.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="comprobantes\listado.aspx.designer.cs">
+      <DependentUpon>listado.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="comprobantes\comprobante.aspx.cs">
+      <DependentUpon>comprobante.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="comprobantes\comprobante.aspx.designer.cs">
+      <DependentUpon>comprobante.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="config\punto_venta.aspx.cs">
+      <DependentUpon>punto_venta.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="config\punto_venta.aspx.designer.cs">
+      <DependentUpon>punto_venta.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="config\listado.aspx.cs">
+      <DependentUpon>listado.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="config\listado.aspx.designer.cs">
+      <DependentUpon>listado.aspx</DependentUpon>
     </Compile>
     <Compile Include="credito\credito.aspx.cs">
       <DependentUpon>credito.aspx</DependentUpon>
@@ -4783,6 +4815,13 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="reportes\notaCreditoBUNIQ.rdlc" />
+    <EmbeddedResource Include="reportes\notaCreditoAUNIQ.rdlc" />
+    <EmbeddedResource Include="reportes\facturaBUNIQ.rdlc" />
+    <EmbeddedResource Include="reportes\facturaAUNIQ.rdlc" />
+    <EmbeddedResource Include="reportes\remitoT_UNIQBROW.rdlc" />
+    <EmbeddedResource Include="reportes\remitoD_UNIQBROW.rdlc" />
+    <EmbeddedResource Include="reportes\remito_UNIQBROW.rdlc" />
     <EmbeddedResource Include="reportes\remitoT_neonbind.rdlc" />
     <EmbeddedResource Include="reportes\remitoD_neonbind.rdlc" />
     <EmbeddedResource Include="reportes\remito_neonbind.rdlc" />

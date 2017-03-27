@@ -225,6 +225,12 @@ License: SempaIT - Todos los derechos reservados.
                                     <a href="/scf/usuarios/listado.aspx">Usuarios</a>
                                 </li>
                                 <li>
+                                    <a href="/scf/comprobantes/listado.aspx">Comprobantes</a>
+                                </li>
+                                <li>
+                                    <a href="/scf/config/listado.aspx">Puntos de Venta</a>
+                                </li>
+                                <li>
                                     <a href="/scf/config/empresa.aspx">Datos Empresa</a>
                                 </li>
                             </ul>
