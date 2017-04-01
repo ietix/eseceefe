@@ -1893,8 +1893,6 @@ namespace BibliotecaSCF.Controladores
         {
           var dataRow = tablaNotasDePedido.NewRow();
 
-          Debug.WriteLine(nota.CodigoEstado.ToString());
-
           dataRow["codigoNotaDePedido"] = nota.Codigo;
           dataRow["numeroInternoCliente"] = nota.NumeroInternoCliente;
           dataRow["fechaEmision"] = nota.FechaEmision;

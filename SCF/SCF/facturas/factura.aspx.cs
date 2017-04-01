@@ -112,7 +112,7 @@ namespace SCF.facturas
     {
       try
       {
-        if (Session["PuntoDeVenta"] != null && cbTipoComprobante.SelectedIndex > 0)
+        if (Session["PuntoDeVenta"] != null && cbTipoComprobante.SelectedIndex >= 0)
         {
           this.RetornarPuntoDeVenta();
           lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(Convert.ToInt32(lblPuntoDeVenta.Text), Convert.ToInt32(cbTipoComprobante.SelectedItem.Value)));
