@@ -119,6 +119,8 @@
                                                     <Items>
                                                         <dx:ListEditItem Selected="true" Text="15 Días" Value="1" />
                                                         <dx:ListEditItem Text="30 Días" Value="2" />
+                                                        <dx:ListEditItem Text="Contado" Value="2" />
+                                                        <dx:ListEditItem Text="Tarjeta" Value="2" />
                                                     </Items>
                                                 </dx:ASPxComboBox>
                                             </div>
@@ -183,7 +185,7 @@
                                         <!--/span-->
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <dx:ASPxLabel ID="lblTipoDocumento" runat="server" Text="CUIT" class="control-label"></dx:ASPxLabel>
+                                                <label class="control-label">CUIT/CUIL/DNI</label>
                                                 <dx:ASPxTextBox runat="server" ID="txtNroDocumento" CssClass="form-control" Width="100%">
                                                 </dx:ASPxTextBox>
                                             </div>
@@ -302,7 +304,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <dx:ASPxLabel ID="lblSubtotalDesc" runat="server" Text="SUBTOTAL" class="control-label"></dx:ASPxLabel>
+                                                        <label class="control-label col-md-3">SUBTOTAL</label>
                                                         <div class="col-md-9">
                                                             <dx:ASPxLabel ID="txtSubtotal" runat="server" Text=" "></dx:ASPxLabel>
                                                         </div>
@@ -431,7 +433,7 @@
                                                                 <!--/span-->
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
-                                                                        <asp:Label ID="lblTituloDocumento" runat="server" class="control-label col-md-6">CUIT: &nbsp;&nbsp;<asp:Label ID="lblNumeroDocumento" runat="server"></asp:Label></asp:Label>
+                                                                        <label class="control-label col-md-6">CUIT/CUIL/DNI: &nbsp;&nbsp;<asp:Label ID="lblNumeroDocumento" runat="server"></asp:Label></label>
                                                                     </div>
                                                                 </div>
                                                                 <!--/span-->
@@ -546,7 +548,7 @@
                                                                 <!--/span-->
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
-                                                                        <asp:Label ID="lblTituloIVA" runat="server" class="control-label col-md-6">IVA: &nbsp;&nbsp;<asp:Label ID="lblImporteIVA" runat="server"></asp:Label></asp:Label>
+                                                                        <label class="control-label col-md-6">IVA: &nbsp;&nbsp;<asp:Label ID="lblImporteIVA" runat="server"></asp:Label></label>
                                                                     </div>
                                                                 </div>
                                                                 <!--/span-->

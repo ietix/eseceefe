@@ -25,11 +25,6 @@ namespace SCF.facturas
       {
         CargarPuntoDeVenta();
       }
-      
-      //if (((DataTable)Session["PuntoDeVenta"]) != null)
-      //{
-      //  CargarNumeroDeFactura();
-      //}
     }
 
     private int RetornarPuntoDeVenta()
@@ -48,14 +43,11 @@ namespace SCF.facturas
       var numeroPuntoDeVenta = Convert.ToInt32(dataRow["numeroPuntoDeVenta"]);
 
       txtPuntoDeVenta.Text = string.Format("{0} ({1})", numeroPuntoDeVenta, dataRow["descripcion"]);
-      lblTipoDocumento.Text = codigoPuntoDeVenta == 1 ? "CUIT" : "DNI/CUIL";
-      lblTituloDocumento.Text = lblTipoDocumento.Text;
-      lblSubtotalDesc.Visible = codigoTipoComprobante == 1;
       txtSubtotal.Visible = codigoTipoComprobante == 1;
       cbCondicionIVA.Visible = codigoTipoComprobante == 1;
       txtImporteIVA.Visible = codigoTipoComprobante == 1;
-      lblTituloIVA.Visible = codigoTipoComprobante == 1;
       lblImporteIVA.Visible = codigoTipoComprobante == 1;
+      lblSubtotal.Visible = codigoTipoComprobante == 1;
 
       lblPuntoDeVenta.Text = Convert.ToString(numeroPuntoDeVenta);
       lblTextoTipoComprabante.Text = string.Format("Tipo de Comprobante: Factura Tipo {0}", codigoTipoComprobante == 1 ? "A" : "B");
@@ -235,6 +227,7 @@ namespace SCF.facturas
       {
         var codigoPuntoDeVenta = this.RetornarPuntoDeVenta();
         this.CarCargarNumeroDeFactura(codigoPuntoDeVenta);
+        this.ObtenerDatosRemito();
       }
     }
 
@@ -272,34 +265,55 @@ namespace SCF.facturas
       gvItemsFactura.DataBind();
 
       Session["dtItemsEntregaActual"] = dtItemsFactura;
-      Session["dtItemsFacturaActual"] = dtItemsFactura;
+      this.CalcularPrecioItems(dtItemsFactura);
+      //Session["dtItemsFacturaActual"] = dtItemsFactura;
 
-      CalcularImporteTotal();
+      //CalcularImporteTotal();
     }
 
     private void CalcularImporteTotal()
     {
-      DataTable dtItemsFacturaActual = (DataTable)Session["dtItemsFacturaActual"];
-      Double subtotal = 0;
+      var dtItemsFacturaActual = (DataTable)Session["dtItemsFacturaActual"];
+      var subtotal = 0.0;
+      var total = 0.0;
 
-      for (int i = 0; i < dtItemsFacturaActual.Rows.Count; i++)
+      for (var i = 0; i < dtItemsFacturaActual.Rows.Count; i++)
       {
         subtotal = subtotal + Convert.ToDouble(dtItemsFacturaActual.Rows[i]["precioTotal"].ToString());
       }
 
       txtSubtotal.Text = Convert.ToString((double)decimal.Round((decimal)subtotal, 2));
       txtImporteIVA.Text = Convert.ToString((double)decimal.Round((decimal)(subtotal * 0.21), 2));
-      txtTotal.Text = Convert.ToString((double)decimal.Round((decimal)(subtotal * 1.21), 2));
+      total = (cbTipoComprobante.SelectedItem != null && cbTipoComprobante.SelectedIndex == 1) ? subtotal : (double)decimal.Round((decimal)(subtotal * 1.21), 2);
+      txtTotal.Text = Convert.ToString(total);
+    }
+
+    private void CalcularPrecioItems(DataTable itemsFactura)
+    {
+      if (cbTipoComprobante.SelectedItem != null && cbTipoComprobante.SelectedIndex == 1)
+      {
+        foreach (DataRow row in itemsFactura.Rows)
+        {
+          row["precioUnitario"] = decimal.Round(Convert.ToDecimal(Convert.ToDouble(row["precioUnitario"]) * 1.21), 2);
+          row["precioTotal"] = decimal.Round(Convert.ToDecimal(Convert.ToDouble(row["precioTotal"]) * 1.21), 2);
+        }
+
+        gvItemsFactura.DataSource = itemsFactura;
+        gvItemsFactura.DataBind();
+      }
+
+      Session["dtItemsFacturaActual"] = itemsFactura;
+      CalcularImporteTotal();
     }
 
     protected void gvItemsFactura_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
     {
 
-      DataTable tablaItemFactura = (DataTable)Session["dtItemsFacturaActual"];
-      int codigoItemNotaPedido = Convert.ToInt32(e.Keys["codigoItemEntrega"]);
+      var tablaItemFactura = (DataTable)Session["dtItemsFacturaActual"];
+      var codigoItemNotaPedido = Convert.ToInt32(e.Keys["codigoItemEntrega"]);
             
-      DataRow fila = (from t in tablaItemFactura.AsEnumerable() where Convert.ToInt32(t["codigoItemEntrega"]) == codigoItemNotaPedido select t).SingleOrDefault();
-      int cantidad = Convert.ToInt32(fila.ItemArray[4]);
+      var fila = (from t in tablaItemFactura.AsEnumerable() where Convert.ToInt32(t["codigoItemEntrega"]) == codigoItemNotaPedido select t).SingleOrDefault();
+      var cantidad = Convert.ToInt32(fila.ItemArray[4]);
 
       if (Convert.ToDouble(fila["precioUnitario"]) != Convert.ToDouble(e.NewValues["precioUnitario"]))
       {
@@ -320,7 +334,6 @@ namespace SCF.facturas
       gvItemsFactura.DataBind();
 
       CalcularImporteTotal();
-
     }
 
     protected void txtCotizacion_TextChanged(object sender, EventArgs e)

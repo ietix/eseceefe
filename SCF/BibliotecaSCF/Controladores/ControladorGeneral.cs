@@ -1730,144 +1730,145 @@ namespace BibliotecaSCF.Controladores
 
     #region NotaDePedido
 
-      public static DataTable RecuperarTodasNotasDePedido(bool soloVigentes)
+    public static DataTable RecuperarTodasNotasDePedido(bool soloVigentes)
+    {
+      ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
       {
-          ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+        DataTable tablaNotasDePedido = new DataTable();
+        tablaNotasDePedido.Columns.Add("codigoNotaDePedido");
+        tablaNotasDePedido.Columns.Add("numeroInternoCliente");
+        tablaNotasDePedido.Columns.Add("fechaEmision");
+        tablaNotasDePedido.Columns.Add("codigoEstado");
+        tablaNotasDePedido.Columns.Add("codigoContratoMarco");
+        tablaNotasDePedido.Columns.Add("descripcionContratoMarco");
+        tablaNotasDePedido.Columns.Add("codigoCliente");
+        tablaNotasDePedido.Columns.Add("razonSocialCliente");
+        tablaNotasDePedido.Columns.Add("fechaHoraProximaEntrega");
+        tablaNotasDePedido.Columns.Add("observaciones");
 
-          try
+        List<NotaDePedido> listaNotasDePedido;
+        if (soloVigentes)
+        {
+          listaNotasDePedido = CatalogoNotaDePedido.RecuperarLista(x => x.CodigoEstado == Constantes.Estados.VIGENTE, nhSesion);
+        }
+        else
+        {
+          listaNotasDePedido = CatalogoNotaDePedido.RecuperarTodos(nhSesion);
+        }
+
+        foreach (NotaDePedido notaPedido in listaNotasDePedido.OrderByDescending(x => x.CodigoEstado))
+        {
+          int codigoEstado = 0;
+          DateTime fechaHoraProximaEntrega = DateTime.MinValue;
+
+          if (notaPedido.ItemsNotaDePedido.Count > 0)
           {
-              DataTable tablaNotasDePedido = new DataTable();
-              tablaNotasDePedido.Columns.Add("codigoNotaDePedido");
-              tablaNotasDePedido.Columns.Add("numeroInternoCliente");
-              tablaNotasDePedido.Columns.Add("fechaEmision");
-              tablaNotasDePedido.Columns.Add("codigoEstado");
-              tablaNotasDePedido.Columns.Add("codigoContratoMarco");
-              tablaNotasDePedido.Columns.Add("descripcionContratoMarco");
-              tablaNotasDePedido.Columns.Add("codigoCliente");
-              tablaNotasDePedido.Columns.Add("razonSocialCliente");
-              tablaNotasDePedido.Columns.Add("fechaHoraProximaEntrega");
-              tablaNotasDePedido.Columns.Add("observaciones");
+            List<Entrega> listaEntregas = CatalogoEntrega.RecuperarLista(x => x.NotaDePedido.Codigo == notaPedido.Codigo && x.CodigoEstado != Constantes.Estados.ANULADA, nhSesion);
 
-              List<NotaDePedido> listaNotasDePedido;
-              if (soloVigentes)
-              {
-                  listaNotasDePedido = CatalogoNotaDePedido.RecuperarLista(x => x.CodigoEstado == Constantes.Estados.VIGENTE, nhSesion);
-              }
-              else
-              {
-                  listaNotasDePedido = CatalogoNotaDePedido.RecuperarTodos(nhSesion);
-              }
+            switch (notaPedido.CodigoEstado)
+            {
+              case Constantes.Estados.VIGENTE:
+                List<ItemNotaDePedido> listaItemsNotaDePedidoVencidos = (from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now select n).ToList();
 
-              foreach (NotaDePedido notaPedido in listaNotasDePedido.OrderByDescending(x => x.CodigoEstado))
-              {
-                  int codigoEstado = 0;
-                  DateTime fechaHoraProximaEntrega = DateTime.MinValue;
+                if (listaEntregas.Count > 0) //valido que no haya alguna entrega que cumpla el item nota de pedido
+                {
+                  List<ItemNotaDePedido> listaBorrar = new List<ItemNotaDePedido>();
 
-                  if (notaPedido.ItemsNotaDePedido.Count > 0)
+                  foreach (ItemNotaDePedido itemNP in listaItemsNotaDePedidoVencidos)
                   {
-                      List<Entrega> listaEntregas = CatalogoEntrega.RecuperarLista(x => x.NotaDePedido.Codigo == notaPedido.Codigo && x.CodigoEstado != Constantes.Estados.ANULADA, nhSesion);
+                    List<ItemEntrega> listaItemsEntrega = (from e in listaEntregas where (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault() != null select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault()).ToList();
+                    int cantidadAEntregarTotal = (from e in listaItemsEntrega select e.CantidadAEntregar).Sum();
 
-                      switch (notaPedido.CodigoEstado)
-                      {
-                          case Constantes.Estados.VIGENTE:
-                              List<ItemNotaDePedido> listaItemsNotaDePedidoVencidos = (from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now select n).ToList();
-
-                              if (listaEntregas.Count > 0) //valido que no haya alguna entrega que cumpla el item nota de pedido
-                              {
-                                  List<ItemNotaDePedido> listaBorrar = new List<ItemNotaDePedido>();
-
-                                  foreach (ItemNotaDePedido itemNP in listaItemsNotaDePedidoVencidos)
-                                  {
-                                      List<ItemEntrega> listaItemsEntrega = (from e in listaEntregas where (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault() != null select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault()).ToList();
-                                      int cantidadAEntregarTotal = (from e in listaItemsEntrega select e.CantidadAEntregar).Sum();
-
-                                      if (cantidadAEntregarTotal >= itemNP.CantidadPedida)
-                                      {
-                                          listaBorrar.Add(itemNP);
-                                      }
-                                  }
-
-                                  foreach (ItemNotaDePedido itemBorrar in listaBorrar)
-                                  {
-                                      listaItemsNotaDePedidoVencidos.Remove(itemBorrar);
-                                  }
-                              }
-
-                              if (listaItemsNotaDePedidoVencidos.Count > 0)
-                              {
-                                  codigoEstado = Constantes.Estados.VENCIDA;
-                                  fechaHoraProximaEntrega = listaItemsNotaDePedidoVencidos.OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
-                              }
-                              else
-                              {
-                                  List<ItemNotaDePedido> listaItemsNotaDePedidoProximosAVencer = (from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now.AddDays(5) select n).ToList();
-
-                                  if (listaEntregas.Count > 0) //valido que no haya alguna entrega que cumpla el item nota de pedido
-                                  {
-                                      List<ItemNotaDePedido> listaBorrar = new List<ItemNotaDePedido>();
-
-                                      foreach (ItemNotaDePedido itemNP in listaItemsNotaDePedidoProximosAVencer)
-                                      {
-                                          List<ItemEntrega> listaItemsEntrega = (from e in listaEntregas where (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault() != null select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault()).ToList();
-                                          int cantidadAEntregarTotal = (from e in listaItemsEntrega select e.CantidadAEntregar).Sum();
-
-                                          if (cantidadAEntregarTotal >= itemNP.CantidadPedida)
-                                          {
-                                              listaBorrar.Add(itemNP);
-                                          }
-                                      }
-
-                                      foreach (ItemNotaDePedido itemBorrar in listaBorrar)
-                                      {
-                                          listaItemsNotaDePedidoProximosAVencer.Remove(itemBorrar);
-                                      }
-                                  }
-
-                                  if (listaItemsNotaDePedidoProximosAVencer.Count > 0)
-                                  {
-                                      codigoEstado = Constantes.Estados.PROXIMA_VENCER;
-                                      fechaHoraProximaEntrega = listaItemsNotaDePedidoProximosAVencer.OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
-                                  }
-                                  else
-                                  {
-                                      codigoEstado = Constantes.Estados.VIGENTE;
-                                      List<ItemNotaDePedido> listaEntregadas = (from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now.AddDays(5) select n).ToList();
-                                      listaEntregadas.AddRange((from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now select n).ToList());
-
-                                      fechaHoraProximaEntrega = notaPedido.ItemsNotaDePedido.Where(x => !listaEntregadas.Select(c => c.Codigo).ToList().Contains(x.Codigo)).OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
-                                  }
-                              }
-
-                              break;
-                          case Constantes.Estados.ANULADA:
-                              codigoEstado = Constantes.Estados.ANULADA;
-                              break;
-
-                          case Constantes.Estados.ENTREGADA:
-                              codigoEstado = Constantes.Estados.ENTREGADA;
-                              break;
-                      }
+                    if (cantidadAEntregarTotal >= itemNP.CantidadPedida)
+                    {
+                      listaBorrar.Add(itemNP);
+                    }
                   }
 
-                  tablaNotasDePedido.Rows.Add(new object[] { notaPedido.Codigo, notaPedido.NumeroInternoCliente, notaPedido.FechaEmision, codigoEstado, notaPedido.ContratoMarco != null ? notaPedido.ContratoMarco.Codigo : 0, 
-                      notaPedido.ContratoMarco != null ? notaPedido.ContratoMarco.Descripcion : "", notaPedido.Cliente.Codigo, notaPedido.Cliente.RazonSocial, fechaHoraProximaEntrega == DateTime.MinValue ? "" : fechaHoraProximaEntrega.ToString(), notaPedido.Observaciones});
-              }
+                  foreach (ItemNotaDePedido itemBorrar in listaBorrar)
+                  {
+                    listaItemsNotaDePedidoVencidos.Remove(itemBorrar);
+                  }
+                }
 
-              DataView dv = tablaNotasDePedido.DefaultView;
-              dv.Sort = "codigoEstado desc";
+                if (listaItemsNotaDePedidoVencidos.Count > 0)
+                {
+                  codigoEstado = Constantes.Estados.VENCIDA;
+                  fechaHoraProximaEntrega = listaItemsNotaDePedidoVencidos.OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
+                }
+                else
+                {
+                  List<ItemNotaDePedido> listaItemsNotaDePedidoProximosAVencer = (from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now.AddDays(5) select n).ToList();
 
-              return dv.ToTable();
+                  if (listaEntregas.Count > 0) //valido que no haya alguna entrega que cumpla el item nota de pedido
+                  {
+                    List<ItemNotaDePedido> listaBorrar = new List<ItemNotaDePedido>();
+
+                    foreach (ItemNotaDePedido itemNP in listaItemsNotaDePedidoProximosAVencer)
+                    {
+                      List<ItemEntrega> listaItemsEntrega = (from e in listaEntregas where (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault() != null select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault()).ToList();
+                      int cantidadAEntregarTotal = (from e in listaItemsEntrega select e.CantidadAEntregar).Sum();
+
+                      if (cantidadAEntregarTotal >= itemNP.CantidadPedida)
+                      {
+                        listaBorrar.Add(itemNP);
+                      }
+                    }
+
+                    foreach (ItemNotaDePedido itemBorrar in listaBorrar)
+                    {
+                      listaItemsNotaDePedidoProximosAVencer.Remove(itemBorrar);
+                    }
+                  }
+
+                  if (listaItemsNotaDePedidoProximosAVencer.Count > 0)
+                  {
+                    codigoEstado = Constantes.Estados.PROXIMA_VENCER;
+                    fechaHoraProximaEntrega = listaItemsNotaDePedidoProximosAVencer.OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
+                  }
+                  else
+                  {
+                    codigoEstado = Constantes.Estados.VIGENTE;
+                    List<ItemNotaDePedido> listaEntregadas = (from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now.AddDays(5) select n).ToList();
+                    listaEntregadas.AddRange((from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now select n).ToList());
+
+                    fechaHoraProximaEntrega = notaPedido.ItemsNotaDePedido.Where(x => !listaEntregadas.Select(c => c.Codigo).ToList().Contains(x.Codigo)).OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
+                  }
+                }
+
+                break;
+
+              case Constantes.Estados.ANULADA:
+                codigoEstado = Constantes.Estados.ANULADA;
+                break;
+
+              case Constantes.Estados.ENTREGADA:
+                codigoEstado = Constantes.Estados.ENTREGADA;
+                break;
+            }
           }
-          catch (Exception ex)
-          {
-              throw ex;
-          }
-          finally
-          {
-              nhSesion.Close();
-              nhSesion.Dispose();
-          }
+
+          tablaNotasDePedido.Rows.Add(new object[] { notaPedido.Codigo, notaPedido.NumeroInternoCliente, notaPedido.FechaEmision, codigoEstado, notaPedido.ContratoMarco != null ? notaPedido.ContratoMarco.Codigo : 0, 
+                notaPedido.ContratoMarco != null ? notaPedido.ContratoMarco.Descripcion : "", notaPedido.Cliente.Codigo, notaPedido.Cliente.RazonSocial, fechaHoraProximaEntrega == DateTime.MinValue ? "" : fechaHoraProximaEntrega.ToString(), notaPedido.Observaciones});
+        }
+
+        DataView dv = tablaNotasDePedido.DefaultView;
+        dv.Sort = "codigoEstado desc";
+
+        return dv.ToTable();
       }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      finally
+      {
+        nhSesion.Close();
+        nhSesion.Dispose();
+      }
+    }
 
     public static DataTable RecuperarNotasDePedidoActivas()
     {
@@ -2398,7 +2399,7 @@ namespace BibliotecaSCF.Controladores
 
       #endregion
 
-      #region Factura
+    #region Factura
 
     public static DataTable RecuperarUltimaFactura(int? codigoPuntoDeVenta)
     {
@@ -2513,99 +2514,99 @@ namespace BibliotecaSCF.Controladores
           }
       }
 
-      public static int ConsultarUltimoNroComprobante(int ptoVenta, int tipoComptobanteAfip)
+    public static int ConsultarUltimoNroComprobante(int ptoVenta, int tipoComptobanteAfip)
+    {
+      var clsFac = new clsFacturacion();
+
+      var ultNroComprobante = clsFac.ConsultarUltNroOrden(ptoVenta, tipoComptobanteAfip);
+      return ultNroComprobante;
+    }
+
+    public static string InsertarActualizarFactura(int codigoFactura, int codigoTipoComprobante, int codigoPuntoDeVenta, int numeroFactura, DateTime fechaFacturacion, List<int> listaCodigosEntrega, int codigoMoneda, int codigoConcepto, int codigoIva, double subtotal, double total, string condicionVenta, double cotizacion, DataTable tablaItemsEntrega)
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
       {
-        var clsFac = new clsFacturacion();
+        Factura factura;
 
-        var ultNroComprobante = clsFac.ConsultarUltNroOrden(ptoVenta, tipoComptobanteAfip);
-        return ultNroComprobante;
-      }
-
-      public static string InsertarActualizarFactura(int codigoFactura, int codigoTipoComprobante, int codigoPuntoDeVenta, int numeroFactura, DateTime fechaFacturacion, List<int> listaCodigosEntrega, int codigoMoneda, int codigoConcepto, int codigoIva, double subtotal, double total, string condicionVenta, double cotizacion, DataTable tablaItemsEntrega)
-      {
-        var nhSesion = ManejoDeNHibernate.IniciarSesion();
-
-        try
+        if (codigoFactura == 0)
         {
-          Factura factura;
+          factura = new Factura();
+        }
+        else
+        {
+          factura = CatalogoFactura.RecuperarPorCodigo(codigoFactura, nhSesion);
 
-          if (codigoFactura == 0)
+          if (!string.IsNullOrEmpty(factura.Cae))
           {
-            factura = new Factura();
+              return "TieneCAE";
           }
-          else
-          {
-            factura = CatalogoFactura.RecuperarPorCodigo(codigoFactura, nhSesion);
+        }
 
-            if (!string.IsNullOrEmpty(factura.Cae))
-            {
-                return "TieneCAE";
-            }
-          }
+        factura.Concepto = CatalogoConcepto.RecuperarPorCodigo(codigoConcepto, nhSesion);
 
-          factura.Concepto = CatalogoConcepto.RecuperarPorCodigo(codigoConcepto, nhSesion);
-
-          //Borramos las entregas eliminadas en la pantalla
-          var listaEntregasBorradas = (from e in factura.Entregas where !listaCodigosEntrega.Contains(e.Codigo) select e).ToList();
+        //Borramos las entregas eliminadas en la pantalla
+        var listaEntregasBorradas = (from e in factura.Entregas where !listaCodigosEntrega.Contains(e.Codigo) select e).ToList();
             
-          foreach (var entregaBorrar in listaEntregasBorradas)
-          {
-            factura.Entregas.Remove(entregaBorrar);
-          }
-
-          //Agrego las entregas que no estaban en la factura hasta el momento
-          foreach (var codigoEntrega in listaCodigosEntrega)
-          {
-            var ent = (from e in factura.Entregas where e.Codigo == codigoEntrega select e).SingleOrDefault();
-
-            if (ent == null)
-            {
-              factura.Entregas.Add(CatalogoEntrega.RecuperarPorCodigo(codigoEntrega, nhSesion));
-            }
-          }
-
-          //Editamos los precios de los items entrega
-          foreach (DataRow row in tablaItemsEntrega.Rows)
-          {
-            var codigoEntrega = Convert.ToInt32(row["codigoEntrega"]);
-            var entrega = (from e in factura.Entregas where e.Codigo == codigoEntrega select e).SingleOrDefault();
-
-            var codigoItemEntrega = Convert.ToInt32(row["codigoItemEntrega"]);
-            var itemEntrega = (from i in entrega.ItemsEntrega where i.Codigo == codigoItemEntrega select i).SingleOrDefault();
-
-            var precio = Convert.ToDouble(row["precio"]);
-            if (itemEntrega.Precio != precio)
-            {
-              itemEntrega.Precio = precio;
-              CatalogoGenerico<ItemEntrega>.InsertarActualizar(itemEntrega, nhSesion);
-            }
-          }
-
-          factura.FechaFacturacion = fechaFacturacion;
-          factura.Iva = CatalogoIva.RecuperarPorCodigo(codigoIva, nhSesion);
-          factura.Moneda = CatalogoMoneda.RecuperarPorCodigo(codigoMoneda, nhSesion);
-          factura.NumeroFactura = numeroFactura;
-          factura.Subtotal = subtotal;// (double)decimal.Round((decimal)subtotal, 2);
-          factura.TipoComprobante = CatalogoTipoComprobante.RecuperarPorCodigo(codigoTipoComprobante, nhSesion);
-          factura.Total = total;
-          factura.FechaVencimiento = DateTime.Parse("1900-01-01 00:00:00");
-          factura.CondicionVenta = condicionVenta;
-          factura.Cotizacion = codigoMoneda == Constantes.Moneda.PESO ? 1 : cotizacion; //Si la moneda es peso guardamos 1 en cotizacion
-          factura.PuntoDeVenta = CatalogoPuntosDeVenta.RecuperarPorCodigo(codigoPuntoDeVenta, nhSesion);
-
-          CatalogoFactura.InsertarActualizar(factura, nhSesion);
-          return "ok";
-        }
-        catch (Exception ex)
+        foreach (var entregaBorrar in listaEntregasBorradas)
         {
-          throw ex;
+          factura.Entregas.Remove(entregaBorrar);
         }
-        finally
+
+        //Agrego las entregas que no estaban en la factura hasta el momento
+        foreach (var codigoEntrega in listaCodigosEntrega)
         {
-          nhSesion.Close();
-          nhSesion.Dispose();
+          var ent = (from e in factura.Entregas where e.Codigo == codigoEntrega select e).SingleOrDefault();
+
+          if (ent == null)
+          {
+            factura.Entregas.Add(CatalogoEntrega.RecuperarPorCodigo(codigoEntrega, nhSesion));
+          }
         }
+
+        //Editamos los precios de los items entrega
+        foreach (DataRow row in tablaItemsEntrega.Rows)
+        {
+          var codigoEntrega = Convert.ToInt32(row["codigoEntrega"]);
+          var entrega = (from e in factura.Entregas where e.Codigo == codigoEntrega select e).SingleOrDefault();
+
+          var codigoItemEntrega = Convert.ToInt32(row["codigoItemEntrega"]);
+          var itemEntrega = (from i in entrega.ItemsEntrega where i.Codigo == codigoItemEntrega select i).SingleOrDefault();
+
+          var precio = Convert.ToDouble(row["precio"]);
+          if (itemEntrega.Precio != precio)
+          {
+            itemEntrega.Precio = precio;
+            CatalogoGenerico<ItemEntrega>.InsertarActualizar(itemEntrega, nhSesion);
+          }
+        }
+
+        factura.FechaFacturacion = fechaFacturacion;
+        factura.Iva = CatalogoIva.RecuperarPorCodigo(codigoIva, nhSesion);
+        factura.Moneda = CatalogoMoneda.RecuperarPorCodigo(codigoMoneda, nhSesion);
+        factura.NumeroFactura = numeroFactura;
+        factura.Subtotal = subtotal;// (double)decimal.Round((decimal)subtotal, 2);
+        factura.TipoComprobante = CatalogoTipoComprobante.RecuperarPorCodigo(codigoTipoComprobante, nhSesion);
+        factura.Total = total;
+        factura.FechaVencimiento = DateTime.Parse("1900-01-01 00:00:00");
+        factura.CondicionVenta = condicionVenta;
+        factura.Cotizacion = codigoMoneda == Constantes.Moneda.PESO ? 1 : cotizacion; //Si la moneda es peso guardamos 1 en cotizacion
+        factura.PuntoDeVenta = CatalogoPuntosDeVenta.RecuperarPorCodigo(codigoPuntoDeVenta, nhSesion);
+
+        CatalogoFactura.InsertarActualizar(factura, nhSesion);
+        return "ok";
       }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      finally
+      {
+        nhSesion.Close();
+        nhSesion.Dispose();
+      }
+    }
 
       public static string EmitirFactura(int codigoFactura)
       {
@@ -2880,7 +2881,7 @@ namespace BibliotecaSCF.Controladores
       }
     }
 
-      #endregion
+    #endregion
 
       #region Concepto
 

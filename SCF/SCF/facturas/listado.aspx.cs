@@ -208,6 +208,7 @@ namespace SCF.facturas
 
     protected void cbPuntoDeVenta_SelectedIndexChanged(object sender, EventArgs e)
     {
+      gvFacturas.Columns[8].Visible = Convert.ToInt32(cbPuntoDeVenta.SelectedItem.Value) != 10;
       CargarGrilla();
     }
 
@@ -215,7 +216,7 @@ namespace SCF.facturas
     {
       try
       {
-        string status = ControladorGeneral.EmitirFactura(Convert.ToInt32(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "codigoFactura")));
+        var status = ControladorGeneral.EmitirFactura(Convert.ToInt32(gvFacturas.GetRowValues(gvFacturas.FocusedRowIndex, "codigoFactura")));
         lblError.Text = status;
         pcError.ShowOnPageLoad = true;
       }

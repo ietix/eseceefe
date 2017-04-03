@@ -90,49 +90,49 @@
                                         <dx:GridViewDataTextColumn FieldName="descripcionTipoComprobante" Visible="false" VisibleIndex="3" Caption="Tipo Comprobante">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataTextColumn FieldName="descripcionTipoMoneda" VisibleIndex="9" Caption="Tipo Moneda" Visible="true">
+                                        <dx:GridViewDataTextColumn FieldName="descripcionTipoMoneda" VisibleIndex="4" Caption="Tipo Moneda" Visible="true">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
                                         <dx:GridViewDataTextColumn FieldName="remitos" VisibleIndex="5" Caption="Remito" Visible="true">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataTextColumn FieldName="descripcionConcepto" VisibleIndex="5" Caption="Concepto" Visible="false">
+                                        <dx:GridViewDataTextColumn FieldName="descripcionConcepto" VisibleIndex="6" Caption="Concepto" Visible="false">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataTextColumn FieldName="descripcionIVA" VisibleIndex="6" Caption="IVA" Visible="false">
+                                        <dx:GridViewDataTextColumn FieldName="descripcionIVA" VisibleIndex="7" Caption="IVA" Visible="false">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataTextColumn FieldName="subtotal" VisibleIndex="7" Caption="Sobtotal">
+                                        <dx:GridViewDataTextColumn FieldName="subtotal" VisibleIndex="8" Caption="Sobtotal">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataTextColumn FieldName="total" VisibleIndex="8" Caption="Total">
+                                        <dx:GridViewDataTextColumn FieldName="total" VisibleIndex="9" Caption="Total">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataTextColumn FieldName="cae" VisibleIndex="9" Caption="CAE">
+                                        <dx:GridViewDataTextColumn FieldName="cae" VisibleIndex="10" Caption="CAE">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataDateColumn FieldName="fechaVencimientoCAE" VisibleIndex="10" Caption="Fecha Venc. CAE" Visible="true">
+                                        <dx:GridViewDataDateColumn FieldName="fechaVencimientoCAE" VisibleIndex="11" Caption="Fecha Venc. CAE" Visible="true">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataDateColumn>
-                                        <dx:GridViewDataTextColumn FieldName="condicionVenta" Visible="false" VisibleIndex="9" Caption="Condición Venta">
+                                        <dx:GridViewDataTextColumn FieldName="condicionVenta" Visible="false" VisibleIndex="12" Caption="Condición Venta">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataTextColumn FieldName="domicilio" Visible="false" VisibleIndex="9" Caption="Condición Venta">
+                                        <dx:GridViewDataTextColumn FieldName="domicilio" Visible="false" VisibleIndex="13" Caption="Condición Venta">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataTextColumn FieldName="localidad" Visible="false" VisibleIndex="9" Caption="Condición Venta">
+                                        <dx:GridViewDataTextColumn FieldName="localidad" Visible="false" VisibleIndex="14" Caption="Condición Venta">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataTextColumn FieldName="cotizacion" Visible="false" VisibleIndex="9" Caption="Cotizacion">
+                                        <dx:GridViewDataTextColumn FieldName="cotizacion" Visible="false" VisibleIndex="15" Caption="Cotizacion">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataTextColumn FieldName="observaciones" Visible="false" VisibleIndex="9" Caption="Observaciones">
+                                        <dx:GridViewDataTextColumn FieldName="observaciones" Visible="false" VisibleIndex="16" Caption="Observaciones">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataTextColumn FieldName="codigoPuntoDeVenta" Visible="false" VisibleIndex="9">
+                                        <dx:GridViewDataTextColumn FieldName="codigoPuntoDeVenta" Visible="false" VisibleIndex="17">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
-                                        <dx:GridViewDataTextColumn FieldName="numeroPuntoDeVenta" Visible="false" VisibleIndex="9">
+                                        <dx:GridViewDataTextColumn FieldName="numeroPuntoDeVenta" Visible="false" VisibleIndex="18">
                                             <Settings AllowSort="True" AutoFilterCondition="Contains" />
                                         </dx:GridViewDataTextColumn>
                                     </Columns>

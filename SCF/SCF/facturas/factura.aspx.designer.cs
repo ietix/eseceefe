@@ -121,15 +121,6 @@ namespace SCF.facturas {
         protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtRazonSocial;
         
         /// <summary>
-        /// lblTipoDocumento control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxLabel lblTipoDocumento;
-        
-        /// <summary>
         /// txtNroDocumento control.
         /// </summary>
         /// <remarks>
@@ -164,15 +155,6 @@ namespace SCF.facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnUpdateImporte;
-        
-        /// <summary>
-        /// lblSubtotalDesc control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxLabel lblSubtotalDesc;
         
         /// <summary>
         /// txtSubtotal control.
@@ -337,15 +319,6 @@ namespace SCF.facturas {
         protected global::System.Web.UI.WebControls.Label lblLocalidad;
         
         /// <summary>
-        /// lblTituloDocumento control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTituloDocumento;
-        
-        /// <summary>
         /// lblNumeroDocumento control.
         /// </summary>
         /// <remarks>
@@ -425,15 +398,6 @@ namespace SCF.facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblFechaVencimientoCAE;
-        
-        /// <summary>
-        /// lblTituloIVA control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTituloIVA;
         
         /// <summary>
         /// lblImporteIVA control.

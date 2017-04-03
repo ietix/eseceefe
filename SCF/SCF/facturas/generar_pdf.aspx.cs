@@ -55,8 +55,6 @@ namespace SCF.facturas
       var txtNroDocumento = new ReportParameter("txtNroDocumento", Convert.ToString(dtItemsFacturaActual.Rows[0]["nroDocumentoCliente"]).Trim());
       var txtNroRemitos = new ReportParameter("txtNroRemitos", Convert.ToString(dtFacturaActual.Rows[0]["remitos"]).Trim());
       var txtCondicionVenta = new ReportParameter("txtCondicionVenta", Convert.ToString(dtFacturaActual.Rows[0]["condicionVenta"]).Trim());
-      var txtSubtotal = new ReportParameter("txtSubtotal", Convert.ToString(dtFacturaActual.Rows[0]["subtotal"]).Trim());
-      var txtIVA = new ReportParameter("txtIVA", Convert.ToString(Convert.ToDouble(dtFacturaActual.Rows[0]["subtotal"]) * 0.21).Trim());
       var txtTotal = new ReportParameter("txtTotal", Convert.ToString(dtFacturaActual.Rows[0]["total"]).Trim());
       var txtCAE = new ReportParameter("txtCAE", Convert.ToString(dtFacturaActual.Rows[0]["cae"]).Trim());
       var txtFechaVencimientoCAE = new ReportParameter("txtFechaVencimientoCAE", Convert.ToDateTime(dtFacturaActual.Rows[0]["fechaVencimientoCAE"]).ToString("dd/MM/yyyy"));
@@ -66,7 +64,20 @@ namespace SCF.facturas
       var txtTipoMoneda = new ReportParameter("txtTipoMoneda", Convert.ToString(dtFacturaActual.Rows[0]["descripcionTipoMoneda"]).Trim());
       var txtCotizacion = new ReportParameter("txtCotizacion", Convert.ToString(dtFacturaActual.Rows[0]["cotizacion"]).Trim());
       var txtObservaciones = new ReportParameter("txtObservaciones", Convert.ToString(dtFacturaActual.Rows[0]["observaciones"]).Trim());
-          
+      var txtSubtotal = new ReportParameter("txtSubtotal");
+      var txtIVA = new ReportParameter("txtIVA");
+
+      if (Convert.ToInt32(dtFacturaActual.Rows[0]["codigoPuntoDeVenta"]) == 10)
+      {
+        txtSubtotal.Values.Add(" ");
+        txtIVA.Values.Add(" ");
+      }
+      else
+      {
+        txtSubtotal.Values.Add(Convert.ToString(dtFacturaActual.Rows[0]["subtotal"]).Trim());
+        txtIVA.Values.Add(Convert.ToString(Convert.ToDouble(dtFacturaActual.Rows[0]["subtotal"]) * 0.21).Trim());
+      }
+
       // Create and setup an instance of Bytescout Barcode SDK
       var bc = new Barcode(SymbologyType.Code128);
       bc.RegistrationName = "demo";
