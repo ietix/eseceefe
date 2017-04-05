@@ -413,7 +413,7 @@
         <Top>7.69676cm</Top>
         <Left>4.44183cm</Left>
         <Height>0.54708cm</Height>
-        <Width>3.50542cm</Width>
+        <Width>8.59958cm</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -1059,7 +1059,7 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-		<ReportParameter Name="txtObservaciones">
+    <ReportParameter Name="txtObservaciones">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

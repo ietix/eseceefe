@@ -245,7 +245,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -414,7 +413,7 @@
         <Top>7.69676cm</Top>
         <Left>4.44183cm</Left>
         <Height>0.54708cm</Height>
-        <Width>3.50542cm</Width>
+        <Width>8.59958cm</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -1009,13 +1008,13 @@
     </ReportParameter>
     <ReportParameter Name="txtRazonSocialProveedor">
       <DataType>String</DataType>
-			<Nullable>true</Nullable>
+      <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="txtTipoMoneda">
       <DataType>String</DataType>
-			<Nullable>true</Nullable>
+      <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
