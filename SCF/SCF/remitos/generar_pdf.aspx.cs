@@ -40,7 +40,7 @@ namespace SCF.remitos
       var txtDomicilio = new ReportParameter("txtDomicilio", Convert.ToString(dtRemitoActual.Rows[0]["domicilio"]));
       var txtLocalidad = new ReportParameter("txtLocalidad", Convert.ToString(dtRemitoActual.Rows[0]["localidad"]));
       var txtNroDocumento = new ReportParameter("txtNroDocumento", Convert.ToString(dtItemsRemitoActual.Rows[0]["nroDocumentoCliente"]));
-      var txtCondicionVenta = new ReportParameter("txtCondicionVenta", "15 días");
+      var txtCondicionVenta = new ReportParameter("txtCondicionVenta", " ");
       var txtFechaRemito = new ReportParameter("txtFechaRemito", Convert.ToDateTime(dtRemitoActual.Rows[0]["fechaEmision"]).ToString("dd/MM/yyyy"));
       var txtRespInsc = new ReportParameter("txtRespInsc", "X");
       var txtTransporte = new ReportParameter("txtTransporte", Convert.ToString(dtRemitoActual.Rows[0]["razonSocialTransporte"]));

@@ -119,8 +119,9 @@
                                                     <Items>
                                                         <dx:ListEditItem Selected="true" Text="15 Días" Value="1" />
                                                         <dx:ListEditItem Text="30 Días" Value="2" />
-                                                        <dx:ListEditItem Text="Contado" Value="2" />
-                                                        <dx:ListEditItem Text="Tarjeta" Value="2" />
+                                                        <dx:ListEditItem Text="Contado" Value="3" />
+                                                        <dx:ListEditItem Text="Tarjeta" Value="4" />
+                                                        <dx:ListEditItem Text="50% Antic. 50% c/Ent." Value="5" />
                                                     </Items>
                                                 </dx:ASPxComboBox>
                                             </div>
