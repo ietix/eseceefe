@@ -22,7 +22,9 @@
               <xs:element name="cotizacion" msprop:Generator_ColumnVarNameInTable="columncotizacion" msprop:Generator_ColumnPropNameInRow="cotizacion" msprop:Generator_ColumnPropNameInTable="cotizacionColumn" msprop:Generator_UserColumnName="cotizacion" type="xs:decimal" minOccurs="0" />
               <xs:element name="subtotal" msprop:Generator_ColumnVarNameInTable="columnsubtotal" msprop:Generator_ColumnPropNameInRow="subtotal" msprop:Generator_ColumnPropNameInTable="subtotalColumn" msprop:Generator_UserColumnName="subtotal" type="xs:decimal" minOccurs="0" />
               <xs:element name="iva" msprop:Generator_ColumnVarNameInTable="columniva" msprop:Generator_ColumnPropNameInRow="iva" msprop:Generator_ColumnPropNameInTable="ivaColumn" msprop:Generator_UserColumnName="iva" type="xs:decimal" minOccurs="0" />
+              <xs:element name="tipoComprobante" msprop:Generator_ColumnVarNameInTable="columntipoComprobante" msprop:Generator_ColumnPropNameInRow="tipoComprobante" msprop:Generator_ColumnPropNameInTable="tipoComprobanteColumn" msprop:Generator_UserColumnName="tipoComprobante" type="xs:string" minOccurs="0" />
               <xs:element name="total" msprop:Generator_ColumnVarNameInTable="columntotal" msprop:Generator_ColumnPropNameInRow="total" msprop:Generator_ColumnPropNameInTable="totalColumn" msprop:Generator_UserColumnName="total" type="xs:decimal" minOccurs="0" />
+              <xs:element name="puntoDeVenta" msprop:Generator_ColumnVarNameInTable="columnpuntoDeVenta" msprop:Generator_ColumnPropNameInRow="puntoDeVenta" msprop:Generator_ColumnPropNameInTable="puntoDeVentaColumn" msprop:Generator_UserColumnName="puntoDeVenta" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

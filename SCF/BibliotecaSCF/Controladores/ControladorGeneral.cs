@@ -2777,56 +2777,57 @@ namespace BibliotecaSCF.Controladores
           }
       }
 
-      public static DataTable RecuperarFacturasPorFechas(DateTime fechaHoraDesde, DateTime fechaHoraHasta)
+    public static DataTable RecuperarFacturasPorFechas(DateTime fechaHoraDesde, DateTime fechaHoraHasta)
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
       {
-          ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+        var tablaFacturas = new DataTable();
+        tablaFacturas.Columns.Add("codigoFactura");
+        tablaFacturas.Columns.Add("numeroFactura");
+        tablaFacturas.Columns.Add("fechaFacturacion");
+        tablaFacturas.Columns.Add("descripcionTipoComprobante");
+        tablaFacturas.Columns.Add("descripcionTipoMoneda");
+        tablaFacturas.Columns.Add("descripcionConcepto");
+        tablaFacturas.Columns.Add("descripcionIVA");
+        tablaFacturas.Columns.Add("subtotal");
+        tablaFacturas.Columns.Add("total");
+        tablaFacturas.Columns.Add("cae");
+        tablaFacturas.Columns.Add("fechaVencimientoCAE");
+        tablaFacturas.Columns.Add("remitos");
+        tablaFacturas.Columns.Add("condicionVenta");
+        tablaFacturas.Columns.Add("codigoDireccion");
+        tablaFacturas.Columns.Add("direccion");
+        tablaFacturas.Columns.Add("domicilio");
+        tablaFacturas.Columns.Add("localidad");
+        tablaFacturas.Columns.Add("cotizacion");
+        tablaFacturas.Columns.Add("cliente");
+        tablaFacturas.Columns.Add("numeroPuntoDeVenta");
 
-          try
-          {
-              DataTable tablaFacturas = new DataTable();
-              tablaFacturas.Columns.Add("codigoFactura");
-              tablaFacturas.Columns.Add("numeroFactura");
-              tablaFacturas.Columns.Add("fechaFacturacion");
-              tablaFacturas.Columns.Add("descripcionTipoComprobante");
-              tablaFacturas.Columns.Add("descripcionTipoMoneda");
-              tablaFacturas.Columns.Add("descripcionConcepto");
-              tablaFacturas.Columns.Add("descripcionIVA");
-              tablaFacturas.Columns.Add("subtotal");
-              tablaFacturas.Columns.Add("total");
-              tablaFacturas.Columns.Add("cae");
-              tablaFacturas.Columns.Add("fechaVencimientoCAE");
-              tablaFacturas.Columns.Add("remitos");
-              tablaFacturas.Columns.Add("condicionVenta");
-              tablaFacturas.Columns.Add("codigoDireccion");
-              tablaFacturas.Columns.Add("direccion");
-              tablaFacturas.Columns.Add("domicilio");
-              tablaFacturas.Columns.Add("localidad");
-              tablaFacturas.Columns.Add("cotizacion");
-              tablaFacturas.Columns.Add("cliente");
+        var listaFacturas = CatalogoFactura.RecuperarLista(x => x.FechaFacturacion >= fechaHoraDesde && x.FechaFacturacion <= fechaHoraHasta, nhSesion);
 
-              List<Factura> listaFacturas = CatalogoFactura.RecuperarLista(x => x.FechaFacturacion >= fechaHoraDesde && x.FechaFacturacion <= fechaHoraHasta, nhSesion);
+        listaFacturas.OrderBy(x => x.NumeroFactura).Aggregate(tablaFacturas, (dt, r) =>
+        {
+          dt.Rows.Add(r.Codigo, r.NumeroFactura, r.FechaFacturacion.ToString("dd/MM/yyyy"), r.TipoComprobante.Descripcion, r.Moneda.Descripcion,
+              r.Concepto.Descripcion, r.Iva.Descripcion, r.Subtotal, r.Total, r.Cae, r.FechaVencimiento, string.Join(", ", r.Entregas.Select(x => x.NumeroRemito)),
+              r.CondicionVenta, r.Entregas[0].Direccion.Codigo, r.Entregas[0].Direccion.Descripcion + ", " + r.Entregas[0].Direccion.Localidad + ", " +
+              r.Entregas[0].Direccion.Provincia, r.Entregas[0].Direccion.Descripcion, r.Entregas[0].Direccion.Localidad, r.Cotizacion,
+              r.Entregas[0].NotaDePedido.Cliente.NumeroDocumento + " - " + r.Entregas[0].NotaDePedido.Cliente.RazonSocial, r.PuntoDeVenta.Numero); return dt;
+        });
 
-              listaFacturas.OrderBy(x => x.NumeroFactura).Aggregate(tablaFacturas, (dt, r) =>
-              {
-                  dt.Rows.Add(r.Codigo, r.NumeroFactura, r.FechaFacturacion.ToString("dd/MM/yyyy"), r.TipoComprobante.Descripcion, r.Moneda.Descripcion,
-                      r.Concepto.Descripcion, r.Iva.Descripcion, r.Subtotal, r.Total, r.Cae, r.FechaVencimiento, string.Join(", ", r.Entregas.Select(x => x.NumeroRemito)),
-                      r.CondicionVenta, r.Entregas[0].Direccion.Codigo, r.Entregas[0].Direccion.Descripcion + ", " + r.Entregas[0].Direccion.Localidad + ", " +
-                      r.Entregas[0].Direccion.Provincia, r.Entregas[0].Direccion.Descripcion, r.Entregas[0].Direccion.Localidad, r.Cotizacion,
-                      r.Entregas[0].NotaDePedido.Cliente.NumeroDocumento + " - " + r.Entregas[0].NotaDePedido.Cliente.RazonSocial); return dt;
-              });
-
-              return tablaFacturas;
-          }
-          catch (Exception ex)
-          {
-              throw ex;
-          }
-          finally
-          {
-              nhSesion.Close();
-              nhSesion.Dispose();
-          }
+        return tablaFacturas;
       }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      finally
+      {
+        nhSesion.Close();
+        nhSesion.Dispose();
+      }
+    }
 
     public static DataTable RecuperarFacturaPorPuntoDeVenta(int codigoPuntoDeVenta)
     {
