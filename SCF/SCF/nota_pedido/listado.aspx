@@ -45,6 +45,33 @@
                         </div>
                         <div class="portlet-body form">
                             <!-- BEGIN FORM-->
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Fecha Desde</label>
+                                        <dx:ASPxDateEdit ID="deFechaDesde" runat="server" CssClass="form-control" Theme="Metropolis" Width="100%" EditFormat="Date" AutoPostBack="false">
+                                            <TimeSectionProperties Visible="True">
+                                            </TimeSectionProperties>
+                                        </dx:ASPxDateEdit>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                                <!--/span-->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Fecha Hasta</label>
+                                        <dx:ASPxDateEdit ID="deFechaHasta" runat="server" CssClass="form-control" Theme="Metropolis" Width="100%" EditFormat="Date" AutoPostBack="false">
+                                            <TimeSectionProperties Visible="True">
+                                            </TimeSectionProperties>
+                                        </dx:ASPxDateEdit>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <asp:Button type="button" class="btn blue" style="top:21px" runat="server" ID="btnBuscarNotasDePedido" UseSubmitBehavior="false" Text="Generar Reporte" OnClick="btnBuscarNotasDePedido_Click" />
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-actions top">
                                 <div class="btn-set pull-left">
                                     <asp:Button type="button" ID="btnNuevo" runat="server" OnClick="btnNuevo_Click" UseSubmitBehavior="false" class="btn blue" Text="Nuevo" />
