@@ -1,24 +1,18 @@
 ﻿using BibliotecaSCF.Catalogos;
 using BibliotecaSCF.Clases;
 using BibliotecaSCF.ClasesComplementarias;
+using FluentNHibernate.Conventions;
 using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WSFEv1;
 using WSFEv1.Logica;
 using WSFEv1.Logica.Wsfe;
-using FluentNHibernate.Conventions;
-using FluentNHibernate.Utils;
-using System.Diagnostics;
 
 namespace BibliotecaSCF.Controladores
 {
-  
-
   public class ControladorGeneral
   {
     #region Articulo
@@ -1748,15 +1742,7 @@ namespace BibliotecaSCF.Controladores
         tablaNotasDePedido.Columns.Add("fechaHoraProximaEntrega");
         tablaNotasDePedido.Columns.Add("observaciones");
 
-        List<NotaDePedido> listaNotasDePedido;
-        if (soloVigentes)
-        {
-          listaNotasDePedido = CatalogoNotaDePedido.RecuperarLista(x => x.CodigoEstado == Constantes.Estados.VIGENTE, nhSesion);
-        }
-        else
-        {
-          listaNotasDePedido = CatalogoNotaDePedido.RecuperarTodos(nhSesion);
-        }
+        var listaNotasDePedido = soloVigentes ? CatalogoNotaDePedido.RecuperarLista(x => x.CodigoEstado == Constantes.Estados.VIGENTE, nhSesion) : CatalogoNotaDePedido.RecuperarTodos(nhSesion);
 
         foreach (NotaDePedido notaPedido in listaNotasDePedido.OrderByDescending(x => x.CodigoEstado))
         {
@@ -1856,6 +1842,125 @@ namespace BibliotecaSCF.Controladores
 
         DataView dv = tablaNotasDePedido.DefaultView;
         dv.Sort = "codigoEstado desc";
+
+        return dv.ToTable();
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+      finally
+      {
+        nhSesion.Close();
+        nhSesion.Dispose();
+      }
+    }
+
+    /// <summary>
+    /// Returns a DataTable with NotasDePedido by date
+    /// </summary>
+    /// <param name="fechaDesde">From date for query</param>
+    /// <param name="fechaHasta">To date for query</param>
+    /// <param name="soloVigentes">Indicates wether only status Vigente is looked for</param>
+    /// <returns></returns>
+    public static DataTable RecuperarNotasDePedidoPorFecha(DateTime fechaDesde, DateTime fechaHasta, bool soloVigentes)
+    {
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
+
+      try
+      {
+        var tablaNotasDePedido = new DataTable();
+        tablaNotasDePedido.Columns.Add("codigoNotaDePedido");
+        tablaNotasDePedido.Columns.Add("numeroInternoCliente");
+        tablaNotasDePedido.Columns.Add("fechaEmision");
+        tablaNotasDePedido.Columns.Add("codigoEstado");
+        tablaNotasDePedido.Columns.Add("codigoContratoMarco");
+        tablaNotasDePedido.Columns.Add("descripcionContratoMarco");
+        tablaNotasDePedido.Columns.Add("codigoCliente");
+        tablaNotasDePedido.Columns.Add("razonSocialCliente");
+        tablaNotasDePedido.Columns.Add("fechaHoraProximaEntrega");
+        tablaNotasDePedido.Columns.Add("observaciones");
+
+        var listaNotasDePedido = CatalogoNotaDePedido.RecuperarPorFecha(fechaDesde, fechaHasta, nhSesion);
+          
+        listaNotasDePedido = soloVigentes ? listaNotasDePedido.Where(x => x.CodigoEstado == Constantes.Estados.VIGENTE).ToList() : listaNotasDePedido;
+
+        foreach (var notaPedido in listaNotasDePedido.OrderByDescending(x => x.CodigoEstado))
+        {
+          var codigoEstado = 0;
+          var fechaHoraProximaEntrega = DateTime.MinValue;
+
+          if (notaPedido.ItemsNotaDePedido.Count > 0)
+          {
+            var listaEntregas = CatalogoEntrega.RecuperarLista(x => x.NotaDePedido.Codigo == notaPedido.Codigo && x.CodigoEstado != Constantes.Estados.ANULADA, nhSesion);
+
+            switch (notaPedido.CodigoEstado)
+            {
+              case Constantes.Estados.VIGENTE:
+                var listaItemsNotaDePedidoVencidos = (from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now select n).ToList();
+
+                if (listaEntregas.Count > 0) //valido que no haya alguna entrega que cumpla el item nota de pedido
+                {
+                  var listaBorrar = (from itemNP in listaItemsNotaDePedidoVencidos let listaItemsEntrega = (from e in listaEntregas where (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault() != null select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault()).ToList() let cantidadAEntregarTotal = (from e in listaItemsEntrega select e.CantidadAEntregar).Sum() where cantidadAEntregarTotal >= itemNP.CantidadPedida select itemNP).ToList();
+
+                  foreach (var itemBorrar in listaBorrar)
+                  {
+                    listaItemsNotaDePedidoVencidos.Remove(itemBorrar);
+                  }
+                }
+
+                if (listaItemsNotaDePedidoVencidos.Count > 0)
+                {
+                  codigoEstado = Constantes.Estados.VENCIDA;
+                  fechaHoraProximaEntrega = listaItemsNotaDePedidoVencidos.OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
+                }
+                else
+                {
+                  var listaItemsNotaDePedidoProximosAVencer = (from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now.AddDays(5) select n).ToList();
+
+                  if (listaEntregas.Count > 0) //valido que no haya alguna entrega que cumpla el item nota de pedido
+                  {
+                    var listaBorrar = (from itemNP in listaItemsNotaDePedidoProximosAVencer let listaItemsEntrega = (from e in listaEntregas where (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault() != null select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault()).ToList() let cantidadAEntregarTotal = (from e in listaItemsEntrega select e.CantidadAEntregar).Sum() where cantidadAEntregarTotal >= itemNP.CantidadPedida select itemNP).ToList();
+
+                    foreach (var itemBorrar in listaBorrar)
+                    {
+                      listaItemsNotaDePedidoProximosAVencer.Remove(itemBorrar);
+                    }
+                  }
+
+                  if (listaItemsNotaDePedidoProximosAVencer.Count > 0)
+                  {
+                    codigoEstado = Constantes.Estados.PROXIMA_VENCER;
+                    fechaHoraProximaEntrega = listaItemsNotaDePedidoProximosAVencer.OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
+                  }
+                  else
+                  {
+                    codigoEstado = Constantes.Estados.VIGENTE;
+                    var listaEntregadas = (from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now.AddDays(5) select n).ToList();
+                    listaEntregadas.AddRange((from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now select n).ToList());
+
+                    fechaHoraProximaEntrega = notaPedido.ItemsNotaDePedido.Where(x => !listaEntregadas.Select(c => c.Codigo).ToList().Contains(x.Codigo)).OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
+                  }
+                }
+
+                break;
+
+              case Constantes.Estados.ANULADA:
+                codigoEstado = Constantes.Estados.ANULADA;
+                break;
+
+              case Constantes.Estados.ENTREGADA:
+                codigoEstado = Constantes.Estados.ENTREGADA;
+                break;
+            }
+          }
+
+          tablaNotasDePedido.Rows.Add(new object[] { notaPedido.Codigo, notaPedido.NumeroInternoCliente, notaPedido.FechaEmision.ToString("yyyy-MM-dd HH:mm:ss"), codigoEstado, notaPedido.ContratoMarco != null ? notaPedido.ContratoMarco.Codigo : 0, 
+                notaPedido.ContratoMarco != null ? notaPedido.ContratoMarco.Descripcion : "", notaPedido.Cliente.Codigo, notaPedido.Cliente.RazonSocial, fechaHoraProximaEntrega == DateTime.MinValue ? "" : fechaHoraProximaEntrega.ToString("yyyy-MM-dd HH:mm:ss"), notaPedido.Observaciones});
+        }
+
+        var dv = tablaNotasDePedido.DefaultView;
+        dv.Sort = "fechaEmision desc";
 
         return dv.ToTable();
       }
