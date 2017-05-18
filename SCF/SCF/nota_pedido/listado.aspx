@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <asp:Button type="button" class="btn blue" style="top:21px" runat="server" ID="btnBuscarNotasDePedido" UseSubmitBehavior="false" Text="Generar Reporte" OnClick="btnBuscarNotasDePedido_Click" />
+                                        <asp:Button type="button" class="btn blue" style="top:21px" runat="server" ID="btnBuscarNotasDePedido" UseSubmitBehavior="false" Text="Buscar" OnClick="btnBuscarNotasDePedido_Click" />
                                     </div>
                                 </div>
                             </div>

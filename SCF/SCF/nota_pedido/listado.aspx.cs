@@ -20,6 +20,13 @@ namespace SCF.nota_pedido
         {
           loadGridNotaPedidos();
         }
+        else
+        {
+          var desde = DateTime.Now.Date;
+          var hasta = desde.AddDays(1);
+          deFechaDesde.Value = desde;
+          deFechaHasta.Value = hasta;
+        }
       }
 
       private void loadGridNotaPedidos()
