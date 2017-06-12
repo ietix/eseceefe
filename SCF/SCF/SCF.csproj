@@ -4815,26 +4815,27 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
-    <EmbeddedResource Include="reportes\notaCreditoBUNIQ.rdlc" />
-    <EmbeddedResource Include="reportes\notaCreditoAUNIQ.rdlc" />
-    <EmbeddedResource Include="reportes\facturaBUNIQ.rdlc" />
-    <EmbeddedResource Include="reportes\facturaAUNIQ.rdlc" />
     <EmbeddedResource Include="reportes\remitoT_UNIQBROW.rdlc" />
     <EmbeddedResource Include="reportes\remitoD_UNIQBROW.rdlc" />
     <EmbeddedResource Include="reportes\remito_UNIQBROW.rdlc" />
     <EmbeddedResource Include="reportes\remitoT_neonbind.rdlc" />
     <EmbeddedResource Include="reportes\remitoD_neonbind.rdlc" />
+    <EmbeddedResource Include="reportes\remitoT.rdlc" />
+    <EmbeddedResource Include="reportes\remito.rdlc" />
+    <EmbeddedResource Include="reportes\remitoD.rdlc" />
+    <EmbeddedResource Include="reportes\notaDePedido.rdlc" />
+    <EmbeddedResource Include="reportes\notaCreditoBUNIQ.rdlc" />
+    <EmbeddedResource Include="reportes\notaCreditoAUNIQ.rdlc" />
+    <EmbeddedResource Include="reportes\facturaBUNIQ.rdlc" />
+    <EmbeddedResource Include="reportes\facturaAUNIQ.rdlc" />
     <EmbeddedResource Include="reportes\remito_neonbind.rdlc" />
     <EmbeddedResource Include="reportes\notaCreditoANeo.rdlc" />
     <EmbeddedResource Include="reportes\facturaANeo.rdlc" />
-    <EmbeddedResource Include="reportes\remitoT.rdlc" />
-    <EmbeddedResource Include="reportes\remitoD.rdlc" />
     <EmbeddedResource Include="reportes\notaCreditoA_Obs.rdlc" />
     <EmbeddedResource Include="reportes\reporteFacturas.rdlc" />
     <EmbeddedResource Include="reportes\notaCreditoA.rdlc" />
     <EmbeddedResource Include="reportes\facturaA_Obs.rdlc" />
     <EmbeddedResource Include="reportes\facturaA.rdlc" />
-    <EmbeddedResource Include="reportes\remito.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -454,116 +454,6 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Textbox Name="txtCAE">
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!txtCai.Value</Value>
-                <Style>
-                  <FontSize>9pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style>
-              <TextAlign>Right</TextAlign>
-            </Style>
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>txtCAE</rd:DefaultName>
-        <Top>21.91584cm</Top>
-        <Left>16.40099cm</Left>
-        <Height>0.38848cm</Height>
-        <Width>3.45701cm</Width>
-        <ZIndex>10</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Textbox>
-      <Textbox Name="txtFechaVenciminetoCAE">
-        <CanGrow>true</CanGrow>
-        <CanShrink>true</CanShrink>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!txtFechaVencimientoCai.Value</Value>
-                <Style>
-                  <FontSize>9pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style>
-              <TextAlign>Right</TextAlign>
-            </Style>
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>txtFechaVenciminetoCAE</rd:DefaultName>
-        <Top>22.30432cm</Top>
-        <Left>16.40099cm</Left>
-        <Height>0.3354cm</Height>
-        <Width>3.45701cm</Width>
-        <ZIndex>11</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Textbox>
-      <Image Name="BarCode">
-        <Source>External</Source>
-        <Value>=Parameters!imgBarCode.Value</Value>
-        <Sizing>Fit</Sizing>
-        <Top>21.56306cm</Top>
-        <Left>1.21842cm</Left>
-        <Height>1.07666cm</Height>
-        <Width>8.74417cm</Width>
-        <ZIndex>12</ZIndex>
-        <ToolTip>=Parameters!imgBarCode.Value</ToolTip>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Image>
-      <Textbox Name="txtNumeroCodigoBarra">
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!txtNumeroCodigoBarra.Value</Value>
-                <Style>
-                  <FontSize>6pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style>
-              <TextAlign>Right</TextAlign>
-            </Style>
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>txtNumeroCodigoBarra</rd:DefaultName>
-        <Top>22.63972cm</Top>
-        <Left>3.59516cm</Left>
-        <Height>0.49395cm</Height>
-        <Width>6.36743cm</Width>
-        <ZIndex>13</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
       <Textbox Name="txtRazonSocialProveedor">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -591,7 +481,7 @@
         <Left>3.59516cm</Left>
         <Height>0.49417cm</Height>
         <Width>14.2875cm</Width>
-        <ZIndex>14</ZIndex>
+        <ZIndex>10</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -629,7 +519,7 @@
         <Left>3.59516cm</Left>
         <Height>0.5559cm</Height>
         <Width>14.2875cm</Width>
-        <ZIndex>15</ZIndex>
+        <ZIndex>11</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -666,7 +556,7 @@
         <Left>3.59516cm</Left>
         <Height>0.49416cm</Height>
         <Width>14.2875cm</Width>
-        <ZIndex>16</ZIndex>
+        <ZIndex>12</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -678,7 +568,7 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>10.45833in</Height>
+    <Height>8.61835in</Height>
     <Style>
       <Border>
         <Style>None</Style>
@@ -691,6 +581,214 @@
   </Body>
   <Width>8.1705in</Width>
   <Page>
+    <PageFooter>
+      <Height>2.09978cm</Height>
+      <PrintOnFirstPage>true</PrintOnFirstPage>
+      <PrintOnLastPage>true</PrintOnLastPage>
+      <ReportItems>
+        <Textbox Name="txtCAE">
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Parameters!txtCai.Value</Value>
+                  <Style>
+                    <FontSize>9pt</FontSize>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>txtCAE</rd:DefaultName>
+          <Top>0.127cm</Top>
+          <Left>16.21049cm</Left>
+          <Height>0.38848cm</Height>
+          <Width>3.45701cm</Width>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </Textbox>
+        <Textbox Name="txtFechaVenciminetoCAE">
+          <CanGrow>true</CanGrow>
+          <CanShrink>true</CanShrink>
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Parameters!txtFechaVencimientoCai.Value</Value>
+                  <Style>
+                    <FontSize>9pt</FontSize>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>txtFechaVenciminetoCAE</rd:DefaultName>
+          <Top>0.60015cm</Top>
+          <Left>16.21049cm</Left>
+          <Height>0.3354cm</Height>
+          <Width>3.45701cm</Width>
+          <ZIndex>1</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </Textbox>
+        <Image Name="BarCode">
+          <Source>External</Source>
+          <Value>=Parameters!imgBarCode.Value</Value>
+          <Sizing>Fit</Sizing>
+          <Top>0.03881cm</Top>
+          <Left>1.66293cm</Left>
+          <Height>1.07666cm</Height>
+          <Width>8.74417cm</Width>
+          <ZIndex>2</ZIndex>
+          <ToolTip>=Parameters!imgBarCode.Value</ToolTip>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </Image>
+        <Textbox Name="txtNumeroCodigoBarra">
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>=Parameters!txtNumeroCodigoBarra.Value</Value>
+                  <Style>
+                    <FontSize>6pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>txtNumeroCodigoBarra</rd:DefaultName>
+          <Top>1.11547cm</Top>
+          <Left>4.03967cm</Left>
+          <Height>0.49395cm</Height>
+          <Width>6.36743cm</Width>
+          <ZIndex>3</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+            <PaddingLeft>2pt</PaddingLeft>
+            <PaddingRight>2pt</PaddingRight>
+            <PaddingTop>2pt</PaddingTop>
+            <PaddingBottom>2pt</PaddingBottom>
+          </Style>
+        </Textbox>
+        <Textbox Name="txtCAE4">
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>ORIGINAL</Value>
+                  <Style>
+                    <FontSize>9pt</FontSize>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>txtCAE</rd:DefaultName>
+          <Top>0.98135cm</Top>
+          <Left>12.7182cm</Left>
+          <Height>0.38848cm</Height>
+          <Width>3.45701cm</Width>
+          <ZIndex>4</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </Textbox>
+        <Textbox Name="txtCAE3">
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>FECHA DE VENC.:</Value>
+                  <Style>
+                    <FontSize>9pt</FontSize>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>txtCAE</rd:DefaultName>
+          <Top>0.55759cm</Top>
+          <Left>12.7182cm</Left>
+          <Height>0.38848cm</Height>
+          <Width>3.45701cm</Width>
+          <ZIndex>5</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </Textbox>
+        <Textbox Name="txtCAE2">
+          <KeepTogether>true</KeepTogether>
+          <Paragraphs>
+            <Paragraph>
+              <TextRuns>
+                <TextRun>
+                  <Value>CAE:</Value>
+                  <Style>
+                    <FontSize>9pt</FontSize>
+                  </Style>
+                </TextRun>
+              </TextRuns>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+            </Paragraph>
+          </Paragraphs>
+          <rd:DefaultName>txtCAE</rd:DefaultName>
+          <Top>0.14111cm</Top>
+          <Left>12.7182cm</Left>
+          <Height>0.38848cm</Height>
+          <Width>3.45701cm</Width>
+          <ZIndex>6</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </Textbox>
+      </ReportItems>
+      <Style>
+        <Border>
+          <Style>None</Style>
+        </Border>
+      </Style>
+    </PageFooter>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
     <LeftMargin>0cm</LeftMargin>
