@@ -117,11 +117,12 @@
                                                 <label class="control-label">Condición de Venta</label>
                                                 <dx:ASPxComboBox ID="cbCondicionVenta" runat="server" ValueField="codigoCondicionVenta" TextField="descripcion" DropDownStyle="DropDownList" EnableTheming="True" Theme="Metropolis" CssClass="form-control" Width="100%">
                                                     <Items>
-                                                        <dx:ListEditItem Selected="true" Text="15 Días" Value="1" />
-                                                        <dx:ListEditItem Text="30 Días" Value="2" />
-                                                        <dx:ListEditItem Text="Contado" Value="3" />
-                                                        <dx:ListEditItem Text="Tarjeta" Value="4" />
-                                                        <dx:ListEditItem Text="50% Antic. 50% c/Ent." Value="5" />
+                                                        <dx:ListEditItem Selected="true" Text="10 Días" Value="1" />
+                                                        <dx:ListEditItem Text="15 Días" Value="2" />
+                                                        <dx:ListEditItem Text="30 Días" Value="3" />
+                                                        <dx:ListEditItem Text="Contado" Value="4" />
+                                                        <dx:ListEditItem Text="Tarjeta" Value="5" />
+                                                        <dx:ListEditItem Text="50% Antic. 50% c/Ent." Value="6" />
                                                     </Items>
                                                 </dx:ASPxComboBox>
                                             </div>
