@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using BibliotecaSCF.Clases;
+﻿using BibliotecaSCF.ClasesComplementarias;
 using BibliotecaSCF.Controladores;
+using System;
 using System.Data;
 using System.Drawing;
-using BibliotecaSCF.ClasesComplementarias;
 
 namespace SCF.nota_pedido
 {
-    public partial class listado : System.Web.UI.Page
+  using Microsoft.Reporting.WebForms;
+  using System.Linq;
+
+  public partial class listado : System.Web.UI.Page
     {
       protected void Page_Load(object sender, EventArgs e)
       {
@@ -136,6 +133,66 @@ namespace SCF.nota_pedido
       }
 
       protected void gvNotasPedido_CellEditorInitialize(object sender, DevExpress.Web.ASPxGridView.ASPxGridViewEditorEventArgs e)
+      {
+
+      }
+
+      protected void btnImprimir_Click(object sender, EventArgs e)
+      {
+        if (gvNotasPedido.FocusedRowIndex != -1)
+        {
+          pcPrintNotaDePedido.ShowOnPageLoad = true;
+          var tablaReportes = ControladorGeneral.RecuperarTodosReportes();
+          var reportPath = string.Empty;
+          var dsReporte = new dsItemsNotaDePedido();
+
+          if (tablaReportes.Rows.Cast<DataRow>().Any(row => row["nombreReporte"].ToString() == "notaDePedido"))
+          {
+            reportPath = tablaReportes.Rows.Cast<DataRow>().FirstOrDefault(row => row["nombreReporte"].ToString() == "notaDePedido")["pathReporte1"].ToString();
+          }
+
+          rvNotaDePedido.LocalReport.ReportPath = Server.MapPath("..") + reportPath;
+          rvNotaDePedido.ProcessingMode = ProcessingMode.Local;
+          rvNotaDePedido.LocalReport.EnableExternalImages = true;
+
+          var codigoNotaDePedido = int.Parse(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "codigoNotaDePedido").ToString());
+
+          var txtNroNotaDePedido = new ReportParameter("nroNotaDePedido", Convert.ToString(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "numeroInternoCliente")));
+          var txtFechaNotaDePedido = new ReportParameter("txtFechaNotaDePedido", Convert.ToString(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "fechaEmision")));
+          var txtCliente = new ReportParameter("txtCliente", Convert.ToString(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "razonSocialCliente")));
+
+          rvNotaDePedido.LocalReport.SetParameters(new ReportParameter[] { txtNroNotaDePedido, txtFechaNotaDePedido, txtCliente });
+
+          var tablaItemsPedido = ControladorGeneral.RecuperarItemsNotaDePedido(codigoNotaDePedido);
+          
+          dsReporte.DataTable1.Clear();
+
+          foreach (DataRow fila in tablaItemsPedido.Rows)
+          {
+            var filaReporte = dsReporte.DataTable1.NewRow();
+            filaReporte["codigoArticulo"] = fila["codigoArticulo"];
+            filaReporte["descripcion"] = fila["descripcionCorta"];
+            filaReporte["posicion"] = fila["posicion"];
+            filaReporte["cantidad"] = fila["cantidad"];
+            
+            dsReporte.DataTable1.Rows.Add(filaReporte);
+          }
+
+          var dtReporte = dsReporte;
+
+          var dataSource = new ReportDataSource("DataSet1", dtReporte.Tables[0]);
+          rvNotaDePedido.LocalReport.DataSources.Clear();
+          rvNotaDePedido.LocalReport.DataSources.Add(dataSource);
+          rvNotaDePedido.LocalReport.Refresh();
+        }
+        else
+        {
+          lblMensaje.Text = "Debe seleccionar una nota de pedido.";
+          pcMensaje.ShowOnPageLoad = true;
+        }
+      }
+
+      protected void btnPrint_Click(object sender, EventArgs e)
       {
 
       }

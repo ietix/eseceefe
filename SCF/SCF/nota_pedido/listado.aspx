@@ -4,6 +4,7 @@
 <%@ Register Assembly="DevExpress.Web.v14.1, Version=14.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxPopupControl" TagPrefix="dx" %>
 <%@ Register Assembly="DevExpress.Web.v14.1, Version=14.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxGridView" TagPrefix="dx" %>
 <%@ Register Assembly="DevExpress.Web.v14.1, Version=14.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web.ASPxEditors" TagPrefix="dx" %>
+<%@ Register TagPrefix="rsweb" Namespace="Microsoft.Reporting.WebForms" Assembly="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <!-- BEGIN CONTENT -->
@@ -79,7 +80,7 @@
                                     <asp:Button type="button" ID="btnEliminar"  runat="server" OnClientClick="ShowConfirmarEliminarNotaPedido()" class="btn red" Text="Eliminar" OnClick="btnEliminar_Click" />
                                 </div>
                                 <div class="btn-set pull-right">
-                                    <asp:Button type="button" ID="btnShowPopUpObservacion" Visible="false" runat="server" OnClientClick="ShowObservacion()" class="btn red" Text="Anular" />
+                                    <asp:Button type="button" ID="btnShowPopUpObservacion" runat="server" OnClick="btnImprimir_Click" UseSubmitBehavior="false" class="btn red" Text="Imprimir" />
                                     <asp:Button type="button" ID="btnVerDetalle" runat="server" class="btn green" Text="Detalle" OnClick="btnVerDetalle_Click" UseSubmitBehavior="false" />
                                 </div>
                             </div>
@@ -214,6 +215,38 @@
         </ContentCollection>
     </dx:ASPxPopupControl>
 
+    <!-- BEGIN POPUP IMPRIMIR NOTA DE PEDIDO -->
+    <dx:ASPxPopupControl ID="pcPrintNotaDePedido" runat="server" CloseAction="CloseButton" CloseOnEscape="true"
+        PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" ClientInstanceName="pcShowObservacion"
+        HeaderText="Observacion" AllowDragging="True" Modal="True" PopupAnimationType="Fade" Width="1200"
+        EnableViewState="True" Theme="Metropolis" OnLoad="pcShowObservacion_Load" ShowPageScrollbarWhenModal="True">
+        <ClientSideEvents PopUp="function(s, e) {  txtPrecio.Focus(); }" />
+        <ContentCollection>
+            <dx:PopupControlContentControl ID="PopupControlContentControl5" runat="server">
+                <dx:ASPxPanel ID="ASPxPanel3" runat="server" DefaultButton="">
+                    <PanelCollection>
+                        <dx:PanelContent ID="PanelContent5" runat="server">
+                            <div>
+                                <!-- BEGIN FORM-->
+                                <form action="#" class="horizontal-form">
+                                    <div class="form-body">
+                                        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+                                        <rsweb:ReportViewer Visible="True" ID="rvNotaDePedido" Width="100%" Height="1200" runat="server" ></rsweb:ReportViewer>
+                                    </div>
+                                </form>
+                                <%--<div class="modal-footer">
+                                    <div class="btn-set pull-right">
+                                        <asp:Button type="button" ID="Button3" UseSubmitBehavior="false" runat="server" OnClick="btnPrint_Click" class="btn blue" Text="Aceptar" />
+                                        <asp:Button type="button" ID="Button1" OnClientClick="pcPrintNotaDePedido.Hide();" class="btn default" Text="Cerrar" />
+                                    </div>
+                                </div>--%>
+                            </div>
+                        </dx:PanelContent>
+                    </PanelCollection>
+                </dx:ASPxPanel>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
 
     <dx:ASPxPopupControl ID="pcShowDetalleNotaPedido" runat="server" CloseAction="OuterMouseClick" CloseOnEscape="True" Modal="True"
         PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" ClientInstanceName="pcShowDetalleNotaPedido"
@@ -379,6 +412,9 @@
         }
         function ShowObservacion() {
             pcShowObservacion.Show();
+        }
+        function ShowPrintNotaDePedido() {
+          pcPrintNotaDePedido.Show();
         }
     </script>
 </asp:Content>
