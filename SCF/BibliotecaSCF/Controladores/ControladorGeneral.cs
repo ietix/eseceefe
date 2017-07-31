@@ -1615,11 +1615,11 @@ namespace BibliotecaSCF.Controladores
 
     public static DataTable RecuperarItemsNotaDePedido(int codigoNotaDePedido)
     {
-      ISession nhSesion = ManejoDeNHibernate.IniciarSesion();
+      var nhSesion = ManejoDeNHibernate.IniciarSesion();
 
       try
       {
-        DataTable tablaItemsNotaDePedido = new DataTable();
+        var tablaItemsNotaDePedido = new DataTable();
         tablaItemsNotaDePedido.Columns.Add("codigoItemNotaDePedido");
         tablaItemsNotaDePedido.Columns.Add("codigoArticulo");
         tablaItemsNotaDePedido.Columns.Add("descripcionCorta");
@@ -1633,13 +1633,13 @@ namespace BibliotecaSCF.Controladores
         tablaItemsNotaDePedido.Columns.Add("descripcionMoneda");
         tablaItemsNotaDePedido.Columns.Add("posicion");
         tablaItemsNotaDePedido.Columns.Add("subtotal");
-        NotaDePedido notaDePedido = CatalogoNotaDePedido.RecuperarPorCodigo(codigoNotaDePedido, nhSesion);
+        var notaDePedido = CatalogoNotaDePedido.RecuperarPorCodigo(codigoNotaDePedido, nhSesion);
 
-        List<Entrega> listaEntregas = CatalogoEntrega.RecuperarLista(x => x.NotaDePedido.Codigo == codigoNotaDePedido, nhSesion);
+        var listaEntregas = CatalogoEntrega.RecuperarLista(x => x.NotaDePedido.Codigo == codigoNotaDePedido, nhSesion);
 
-        foreach (ItemNotaDePedido item in notaDePedido.ItemsNotaDePedido)
+        foreach (var item in notaDePedido.ItemsNotaDePedido)
         {
-          int cantidadEntregada = (from e in listaEntregas select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == item.Codigo select i.CantidadAEntregar).SingleOrDefault()).Sum();
+          var cantidadEntregada = (from e in listaEntregas select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == item.Codigo select i.CantidadAEntregar).SingleOrDefault()).Sum();
 
           tablaItemsNotaDePedido.Rows.Add(item.Codigo, item.Articulo.Codigo, item.Articulo.DescripcionCorta, item.Articulo.DescripcionLarga, item.Articulo.Marca,
           item.Precio, item.CantidadPedida, item.FechaEntrega.ToString("dd/MM/yyyy"), cantidadEntregada, item.Articulo.RecuperarHistorialPrecioActual().Moneda.Codigo,
