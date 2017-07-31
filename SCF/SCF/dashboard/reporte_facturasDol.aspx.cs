@@ -10,7 +10,7 @@ using Microsoft.Reporting.WebForms;
 
 namespace SCF.dashboard
 {
-  public partial class reporte_facturas : System.Web.UI.Page
+  public partial class reporte_facturasDol : System.Web.UI.Page
   {
     dtReporteFacturas dtReporte = new dtReporteFacturas();
     DataTable tablaReporte = new DataTable();
@@ -31,7 +31,7 @@ namespace SCF.dashboard
             
       rvFacturas.ProcessingMode = ProcessingMode.Local;
       rvFacturas.LocalReport.EnableExternalImages = true;
-      rvFacturas.LocalReport.ReportPath = Server.MapPath("..") + "\\reportes\\reporteFacturas.rdlc";
+      rvFacturas.LocalReport.ReportPath = Server.MapPath("..") + "\\reportes\\reporteFacturasDol.rdlc";
 
       var txtFechaDesde = new ReportParameter("txtFechaDesde", deFechaDesde.Value.ToString());
       var txtFechaHasta = new ReportParameter("txtFechaHasta", deFechaHasta.Value.ToString());
@@ -43,7 +43,7 @@ namespace SCF.dashboard
 
       foreach (DataRow fila in tablaReporte.Rows)
       {
-        if (fila["descripcionTipoMoneda"].ToString() == "Pesos")
+        if (fila["descripcionTipoMoneda"].ToString() == "Dolar")
         {
           var iva = double.Parse(fila["total"].ToString()) - double.Parse(fila["subtotal"].ToString());
           var filaReporte = dtReporte.DataTable1.NewRow();

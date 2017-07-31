@@ -4086,6 +4086,7 @@
     <Content Include="credito\credito.aspx" />
     <Content Include="credito\generar_pdf.aspx" />
     <Content Include="credito\listado.aspx" />
+    <Content Include="dashboard\reporte_facturasDol.aspx" />
     <Content Include="dashboard\reporte_facturas.aspx" />
     <Content Include="facturas\generar_pdf.aspx" />
     <Content Include="facturas\tipo_comprobante.aspx" />
@@ -4193,6 +4194,13 @@
     <Compile Include="credito\listado.aspx.designer.cs">
       <DependentUpon>listado.aspx</DependentUpon>
     </Compile>
+    <Compile Include="dashboard\reporte_facturasDol.aspx.cs">
+      <DependentUpon>reporte_facturasDol.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="dashboard\reporte_facturasDol.aspx.designer.cs">
+      <DependentUpon>reporte_facturasDol.aspx</DependentUpon>
+    </Compile>
     <Compile Include="dashboard\reporte_facturas.aspx.cs">
       <DependentUpon>reporte_facturas.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -4209,6 +4217,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsItemsNotaDeCredito.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="dsItemsNotaDePedido.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dsItemsNotaDePedido.xsd</DependentUpon>
     </Compile>
     <Compile Include="dsItemsRemito.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -4772,6 +4785,17 @@
     <Content Include="dsItemsNotaDeCredito.xss">
       <DependentUpon>dsItemsNotaDeCredito.xsd</DependentUpon>
     </Content>
+    <Content Include="dsItemsNotaDePedido.xsc">
+      <DependentUpon>dsItemsNotaDePedido.xsd</DependentUpon>
+    </Content>
+    <None Include="dsItemsNotaDePedido.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsItemsNotaDePedido.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="dsItemsNotaDePedido.xss">
+      <DependentUpon>dsItemsNotaDePedido.xsd</DependentUpon>
+    </Content>
     <None Include="dsItemsRemito.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -4815,6 +4839,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="reportes\notaDePedido.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="reportes\reporteFacturasDol.rdlc" />
     <EmbeddedResource Include="reportes\remitoT_UNIQBROW.rdlc" />
     <EmbeddedResource Include="reportes\remitoD_UNIQBROW.rdlc" />
     <EmbeddedResource Include="reportes\remito_UNIQBROW.rdlc" />
@@ -4823,7 +4851,6 @@
     <EmbeddedResource Include="reportes\remitoT.rdlc" />
     <EmbeddedResource Include="reportes\remito.rdlc" />
     <EmbeddedResource Include="reportes\remitoD.rdlc" />
-    <EmbeddedResource Include="reportes\notaDePedido.rdlc" />
     <EmbeddedResource Include="reportes\notaCreditoBUNIQ.rdlc" />
     <EmbeddedResource Include="reportes\notaCreditoAUNIQ.rdlc" />
     <EmbeddedResource Include="reportes\facturaBUNIQ.rdlc" />
