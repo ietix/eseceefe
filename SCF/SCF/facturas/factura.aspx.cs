@@ -94,7 +94,7 @@ namespace SCF.facturas
     private void CargarComboRemito()
     {
       var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVentaParent"]);
-      gluRemito.DataSource = ControladorGeneral.RecuperarEntregaPorPuntoDeVenta(codigoPuntoDeVenta, true);
+      gluRemito.DataSource = ControladorGeneral.RecuperarEntregaPorPuntoDeVenta(codigoPuntoDeVenta);
       gluRemito.DataBind();
     }
 
