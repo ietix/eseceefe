@@ -4839,6 +4839,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="reportes\facturaBNeo.rdlc" />
+    <EmbeddedResource Include="reportes\notaCreditoBNeo.rdlc" />
     <EmbeddedResource Include="reportes\notaDePedido.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
