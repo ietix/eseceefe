@@ -180,9 +180,45 @@ namespace SCF.credito
         txtTotal.Text = Convert.ToString((double)decimal.Round((decimal)(subtotal * 1.21), 2));
       }
 
-      protected void gvItemsEntrega_HtmlRowPrepared(object sender, DevExpress.Web.ASPxGridView.ASPxGridViewTableRowEventArgs e)
+      protected void gvItemsNotaDeCredito_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
       {
+        var tablaDatosFactura = (DataTable)Session["dtDatosFactura"];
+        var tablaDatosNotaDeCredito = (DataTable)Session["tablaNotaCredito"];
+        var codigoItemNotaPedido = Convert.ToInt32(e.Keys["codigoItemEntrega"]);
+        var fila = (from t in tablaDatosFactura.AsEnumerable() where Convert.ToInt32(t["codigoItemEntrega"]) == codigoItemNotaPedido select t).SingleOrDefault();
+        var filaNC = (from t in tablaDatosNotaDeCredito.AsEnumerable() where Convert.ToInt32(t["codigoItemEntrega"]) == codigoItemNotaPedido select t).SingleOrDefault();
+        var cantidad = Convert.ToInt32(fila.ItemArray[5]);
 
+        if (cantidad != Convert.ToInt32(e.NewValues["cantidad"]))
+        {
+          fila["cantidad"] = Convert.ToInt32(e.NewValues["cantidad"]);
+          filaNC["cantidad"] = Convert.ToInt32(e.NewValues["cantidad"]);
+          cantidad = Convert.ToInt32(e.NewValues["cantidad"]);
+        }
+
+        if (Convert.ToDouble(fila["precioTotal"]) != Convert.ToDouble(e.NewValues["precioTotal"]))
+        {
+          fila["precioTotal"] = Convert.ToDouble(e.NewValues["precioTotal"]);
+          filaNC["precioTotal"] = Convert.ToDouble(e.NewValues["precioTotal"]);
+          fila["precioUnitario"] = Math.Round(Convert.ToDouble(e.NewValues["precioTotal"]) / cantidad, 2);
+          filaNC["precioUnitario"] = Math.Round(Convert.ToDouble(e.NewValues["precioTotal"]) / cantidad, 2);
+        }
+        else
+        {
+          fila["precioUnitario"] = Convert.ToDouble(e.NewValues["precioUnitario"]);
+          filaNC["precioUnitario"] = Convert.ToDouble(e.NewValues["precioUnitario"]);
+          fila["precioTotal"] = cantidad * Convert.ToDouble(e.NewValues["precioUnitario"]);
+          filaNC["precioTotal"] = cantidad * Convert.ToDouble(e.NewValues["precioUnitario"]);
+        }
+
+        Session["dtDatosFactura"] = tablaDatosFactura;
+        Session["tablaNotaCredito"] = tablaDatosNotaDeCredito;
+        e.Cancel = true;
+        gvItemsNotaDeCredito.CancelEdit();
+        gvItemsNotaDeCredito.DataSource = tablaDatosFactura;
+        gvItemsNotaDeCredito.DataBind();
+
+        this.UpdateImporte();
       }
 
       protected void btnEmitir_Click(object sender, EventArgs e)
