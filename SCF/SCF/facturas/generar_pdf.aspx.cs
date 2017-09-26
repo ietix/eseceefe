@@ -33,7 +33,7 @@ namespace SCF.facturas
           
       rvFacturaA.ProcessingMode = ProcessingMode.Local;
 
-      if (Convert.ToString(dtFacturaActual.Rows[0]["descripcionTipoMoneda"]) == "Dolar")
+      if (Convert.ToString(dtFacturaActual.Rows[0]["descripcionTipoMoneda"]) != "Pesos")
       {
         rvFacturaA.LocalReport.ReportPath = Server.MapPath("..") + Convert.ToString(tablaReportes.Rows[0]["pathReporte2"]);
       }
