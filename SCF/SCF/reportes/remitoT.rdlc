@@ -410,7 +410,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>txtTransporte</rd:DefaultName>
-        <Top>17.81018cm</Top>
+        <Top>17.17518cm</Top>
         <Left>3.59516cm</Left>
         <Height>0.4677cm</Height>
         <Width>14.2875cm</Width>
@@ -477,7 +477,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>txtRazonSocialProveedor</rd:DefaultName>
-        <Top>17.31601cm</Top>
+        <Top>16.68101cm</Top>
         <Left>3.59516cm</Left>
         <Height>0.49417cm</Height>
         <Width>14.2875cm</Width>
@@ -515,7 +515,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>txtNumeroNotaDePedido</rd:DefaultName>
-        <Top>16.76011cm</Top>
+        <Top>16.12511cm</Top>
         <Left>3.59516cm</Left>
         <Height>0.5559cm</Height>
         <Width>14.2875cm</Width>
@@ -552,9 +552,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>txtTransporte</rd:DefaultName>
-        <Top>18.27788cm</Top>
+        <Top>17.64288cm</Top>
         <Left>3.59516cm</Left>
-        <Height>0.49416cm</Height>
+        <Height>1.426cm</Height>
         <Width>14.2875cm</Width>
         <ZIndex>12</ZIndex>
         <Style>
