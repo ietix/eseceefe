@@ -137,64 +137,25 @@ namespace SCF.nota_pedido
 
       }
 
+      /// <summary>
+      /// Print a Nota de Pedido
+      /// </summary>
+      /// <param name="sender">The object that raised the event</param>
+      /// <param name="e">The arguments sent by event</param>
       protected void btnImprimir_Click(object sender, EventArgs e)
       {
         if (gvNotasPedido.FocusedRowIndex != -1)
         {
-          pcPrintNotaDePedido.ShowOnPageLoad = true;
-          var tablaReportes = ControladorGeneral.RecuperarTodosReportes();
-          var reportPath = string.Empty;
-          var dsReporte = new dsItemsNotaDePedido();
+          DataTable tableNotaDePedidoActual = GetTablaNotaDePedidoCurrentSession();
+          Session["tablaNotaDePedido"] = tableNotaDePedidoActual;
 
-          if (tablaReportes.Rows.Cast<DataRow>().Any(row => row["nombreReporte"].ToString() == "notaDePedido"))
-          {
-            reportPath = tablaReportes.Rows.Cast<DataRow>().FirstOrDefault(row => row["nombreReporte"].ToString() == "notaDePedido")["pathReporte1"].ToString();
-          }
-
-          rvNotaDePedido.LocalReport.ReportPath = Server.MapPath("..") + reportPath;
-          rvNotaDePedido.ProcessingMode = ProcessingMode.Local;
-          rvNotaDePedido.LocalReport.EnableExternalImages = true;
-
-          var codigoNotaDePedido = int.Parse(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "codigoNotaDePedido").ToString());
-
-          var txtNroNotaDePedido = new ReportParameter("nroNotaDePedido", Convert.ToString(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "numeroInternoCliente")));
-          var txtFechaNotaDePedido = new ReportParameter("txtFechaNotaDePedido", Convert.ToString(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "fechaEmision")));
-          var txtCliente = new ReportParameter("txtCliente", Convert.ToString(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "razonSocialCliente")));
-
-          rvNotaDePedido.LocalReport.SetParameters(new ReportParameter[] { txtNroNotaDePedido, txtFechaNotaDePedido, txtCliente });
-
-          var tablaItemsPedido = ControladorGeneral.RecuperarItemsNotaDePedido(codigoNotaDePedido);
-          
-          dsReporte.DataTable1.Clear();
-
-          foreach (DataRow fila in tablaItemsPedido.Rows)
-          {
-            var filaReporte = dsReporte.DataTable1.NewRow();
-            filaReporte["codigoArticulo"] = fila["codigoArticulo"];
-            filaReporte["descripcion"] = fila["descripcionCorta"];
-            filaReporte["posicion"] = fila["posicion"];
-            filaReporte["cantidad"] = fila["cantidad"];
-            
-            dsReporte.DataTable1.Rows.Add(filaReporte);
-          }
-
-          var dtReporte = dsReporte;
-
-          var dataSource = new ReportDataSource("DataSet1", dtReporte.Tables[0]);
-          rvNotaDePedido.LocalReport.DataSources.Clear();
-          rvNotaDePedido.LocalReport.DataSources.Add(dataSource);
-          rvNotaDePedido.LocalReport.Refresh();
+          Response.Write("<script>window.open('generar_pdf.aspx','_blank');</script>");
         }
         else
         {
-          lblMensaje.Text = "Debe seleccionar una nota de pedido.";
+          lblMensaje.Text = "Debe seleccionar una nota de pedido para poder generar el PDF.";
           pcMensaje.ShowOnPageLoad = true;
         }
-      }
-
-      protected void btnPrint_Click(object sender, EventArgs e)
-      {
-
       }
 
       protected void btnShowPopUpObservacion_Click(object sender, EventArgs e)
@@ -239,6 +200,41 @@ namespace SCF.nota_pedido
       protected void btnEliminar_Click(object sender, EventArgs e)
       {
            
+      }
+
+      /// <summary>
+      /// Gets a table containing the current selected Nota de Pedido
+      /// </summary>
+      /// <returns>A datatable</returns>
+      private DataTable GetTablaNotaDePedidoCurrentSession()
+      {
+        var codigoNotaDePedido = Convert.ToInt32(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "codigoNotaDePedido"));
+        var numeroInternoCliente = Convert.ToString(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "numeroInternoCliente"));
+        var fechaEmision = Convert.ToDateTime(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "fechaEmision"));
+        var codigoEstado = Convert.ToInt32(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "codigoEstado"));
+        var codigoContratoMarco = Convert.ToInt32(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "codigoContratoMarco"));
+        var descripcionContratoMarco = Convert.ToString(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "descripcionContratoMarco"));
+        var codigoCliente = Convert.ToInt32(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "codigoCliente"));
+        var razonSocialCliente = Convert.ToString(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "razonSocialCliente"));
+        var fechaHoraProximaEntrega = string.IsNullOrEmpty(Convert.ToString(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "fechaHoraProximaEntrega"))) ? DateTime.MinValue : Convert.ToDateTime(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "fechaHoraProximaEntrega"));
+        var observaciones = Convert.ToString(gvNotasPedido.GetRowValues(gvNotasPedido.FocusedRowIndex, "observaciones"));
+        
+        var tablaNotaPedido = new DataTable();
+        tablaNotaPedido.Columns.Add("codigoNotaDePedido");
+        tablaNotaPedido.Columns.Add("numeroInternoCliente");
+        tablaNotaPedido.Columns.Add("fechaEmision");
+        tablaNotaPedido.Columns.Add("codigoEstado");
+        tablaNotaPedido.Columns.Add("codigoContratoMarco");
+        tablaNotaPedido.Columns.Add("descripcionContratoMarco");
+        tablaNotaPedido.Columns.Add("codigoCliente");
+        tablaNotaPedido.Columns.Add("razonSocialCliente");
+        tablaNotaPedido.Columns.Add("fechaHoraProximaEntrega");
+        tablaNotaPedido.Columns.Add("observaciones");
+
+        tablaNotaPedido.Rows.Add(new object[] { codigoNotaDePedido, numeroInternoCliente, fechaEmision, codigoEstado, codigoContratoMarco, descripcionContratoMarco, codigoCliente, razonSocialCliente,
+        fechaHoraProximaEntrega, observaciones});
+
+        return tablaNotaPedido;
       }
     }
 }

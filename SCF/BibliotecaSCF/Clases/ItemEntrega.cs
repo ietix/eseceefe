@@ -9,7 +9,7 @@ namespace BibliotecaSCF.Clases
     public class ItemEntrega
     {
         public virtual int Codigo { get; set; }
-        public virtual int CantidadAEntregar { get; set; }
+        public virtual double CantidadAEntregar { get; set; }
         public virtual double Precio { get; set; }
 
         public virtual ArticuloProveedor ArticuloProveedor { get; set; }

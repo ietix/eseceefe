@@ -1,14 +1,8 @@
 ﻿using BibliotecaSCF.Controladores;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using BibliotecaSCF.Clases;
 using System.Drawing;
-using System.Globalization;
 
 namespace SCF.nota_pedido
 {
@@ -274,15 +268,15 @@ namespace SCF.nota_pedido
             DataRow fila = (from t in tablaItemsNotaDePedido.AsEnumerable() where Convert.ToInt32(t["posicion"]) == posicion select t).SingleOrDefault();
 
             fila["posicion"] = Convert.ToInt32(e.NewValues["posicion"]);
-            fila["cantidad"] = Convert.ToInt32(e.NewValues["cantidad"]);
+            fila["cantidad"] = Convert.ToDouble(e.NewValues["cantidad"]);
 
             DateTime a = new DateTime();
 
             if (!DateTime.TryParse(e.NewValues["fechaEntrega"].ToString(), out a))
             {
                 a = Convert.ToDateTime(e.NewValues["fechaEntrega"].ToString(), System.Globalization.CultureInfo.GetCultureInfo("en-Us").DateTimeFormat);
-
             }
+            
             fila["precio"] = Convert.ToDouble(e.NewValues["precio"]);
 
             fila["fechaEntrega"] = a;

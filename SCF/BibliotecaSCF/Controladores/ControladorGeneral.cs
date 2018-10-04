@@ -1231,7 +1231,7 @@ namespace BibliotecaSCF.Controladores
               }
             }
 
-            item.CantidadAEntregar = Convert.ToInt32(filaItem["cantidad"]);
+            item.CantidadAEntregar = Convert.ToDouble(filaItem["cantidad"]);
             item.ArticuloProveedor = null;
             item.ItemNotaDePedido = (from i in notaDePedido.ItemsNotaDePedido where i.Codigo == Convert.ToInt32(filaItem["codigoItemNotaDePedido"]) select i).SingleOrDefault();
           }
@@ -1266,7 +1266,7 @@ namespace BibliotecaSCF.Controladores
                   foreach (ItemNotaDePedido itemNP in notaDePedido.ItemsNotaDePedido)
                   {
                       List<ItemEntrega> listaItemsEntrega = (from e in listaEntregas where (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault() != null select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault()).ToList();
-                      int cantidadAEntregarTotal = (from e in listaItemsEntrega select e.CantidadAEntregar).Sum();
+                      double cantidadAEntregarTotal = (from e in listaItemsEntrega select e.CantidadAEntregar).Sum();
 
                       if (cantidadAEntregarTotal >= itemNP.CantidadPedida)
                       {
@@ -1765,7 +1765,7 @@ namespace BibliotecaSCF.Controladores
                   foreach (ItemNotaDePedido itemNP in listaItemsNotaDePedidoVencidos)
                   {
                     List<ItemEntrega> listaItemsEntrega = (from e in listaEntregas where (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault() != null select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault()).ToList();
-                    int cantidadAEntregarTotal = (from e in listaItemsEntrega select e.CantidadAEntregar).Sum();
+                    double cantidadAEntregarTotal = (from e in listaItemsEntrega select e.CantidadAEntregar).Sum();
 
                     if (cantidadAEntregarTotal >= itemNP.CantidadPedida)
                     {
@@ -1795,7 +1795,7 @@ namespace BibliotecaSCF.Controladores
                     foreach (ItemNotaDePedido itemNP in listaItemsNotaDePedidoProximosAVencer)
                     {
                       List<ItemEntrega> listaItemsEntrega = (from e in listaEntregas where (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault() != null select (from i in e.ItemsEntrega where i.ItemNotaDePedido.Codigo == itemNP.Codigo && i != null select i).SingleOrDefault()).ToList();
-                      int cantidadAEntregarTotal = (from e in listaItemsEntrega select e.CantidadAEntregar).Sum();
+                      double cantidadAEntregarTotal = (from e in listaItemsEntrega select e.CantidadAEntregar).Sum();
 
                       if (cantidadAEntregarTotal >= itemNP.CantidadPedida)
                       {
@@ -2087,7 +2087,7 @@ namespace BibliotecaSCF.Controladores
                 }
 
                 item.Articulo = CatalogoArticulo.RecuperarPorCodigo(Convert.ToInt32(filaItemNotaDePedido["codigoArticulo"]), nhSesion);
-                item.CantidadPedida = Convert.ToInt32(filaItemNotaDePedido["cantidad"]);
+                item.CantidadPedida = Convert.ToDouble(filaItemNotaDePedido["cantidad"]);
                 item.FechaEntrega = Convert.ToDateTime(filaItemNotaDePedido["fechaEntrega"]);
                 item.Precio = Convert.ToDouble(filaItemNotaDePedido["precio"]);
                 item.Posicion = Convert.ToInt32(filaItemNotaDePedido["posicion"]);

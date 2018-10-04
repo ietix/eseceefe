@@ -271,7 +271,7 @@ namespace SCF.remitos
           DataTable tablaItemsEntrega = (DataTable)Session["tablaItemsEntrega"];
           int codigoItemEntregaEditado = Convert.ToInt32(e.Keys["codigoItemEntrega"]);
           DataRow fila = (from t in tablaItemsEntrega.AsEnumerable() where Convert.ToInt32(t["codigoItemEntrega"]) == codigoItemEntregaEditado select t).SingleOrDefault();
-          int cantidad = Convert.ToInt32(e.NewValues["cantidad"]);
+          double cantidad = Convert.ToDouble(e.NewValues["cantidad"]);
           fila["cantidad"] = cantidad;
           Session["tablaItemsEntrega"] = tablaItemsEntrega;
           e.Cancel = true;

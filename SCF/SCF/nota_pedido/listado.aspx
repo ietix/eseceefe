@@ -215,39 +215,6 @@
         </ContentCollection>
     </dx:ASPxPopupControl>
 
-    <!-- BEGIN POPUP IMPRIMIR NOTA DE PEDIDO -->
-    <dx:ASPxPopupControl ID="pcPrintNotaDePedido" runat="server" CloseAction="CloseButton" CloseOnEscape="true"
-        PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" ClientInstanceName="pcShowObservacion"
-        HeaderText="Observacion" AllowDragging="True" Modal="True" PopupAnimationType="Fade" Width="1200"
-        EnableViewState="True" Theme="Metropolis" OnLoad="pcShowObservacion_Load" ShowPageScrollbarWhenModal="True">
-        <ClientSideEvents PopUp="function(s, e) {  txtPrecio.Focus(); }" />
-        <ContentCollection>
-            <dx:PopupControlContentControl ID="PopupControlContentControl5" runat="server">
-                <dx:ASPxPanel ID="ASPxPanel3" runat="server" DefaultButton="">
-                    <PanelCollection>
-                        <dx:PanelContent ID="PanelContent5" runat="server">
-                            <div>
-                                <!-- BEGIN FORM-->
-                                <form action="#" class="horizontal-form">
-                                    <div class="form-body">
-                                        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
-                                        <rsweb:ReportViewer Visible="True" ID="rvNotaDePedido" Width="100%" Height="1200" runat="server" ></rsweb:ReportViewer>
-                                    </div>
-                                </form>
-                                <%--<div class="modal-footer">
-                                    <div class="btn-set pull-right">
-                                        <asp:Button type="button" ID="Button3" UseSubmitBehavior="false" runat="server" OnClick="btnPrint_Click" class="btn blue" Text="Aceptar" />
-                                        <asp:Button type="button" ID="Button1" OnClientClick="pcPrintNotaDePedido.Hide();" class="btn default" Text="Cerrar" />
-                                    </div>
-                                </div>--%>
-                            </div>
-                        </dx:PanelContent>
-                    </PanelCollection>
-                </dx:ASPxPanel>
-            </dx:PopupControlContentControl>
-        </ContentCollection>
-    </dx:ASPxPopupControl>
-
     <dx:ASPxPopupControl ID="pcShowDetalleNotaPedido" runat="server" CloseAction="OuterMouseClick" CloseOnEscape="True" Modal="True"
         PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" ClientInstanceName="pcShowDetalleNotaPedido"
         HeaderText="Detalle Nota de Pedido" AllowDragging="True" EnableViewState="False" Width="800px"
