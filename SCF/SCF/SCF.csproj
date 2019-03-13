@@ -68,6 +68,10 @@
     <Reference Include="DevExpress.Web.v14.1, Version=14.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -83,10 +87,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Microsoft.ReportViewer.WebForms.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="PDFClown, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\PDFClown.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.DynamicData" />
@@ -4098,6 +4098,7 @@
     <Content Include="facturas\generar_pdf.aspx" />
     <Content Include="facturas\tipo_comprobante.aspx" />
     <Content Include="nota_pedido\generar_pdf.aspx" />
+    <Content Include="nota_pedido\NotaDePedido.jpg" />
     <Content Include="remitos\generar_pdf_T.aspx" />
     <Content Include="remitos\generar_pdf_D.aspx" />
     <Content Include="remitos\generar_pdf.aspx" />
@@ -4831,6 +4832,7 @@
     <Content Include="dtReporteFacturas.xss">
       <DependentUpon>dtReporteFacturas.xsd</DependentUpon>
     </Content>
+    <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\SCF.pubxml" />
     <None Include="Properties\PublishProfiles\SCF_Local.pubxml" />
     <None Include="Web.Debug.config">
