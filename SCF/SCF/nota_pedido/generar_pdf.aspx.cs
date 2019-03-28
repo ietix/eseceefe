@@ -61,12 +61,12 @@ namespace SCF.nota_pedido
       doc.Add(noteDate);
       doc.Add(customer);
       doc.Add(separator);
-
+      
       // Creamos una tabla que contendrá el nombre, apellido y país
       // de nuestros visitante.
       float[] relWidths = new float[] { 10, 70, 10, 10 };
-      var tblPrueba = new PdfPTable(relWidths);
-      tblPrueba.WidthPercentage = 92;
+      var notaDePedido = new PdfPTable(relWidths);
+      notaDePedido.WidthPercentage = 92;
 
       foreach (DataRow fila in tablaItemsPedido.Rows)
       {
@@ -85,13 +85,43 @@ namespace SCF.nota_pedido
         codCantidad.BorderWidth = 0;
         codCantidad.Column.Alignment = Element.ALIGN_CENTER;
 
-        tblPrueba.AddCell(codArticulo);
-        tblPrueba.AddCell(codDescripcion);
-        tblPrueba.AddCell(codPosicion);
-        tblPrueba.AddCell(codCantidad);
+        notaDePedido.AddCell(codArticulo);
+        notaDePedido.AddCell(codDescripcion);
+        notaDePedido.AddCell(codPosicion);
+        notaDePedido.AddCell(codCantidad);
+      }
+      for (var i = 0; i < 3; i++)
+      {
+        var firstCell = new PdfPCell(new Phrase(" ", standardFont));
+        firstCell.BorderWidth = 0;
+        notaDePedido.AddCell(firstCell);
+        firstCell = new PdfPCell(new Phrase(" ", standardFont));
+        firstCell.BorderWidth = 0;
+        notaDePedido.AddCell(firstCell);
+        firstCell = new PdfPCell(new Phrase(" ", standardFont));
+        firstCell.BorderWidth = 0;
+        notaDePedido.AddCell(firstCell);
+        firstCell = new PdfPCell(new Phrase(" ", standardFont));
+        firstCell.BorderWidth = 0;
+        notaDePedido.AddCell(firstCell);
       }
 
-      doc.Add(tblPrueba);
+      var observaciones = new string(' ', 5) + Convert.ToString(dtNotaDePedidoActual.Rows[0]["observaciones"]);
+      var textCell = new PdfPCell();
+
+      textCell.BorderWidth = 0;
+      notaDePedido.AddCell(textCell);
+      textCell = new PdfPCell(new Phrase(observaciones, standardFont));
+      textCell.BorderWidth = 0;
+      notaDePedido.AddCell(textCell);
+      textCell = new PdfPCell();
+      textCell.BorderWidth = 0;
+      notaDePedido.AddCell(textCell);
+      textCell = new PdfPCell();
+      textCell.BorderWidth = 0;
+      notaDePedido.AddCell(textCell);
+      
+      doc.Add(notaDePedido);
       doc.Close();
       writer.Close();
 
@@ -100,51 +130,5 @@ namespace SCF.nota_pedido
       Response.WriteFile(reportPath + @"/test.pdf");
       Response.End();
     }
-
-    //private void LoadReporte()
-    //{
-    //  var dtNotaDePedidoActual = (DataTable)Session["tablaNotaDePedido"];
-    //  var tablaReportes = ControladorGeneral.RecuperarTodosReportes();
-    //  var reportPath = string.Empty;
-
-    //  if (tablaReportes.Rows.Cast<DataRow>().Any(row => row["nombreReporte"].ToString() == "notaDePedido"))
-    //  {
-    //    reportPath = tablaReportes.Rows.Cast<DataRow>().FirstOrDefault(row => row["nombreReporte"].ToString() == "notaDePedido")["pathReporte1"].ToString();
-    //  }
-
-    //  this.rvNotaDePedido.ProcessingMode = ProcessingMode.Local;
-    //  this.rvNotaDePedido.LocalReport.ReportPath = Server.MapPath("..") + reportPath;
-    //  this.rvNotaDePedido.LocalReport.EnableExternalImages = true;
-
-    //  var codigoNotaDePedido = Convert.ToString(dtNotaDePedidoActual.Rows[0]["codigoNotaDePedido"]);
-
-    //  var txtNroNotaDePedido = new ReportParameter("nroNotaDePedido", Convert.ToString(dtNotaDePedidoActual.Rows[0]["numeroInternoCliente"]));
-    //  var txtFechaNotaDePedido = new ReportParameter("txtFechaNotaDePedido", Convert.ToDateTime(dtNotaDePedidoActual.Rows[0]["fechaEmision"]).ToString("dd/MM/yyyy"));
-    //  var txtCliente = new ReportParameter("txtCliente", Convert.ToString(dtNotaDePedidoActual.Rows[0]["razonSocialCliente"]));
-
-    //  this.rvNotaDePedido.LocalReport.SetParameters(new ReportParameter[] { txtNroNotaDePedido, txtFechaNotaDePedido, txtCliente });
-
-    //  var tablaItemsPedido = ControladorGeneral.RecuperarItemsNotaDePedido(Convert.ToInt32(codigoNotaDePedido));
-
-    //  dsReporte.DataTable1.Clear();
-
-    //  foreach (DataRow fila in tablaItemsPedido.Rows)
-    //  {
-    //    var filaReporte = dsReporte.DataTable1.NewRow();
-    //    filaReporte["codigoArticulo"] = fila["codigoArticulo"];
-    //    filaReporte["descripcion"] = fila["descripcionCorta"];
-    //    filaReporte["posicion"] = fila["posicion"];
-    //    filaReporte["cantidad"] = fila["cantidad"];
-            
-    //    dsReporte.DataTable1.Rows.Add(filaReporte);
-    //  }
-
-    //  var dtReporte = dsReporte;
-
-    //  var dataSource = new ReportDataSource("DataSet1", dtReporte.Tables[0]);
-    //  rvNotaDePedido.LocalReport.DataSources.Clear();
-    //  rvNotaDePedido.LocalReport.DataSources.Add(dataSource);
-    //  rvNotaDePedido.LocalReport.Refresh();
-    //}
   }
 }

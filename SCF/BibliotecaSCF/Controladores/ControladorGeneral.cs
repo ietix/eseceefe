@@ -2624,7 +2624,10 @@ namespace BibliotecaSCF.Controladores
       var clsFac = new clsFacturacion();
 
       var ultNroComprobante = clsFac.ConsultarUltNroOrden(ptoVenta, tipoComptobanteAfip);
+      //var ultNroComprobante = clsFac.Consultar(3581, 2, 1);
+      //ultNroComprobante = clsFac.Consultar(3580, 2, 1);
       return ultNroComprobante;
+      //return 0;
     }
 
     public static string InsertarActualizarFactura(int codigoFactura, int codigoTipoComprobante, int codigoPuntoDeVenta, int numeroFactura, DateTime fechaFacturacion, List<int> listaCodigosEntrega, int codigoMoneda, int codigoConcepto, int codigoIva, double subtotal, double total, string condicionVenta, double cotizacion, DataTable tablaItemsEntrega)
