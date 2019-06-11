@@ -1434,7 +1434,7 @@ namespace BibliotecaSCF.Controladores
           listaEntregas = listaEntregas.Count >= listaEntregasConFacturas.Count ? listaEntregas.Except(listaEntregasConFacturas).ToList() : listaEntregas.Where(x => x.IsNotAny(listaEntregasConFacturas.ToArray())).ToList();
         }
 
-        listaEntregas.OrderByDescending(x => x.CodigoEstado).Aggregate(tablaEntrega, (dt, r) =>
+        listaEntregas.OrderByDescending(x => x.CodigoEstado).OrderByDescending(x => x.NumeroRemito).Aggregate(tablaEntrega, (dt, r) =>
         {
           dt.Rows.Add(r.Codigo, r.NotaDePedido.Codigo, r.NotaDePedido.Cliente.Codigo,
               r.NotaDePedido.Cliente.RazonSocial, r.NotaDePedido.Cliente.NumeroDocumento, r.NotaDePedido.Cliente.CodigoSCF,
