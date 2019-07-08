@@ -1939,7 +1939,16 @@ namespace BibliotecaSCF.Controladores
                     var listaEntregadas = (from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now.AddDays(5) select n).ToList();
                     listaEntregadas.AddRange((from n in notaPedido.ItemsNotaDePedido where n.FechaEntrega < DateTime.Now select n).ToList());
 
-                    fechaHoraProximaEntrega = notaPedido.ItemsNotaDePedido.Where(x => !listaEntregadas.Select(c => c.Codigo).ToList().Contains(x.Codigo)).OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
+                    var queryItemsEntregados = notaPedido.ItemsNotaDePedido.Where(x => !listaEntregadas.Select(c => c.Codigo).ToList().Contains(x.Codigo)).OrderBy(x => x.FechaEntrega).ToList();
+
+                    if (queryItemsEntregados.Count > 0)
+                    {
+                      fechaHoraProximaEntrega = notaPedido.ItemsNotaDePedido.Where(x => !listaEntregadas.Select(c => c.Codigo).ToList().Contains(x.Codigo)).OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
+                    }
+                    else
+                    {
+                      fechaHoraProximaEntrega = notaPedido.ItemsNotaDePedido.Min(x => x.FechaEntrega);
+                    }
                   }
                 }
 
