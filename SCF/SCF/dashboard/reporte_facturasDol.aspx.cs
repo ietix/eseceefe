@@ -43,13 +43,13 @@ namespace SCF.dashboard
 
       foreach (DataRow fila in tablaReporte.Rows)
       {
-        if (fila["descripcionTipoMoneda"].ToString() == "Dolar")
+        if (fila["descripcionTipoMoneda"].ToString() != "Pesos")
         {
           var iva = double.Parse(fila["total"].ToString()) - double.Parse(fila["subtotal"].ToString());
           var filaReporte = dtReporte.DataTable1.NewRow();
           filaReporte["tipoComprobante"] = fila["descripcionTipoComprobante"];
-          filaReporte["puntoDeVenta"] = fila["numeroPuntoDeVenta"] == DBNull.Value ? string.Empty : Convert.ToInt32(fila["numeroPuntoDeVenta"]).ToString("D4");
-          filaReporte["numeroFactura"] = Convert.ToInt32(fila["numeroFactura"]).ToString("D8");
+          filaReporte["puntoDeVenta"] = fila["numeroPuntoDeVenta"] == DBNull.Value ? string.Empty : Convert.ToInt32(fila["numeroPuntoDeVenta"]).ToString("D2");
+          filaReporte["numeroFactura"] = Convert.ToInt32(fila["numeroFactura"]).ToString("D6");
           filaReporte["fechaEmision"] = fila["fechaFacturacion"];
           filaReporte["nombreCliente"] = fila["cliente"];
           filaReporte["tipoMoneda"] = fila["descripcionTipoMoneda"];

@@ -156,7 +156,7 @@ License: SempaIT - Todos los derechos reservados.
                                     <a href="/scf/dashboard/reporte_facturas.aspx">Reporte Facturas en Pesos</a>
                                 </li>
                                 <li>
-                                    <a href="/scf/dashboard/reporte_facturasDol.aspx">Reporte Facturas en Dólares</a>
+                                    <a href="/scf/dashboard/reporte_facturasDol.aspx">Reporte Facturas en Otras Monedas</a>
                                 </li>
                             </ul>
                         </li>
