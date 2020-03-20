@@ -54,9 +54,11 @@ namespace SCF.credito
       {
         try
         {
-          var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVentaSuperior"]);
-
-          lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(codigoPuntoDeVenta, 3));
+          var numeroPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["numeroPuntoDeVenta"]);
+          var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVenta"]);
+          var codigoTipoComprobante = Convert.ToInt32(ControladorGeneral.RecuperarPuntosDeVentaPorCodigo(codigoPuntoDeVenta).Rows[0]["codigoTipoComprobante"]);
+          
+          lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(codigoPuntoDeVenta, codigoTipoComprobante));
           pcUltimoComprobanteAfip.ShowOnPageLoad = true;
         }
         catch
@@ -175,9 +177,14 @@ namespace SCF.credito
           subtotal = subtotal + Convert.ToDouble(dtNotaCredito.Rows[i]["precioTotal"].ToString());
         }
 
+        var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVenta"]);
+        var codigoTipoComprobante = Convert.ToInt32(ControladorGeneral.RecuperarPuntosDeVentaPorCodigo(codigoPuntoDeVenta).Rows[0]["codigoTipoComprobante"]);
+
         txtSubtotal.Text = Convert.ToString((double)decimal.Round((decimal)subtotal, 2));
+        cbCondicionIVA.Visible = codigoTipoComprobante == 3;
+        txtImporteIVA.Visible = cbCondicionIVA.Visible;
         txtImporteIVA.Text = Convert.ToString((double)decimal.Round((decimal)(subtotal * 0.21), 2));
-        txtTotal.Text = Convert.ToString((double)decimal.Round((decimal)(subtotal * 1.21), 2));
+        txtTotal.Text = codigoTipoComprobante == 3 ? Convert.ToString((double)decimal.Round((decimal)(subtotal * 1.21), 2)) : Convert.ToString((double)decimal.Round((decimal)(subtotal), 2));
       }
 
       protected void gvItemsNotaDeCredito_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)

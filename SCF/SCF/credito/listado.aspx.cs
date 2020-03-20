@@ -40,7 +40,12 @@ namespace SCF.credito
 
       private void CargarCombo()
       {
-        cbPuntoDeVenta.DataSource = ControladorGeneral.RecuperarPuntosDeVentaPorTipoComprobante(3);
+        DataTable puntosDeVenta = ControladorGeneral.RecuperarPuntosDeVentaPorTipoComprobante(3);
+        DataTable puntosB = ControladorGeneral.RecuperarPuntosDeVentaPorTipoComprobante(8);
+
+        puntosDeVenta.Merge(puntosB);
+
+        cbPuntoDeVenta.DataSource = puntosDeVenta;
         cbPuntoDeVenta.DataBind();
       }
 

@@ -7,495 +7,497 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SCF.credito {
-    
-    
-    public partial class credito {
-        
-        /// <summary>
-        /// btnUltimoNroComprobante control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUltimoNroComprobante;
-        
-        /// <summary>
-        /// cbFactura control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxComboBox cbFactura;
-        
-        /// <summary>
-        /// txtNotaCredito control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtNotaCredito;
-        
-        /// <summary>
-        /// txtFechaEmision control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxDateEdit txtFechaEmision;
-        
-        /// <summary>
-        /// txtRazonSocial control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtRazonSocial;
-        
-        /// <summary>
-        /// txtNroDocumento control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtNroDocumento;
-        
-        /// <summary>
-        /// txtCodigoConSCF control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtCodigoConSCF;
-        
-        /// <summary>
-        /// txtCodigoRemito control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtCodigoRemito;
-        
-        /// <summary>
-        /// txtDireccion control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtDireccion;
-        
-        /// <summary>
-        /// txtConcepto control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtConcepto;
-        
-        /// <summary>
-        /// txtCondicionVenta control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtCondicionVenta;
-        
-        /// <summary>
-        /// txtTipoMoneda control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtTipoMoneda;
-        
-        /// <summary>
-        /// txtCotizacion control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtCotizacion;
-        
-        /// <summary>
-        /// txtTransporte control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtTransporte;
-        
-        /// <summary>
-        /// gvItemsFactura control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView.ASPxGridView gvItemsFactura;
-        
-        /// <summary>
-        /// btnSeleccionarArticulos control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSeleccionarArticulos;
-        
-        /// <summary>
-        /// gvItemsNotaDeCredito control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView.ASPxGridView gvItemsNotaDeCredito;
-        
-        /// <summary>
-        /// btnEliminar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnEliminar;
-        
-        /// <summary>
-        /// btnUpdateImporte control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUpdateImporte;
-        
-        /// <summary>
-        /// txtSubtotal control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxLabel txtSubtotal;
-        
-        /// <summary>
-        /// cbCondicionIVA control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxComboBox cbCondicionIVA;
-        
-        /// <summary>
-        /// txtImporteIVA control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxLabel txtImporteIVA;
-        
-        /// <summary>
-        /// txtTotal control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxLabel txtTotal;
-        
-        /// <summary>
-        /// btnEmitir control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnEmitir;
-        
-        /// <summary>
-        /// pcError control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPopupControl.ASPxPopupControl pcError;
-        
-        /// <summary>
-        /// PopupControlContentControl3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPopupControl.PopupControlContentControl PopupControlContentControl3;
-        
-        /// <summary>
-        /// ASPxPanel1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPanel.ASPxPanel ASPxPanel1;
-        
-        /// <summary>
-        /// PanelContent3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPanel.PanelContent PanelContent3;
-        
-        /// <summary>
-        /// lblError control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxEditors.ASPxLabel lblError;
-        
-        /// <summary>
-        /// pcUltimoComprobanteAfip control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPopupControl.ASPxPopupControl pcUltimoComprobanteAfip;
-        
-        /// <summary>
-        /// PopupControlContentControl1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPopupControl.PopupControlContentControl PopupControlContentControl1;
-        
-        /// <summary>
-        /// ASPxPanel2 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPanel.ASPxPanel ASPxPanel2;
-        
-        /// <summary>
-        /// PanelContent1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPanel.PanelContent PanelContent1;
-        
-        /// <summary>
-        /// lblUltimoNroComprobante control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblUltimoNroComprobante;
-        
-        /// <summary>
-        /// pcValidarComprobante control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPopupControl.ASPxPopupControl pcValidarComprobante;
-        
-        /// <summary>
-        /// PopupControlContentControl5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPopupControl.PopupControlContentControl PopupControlContentControl5;
-        
-        /// <summary>
-        /// ASPxPanel3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPanel.ASPxPanel ASPxPanel3;
-        
-        /// <summary>
-        /// PanelContent5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxPanel.PanelContent PanelContent5;
-        
-        /// <summary>
-        /// lblNroFacturaAEmitir control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNroFacturaAEmitir;
-        
-        /// <summary>
-        /// lblNombreApellidoCliente control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNombreApellidoCliente;
-        
-        /// <summary>
-        /// lblDomicilio control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblDomicilio;
-        
-        /// <summary>
-        /// lblLocalidad control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblLocalidad;
-        
-        /// <summary>
-        /// lblNumeroDocumento control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNumeroDocumento;
-        
-        /// <summary>
-        /// lblCondicionVenta control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCondicionVenta;
-        
-        /// <summary>
-        /// lblNroRemitos control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNroRemitos;
-        
-        /// <summary>
-        /// lblTipoMoneda control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTipoMoneda;
-        
-        /// <summary>
-        /// lblCotizacion control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblCotizacion;
-        
-        /// <summary>
-        /// gvDetalleNotaDeCredito control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::DevExpress.Web.ASPxGridView.ASPxGridView gvDetalleNotaDeCredito;
-        
-        /// <summary>
-        /// lblNroCAE control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblNroCAE;
-        
-        /// <summary>
-        /// lblSubtotal control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSubtotal;
-        
-        /// <summary>
-        /// lblFechaVencimientoCAE control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblFechaVencimientoCAE;
-        
-        /// <summary>
-        /// lblImporteIVA control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblImporteIVA;
-        
-        /// <summary>
-        /// lblImporteTotal control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblImporteTotal;
-        
-        /// <summary>
-        /// btnEmitirComprobante control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnEmitirComprobante;
-    }
+namespace SCF.credito
+{
+
+
+  public partial class credito
+  {
+
+    /// <summary>
+    /// btnUltimoNroComprobante control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Button btnUltimoNroComprobante;
+
+    /// <summary>
+    /// cbFactura control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxComboBox cbFactura;
+
+    /// <summary>
+    /// txtNotaCredito control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtNotaCredito;
+
+    /// <summary>
+    /// txtFechaEmision control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxDateEdit txtFechaEmision;
+
+    /// <summary>
+    /// txtRazonSocial control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtRazonSocial;
+
+    /// <summary>
+    /// txtNroDocumento control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtNroDocumento;
+
+    /// <summary>
+    /// txtCodigoConSCF control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtCodigoConSCF;
+
+    /// <summary>
+    /// txtCodigoRemito control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtCodigoRemito;
+
+    /// <summary>
+    /// txtDireccion control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtDireccion;
+
+    /// <summary>
+    /// txtConcepto control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtConcepto;
+
+    /// <summary>
+    /// txtCondicionVenta control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtCondicionVenta;
+
+    /// <summary>
+    /// txtTipoMoneda control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtTipoMoneda;
+
+    /// <summary>
+    /// txtCotizacion control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtCotizacion;
+
+    /// <summary>
+    /// txtTransporte control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxTextBox txtTransporte;
+
+    /// <summary>
+    /// gvItemsFactura control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxGridView.ASPxGridView gvItemsFactura;
+
+    /// <summary>
+    /// btnSeleccionarArticulos control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Button btnSeleccionarArticulos;
+
+    /// <summary>
+    /// gvItemsNotaDeCredito control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxGridView.ASPxGridView gvItemsNotaDeCredito;
+
+    /// <summary>
+    /// btnEliminar control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Button btnEliminar;
+
+    /// <summary>
+    /// btnUpdateImporte control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Button btnUpdateImporte;
+
+    /// <summary>
+    /// txtSubtotal control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxLabel txtSubtotal;
+
+    /// <summary>
+    /// cbCondicionIVA control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxComboBox cbCondicionIVA;
+
+    /// <summary>
+    /// txtImporteIVA control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxLabel txtImporteIVA;
+
+    /// <summary>
+    /// txtTotal control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxLabel txtTotal;
+
+    /// <summary>
+    /// btnEmitir control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Button btnEmitir;
+
+    /// <summary>
+    /// pcError control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxPopupControl.ASPxPopupControl pcError;
+
+    /// <summary>
+    /// PopupControlContentControl3 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxPopupControl.PopupControlContentControl PopupControlContentControl3;
+
+    /// <summary>
+    /// ASPxPanel1 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxPanel.ASPxPanel ASPxPanel1;
+
+    /// <summary>
+    /// PanelContent3 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxPanel.PanelContent PanelContent3;
+
+    /// <summary>
+    /// lblError control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxEditors.ASPxLabel lblError;
+
+    /// <summary>
+    /// pcUltimoComprobanteAfip control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxPopupControl.ASPxPopupControl pcUltimoComprobanteAfip;
+
+    /// <summary>
+    /// PopupControlContentControl1 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxPopupControl.PopupControlContentControl PopupControlContentControl1;
+
+    /// <summary>
+    /// ASPxPanel2 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxPanel.ASPxPanel ASPxPanel2;
+
+    /// <summary>
+    /// PanelContent1 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxPanel.PanelContent PanelContent1;
+
+    /// <summary>
+    /// lblUltimoNroComprobante control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblUltimoNroComprobante;
+
+    /// <summary>
+    /// pcValidarComprobante control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxPopupControl.ASPxPopupControl pcValidarComprobante;
+
+    /// <summary>
+    /// PopupControlContentControl5 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxPopupControl.PopupControlContentControl PopupControlContentControl5;
+
+    /// <summary>
+    /// ASPxPanel3 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxPanel.ASPxPanel ASPxPanel3;
+
+    /// <summary>
+    /// PanelContent5 control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxPanel.PanelContent PanelContent5;
+
+    /// <summary>
+    /// lblNroFacturaAEmitir control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblNroFacturaAEmitir;
+
+    /// <summary>
+    /// lblNombreApellidoCliente control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblNombreApellidoCliente;
+
+    /// <summary>
+    /// lblDomicilio control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblDomicilio;
+
+    /// <summary>
+    /// lblLocalidad control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblLocalidad;
+
+    /// <summary>
+    /// lblNumeroDocumento control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblNumeroDocumento;
+
+    /// <summary>
+    /// lblCondicionVenta control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblCondicionVenta;
+
+    /// <summary>
+    /// lblNroRemitos control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblNroRemitos;
+
+    /// <summary>
+    /// lblTipoMoneda control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblTipoMoneda;
+
+    /// <summary>
+    /// lblCotizacion control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblCotizacion;
+
+    /// <summary>
+    /// gvDetalleNotaDeCredito control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::DevExpress.Web.ASPxGridView.ASPxGridView gvDetalleNotaDeCredito;
+
+    /// <summary>
+    /// lblNroCAE control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblNroCAE;
+
+    /// <summary>
+    /// lblSubtotal control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblSubtotal;
+
+    /// <summary>
+    /// lblFechaVencimientoCAE control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblFechaVencimientoCAE;
+
+    /// <summary>
+    /// lblImporteIVA control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblImporteIVA;
+
+    /// <summary>
+    /// lblImporteTotal control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblImporteTotal;
+
+    /// <summary>
+    /// btnEmitirComprobante control.
+    /// </summary>
+    /// <remarks>
+    /// Auto-generated field.
+    /// To modify move field declaration from designer file to code-behind file.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Button btnEmitirComprobante;
+  }
 }
