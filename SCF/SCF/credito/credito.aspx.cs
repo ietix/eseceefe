@@ -256,6 +256,7 @@ namespace SCF.credito
             lblNroCAE.Text = "NO FACTURADO";
             lblSubtotal.Text = txtSubtotal.Text;
             lblImporteIVA.Text = txtImporteIVA.Text;
+          lblImporteIVA.Visible = txtImporteIVA.Visible;
             lblImporteTotal.Text = txtTotal.Text;
             lblCotizacion.Text = txtCotizacion.Text;
             lblTipoMoneda.Text = txtTipoMoneda.Text;
