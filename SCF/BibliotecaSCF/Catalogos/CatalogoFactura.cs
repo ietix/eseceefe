@@ -57,7 +57,9 @@ namespace BibliotecaSCF.Catalogos
     {
       try
       {
-        var listaFacturas = nhSession.Query<Factura>().Where(x => x.PuntoDeVenta.Codigo == codigoPuntoDeVenta).ToList();
+        var date = new DateTime(2020, 01, 01);
+
+        var listaFacturas = nhSession.Query<Factura>().Where(x => x.PuntoDeVenta.Codigo == codigoPuntoDeVenta && x.FechaFacturacion >= date).ToList();
         return listaFacturas;
       }
       catch (Exception ex)

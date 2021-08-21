@@ -2016,7 +2016,7 @@ namespace BibliotecaSCF.Controladores
           dataRow["descripcionContratoMarco"] = nota.ContratoMarco == null ? string.Empty : nota.ContratoMarco.Descripcion;
           dataRow["codigoCliente"] = nota.Cliente.Codigo;
           dataRow["razonSocialCliente"] = nota.Cliente.RazonSocial;
-          dataRow["fechaHoraProximaEntrega"] = nota.ItemsNotaDePedido.OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega;
+          dataRow["fechaHoraProximaEntrega"] = nota.ItemsNotaDePedido.Any() ? nota.ItemsNotaDePedido.OrderBy(x => x.FechaEntrega).ToList()[0].FechaEntrega : nota.FechaEmision;
           dataRow["observaciones"] = nota.Observaciones;
 
           tablaNotasDePedido.Rows.Add(dataRow);
@@ -3831,6 +3831,15 @@ namespace BibliotecaSCF.Controladores
               detalleReq.Concepto = notaDeCredito.Factura.Concepto.Codigo;
               detalleReq.DocNro = Convert.ToInt64(notaDeCredito.Factura.Entregas[0].NotaDePedido.Cliente.NumeroDocumento.Replace("-", ""));
               detalleReq.DocTipo = notaDeCredito.Factura.Entregas[0].NotaDePedido.Cliente.TipoDocumento.Codigo;
+              
+              CbteAsoc cbteAsoc = new CbteAsoc();
+
+              cbteAsoc.Nro = notaDeCredito.Factura.NumeroFactura;
+              cbteAsoc.PtoVta = notaDeCredito.PuntoDeVenta.Numero;
+              cbteAsoc.Tipo = notaDeCredito.Factura.TipoComprobante.Codigo;
+
+              detalleReq.CbtesAsoc = (new List<CbteAsoc>() { cbteAsoc }).ToArray();
+
               //detalleReq.CbtesAsoc = ??????
 
               if (notaDeCredito.Factura.Concepto.Codigo != 1)

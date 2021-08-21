@@ -68,7 +68,9 @@ namespace BibliotecaSCF.Catalogos
       {
         try
         {
-          var listaEntregas = nhSession.Query<Entrega>().Where(x => x.PuntoDeVenta.Codigo == codigoPuntoDeVenta).ToList();
+          var date = new DateTime(2020, 01, 01);
+
+          var listaEntregas = nhSession.Query<Entrega>().Where(x => x.PuntoDeVenta.Codigo == codigoPuntoDeVenta && x.FechaEmision >= date).ToList();
           return listaEntregas;
         }
         catch (Exception ex)

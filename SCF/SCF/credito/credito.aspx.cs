@@ -58,7 +58,7 @@ namespace SCF.credito
           var codigoPuntoDeVenta = Convert.ToInt32(((DataTable)Session["puntoDeVenta"]).Rows[0]["codigoPuntoDeVenta"]);
           var codigoTipoComprobante = Convert.ToInt32(ControladorGeneral.RecuperarPuntosDeVentaPorCodigo(codigoPuntoDeVenta).Rows[0]["codigoTipoComprobante"]);
           
-          lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(codigoPuntoDeVenta, codigoTipoComprobante));
+          lblUltimoNroComprobante.Text = Convert.ToString(ControladorGeneral.ConsultarUltimoNroComprobante(numeroPuntoDeVenta, codigoTipoComprobante));
           pcUltimoComprobanteAfip.ShowOnPageLoad = true;
         }
         catch
