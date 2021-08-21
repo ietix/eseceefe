@@ -194,3 +194,7 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+/SCF/SCF/credito/Comprobantes_AFIP/FEREQ.XML
+/SCF/SCF/credito/Comprobantes_AFIP/FERES.XML
+/SCF/SCF/credito/Comprobantes_AFIP/ta.xml
+/SCF/SCF/credito/Comprobantes_AFIP/ULTIMO.XML
